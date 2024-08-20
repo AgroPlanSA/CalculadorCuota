@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -32,8 +32,8 @@
             display: block;
             margin-top: 10px;
         }
-        input[type="number"], input[type="text"] {
-            width: calc(100% - 20px); /* Ajuste para padding */
+        input[type="text"], input[type="number"] {
+            width: calc(100% - 20px);
             padding: 10px;
             margin-bottom: 15px;
             border: 1px solid #ccc;
@@ -49,7 +49,7 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 18px;
-            margin-top: 10px; /* Espaciado entre el último campo y el botón */
+            margin-top: 10px;
         }
         .button:hover {
             background-color: #a00;
@@ -62,7 +62,7 @@
             border-radius: 5px;
         }
         @media (max-width: 600px) {
-            input[type="number"], input[type="text"], .button {
+            input[type="text"], .button {
                 font-size: 16px;
             }
         }
@@ -75,9 +75,10 @@
 </div>
 
 <div class="container">
-    <h1><b>CALCULADOR DE CUOTA</b></h1>
+    <h1>Calculador de Cuota</h1>
     <label for="valorBasicoMovil">Valor Básico Móvil ($34.000.000 a $66.000.000)</label>
-    <input type="number" id="valorBasicoMovil" min="34000000" max="66000000" placeholder="Ingrese el valor" required>
+    <input type="text" id="valorBasicoMovil" placeholder="Ingrese el valor" required 
+           oninput="formatearValor(this)" />
     
     <label for="cuotaPura">Cuota Pura</label>
     <input type="text" id="cuotaPura" placeholder="Cuota Pura" disabled>
@@ -90,6 +91,9 @@
     
     <label for="mensualFisca">Mensual Física</label>
     <input type="text" id="mensualFisca" placeholder="Mensual Física" disabled>
+
+    <label for="impuestoSello">Impuesto al Sello</label>
+    <input type="text" id="impuestoSello" placeholder="Impuesto al Sello" disabled>
     
     <button class="button" onclick="calcular()">Calcular</button>
 </div>
@@ -114,27 +118,57 @@
 </div>
 
 <script>
+    function currencyFormat(value) {
+        return new Intl.NumberFormat('es-AR', {
+            style: 'currency',
+            currency: 'ARS',
+        }).format(value);
+    }
+
+    function formatearValor(input) {
+        // Remover caracteres no numéricos
+        let value = input.value.replace(/\D/g, '');
+
+        if (value) {
+            // Formatear el número con puntos cada 3 dígitos
+            input.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        } else {
+            input.value = '';
+        }
+    }
+
     function calcular() {
-        const valorBasico = parseFloat(document.getElementById('valorBasicoMovil').value);
-        
-        // Validación del valor
+        const valorString = document.getElementById('valorBasicoMovil').value.replace(/\./g, '');
+        const valorBasico = parseFloat(valorString);
+
         if (isNaN(valorBasico) || valorBasico < 34000000 || valorBasico > 66000000) {
-            alert("Por favor, ingrese un valor entre $34.000.000 y $66.000.000.");
+            alert("Por favor, ingrese un valor entre $34.000.000,00 y $66.000.000,00.");
             return;
         }
 
-        // Cálculos
         const cuotaPura = valorBasico / 60;
         const mensualJuridica = (valorBasico * 0.08 + (valorBasico * 0.08 * 0.21) + valorBasico) / 60;
         const segVida = valorBasico * 0.00083;
         const mensualFisca = mensualJuridica + segVida;
+        const impuestoSello = (valorBasico * 0.12) / 60;
 
-        // Actualizar resultados en los campos
-        document.getElementById('cuotaPura').value = cuotaPura.toFixed(2);
-        document.getElementById('mensualJuridica').value = mensualJuridica.toFixed(2);
-        document.getElementById('segVida').value = segVida.toFixed(2);
-        document.getElementById('mensualFisca').value = mensualFisca.toFixed(2);
+        document.getElementById('cuotaPura').value = currencyFormat(cuotaPura);
+        document.getElementById('mensualJuridica').value = currencyFormat(mensualJuridica);
+        document.getElementById('segVida').value = currencyFormat(segVida);
+        document.getElementById('mensualFisca').value = currencyFormat(mensualFisca);
+        document.getElementById('impuestoSello').value = currencyFormat(impuestoSello);
     }
+
+    document.getElementById('valorBasicoMovil').addEventListener('input', function(event) {
+        formatearValor(this);
+    });
+
+    // Evento para captar la tecla Enter
+    document.getElementById('valorBasicoMovil').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            calcular();
+        }
+    });
 </script>
 
 </body>
