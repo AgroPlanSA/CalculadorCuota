@@ -152,7 +152,7 @@
         const impuestoSello = (valorBasico * 0.12) / 60;
         const mensualJuridica = ((valorBasico * 0.08 + (valorBasico * 0.08 * 0.21) + valorBasico) / 60) + impuestoSello;
         const segVida = valorBasico * 0.0833 / 100;
-        const mensualFisca = mensualJuridica + segVida + impuestoSello;
+        const mensualFisca = mensualJuridica + segVida;
 
         document.getElementById('cuotaPura').value = currencyFormat(cuotaPura);
         document.getElementById('mensualJuridica').value = currencyFormat(mensualJuridica);
