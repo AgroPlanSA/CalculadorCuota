@@ -1,0 +1,141 @@
+
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculador de Cuota</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #c00;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            border: 2px solid #c00;
+            border-radius: 10px;
+            background: #f8f8f8;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input[type="number"], input[type="text"] {
+            width: calc(100% - 20px); /* Ajuste para padding */
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .button {
+            width: 100%;
+            padding: 15px;
+            background-color: #c00;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            margin-top: 10px; /* Espaciado entre el último campo y el botón */
+        }
+        .button:hover {
+            background-color: #a00;
+        }
+        .specifications {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f1f1f1;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        @media (max-width: 600px) {
+            input[type="number"], input[type="text"], .button {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="logo">
+    <img src="img/AgroPlan Color.png" alt="Logo" style="max-width: 200px;">
+</div>
+
+<div class="container">
+    <h1><b>CALCULADOR DE CUOTA</b></h1>
+    <label for="valorBasicoMovil">Valor Básico Móvil ($34.000.000 a $66.000.000)</label>
+    <input type="number" id="valorBasicoMovil" min="34000000" max="66000000" placeholder="Ingrese el valor" required>
+    
+    <label for="cuotaPura">Cuota Pura</label>
+    <input type="text" id="cuotaPura" placeholder="Cuota Pura" disabled>
+    
+    <label for="mensualJuridica">Mensual Jurídica</label>
+    <input type="text" id="mensualJuridica" placeholder="Mensual Jurídica" disabled>
+    
+    <label for="segVida">Seg. de Vida</label>
+    <input type="text" id="segVida" placeholder="Seg. de Vida" disabled>
+    
+    <label for="mensualFisca">Mensual Física</label>
+    <input type="text" id="mensualFisca" placeholder="Mensual Física" disabled>
+    
+    <button class="button" onclick="calcular()">Calcular</button>
+</div>
+
+<div class="specifications">
+    <h2>Especificaciones del Plan</h2>
+
+    <p><b>Plazo:</b> 60 meses / cuotas en pesos y sin interés</p>
+    <p><b>Carga Administrativa:</b>8.0% fija para financiación a 5 años</p>
+    <p><b>Adjudicaciones mensuales:</b>por sorteo o licitación</p>
+    <p>* Al adjudicar si el cliente ordena un bien de MENOR valor al Valor Móvil Adjudicado, la diferencia será acreditado como cuotas adelantadas.</p>
+    <p>* Si ordena un bien de MAYOR valor al Valor Móvil Adjudicado, la diferencia será abonada por el cliente.</p>
+    <p><b>Impuesto al sello:</b>del valor suscripto es: 1.2% para todas las provincias a excepción de Córdoba. (Se abonara prorrateado en las primeras 6 cuotas detallado en el cupón de pago)</p>
+    <p><b>Impuesto al débito y crédito (Ley 25.413):</b>1,2% sobre el valor de la cuota pura correspondiente al mes en curso.</p>
+    <p><b>Seguro de Vida (Personas física/Soc. de Hecho únicamente):</b>0,0833 % del saldo deudor. Hasta 64 años inclusive.</p>
+    <p><b>Derecho de Adjudicación:</b>Cupón de pago único que se genera al aceptar la adjudicación 1% + IVA del valor Móvil adjudicado.</p>
+    <p><b>Gastos de Patentamiento</b>(1,5% valor de Factura o $ 75,000 con Ruta) y <b>Prenda</b>(1% PF o 1,4% PJ Sobre monto de prenda + Gestoría $ 35,000 + Formularios $ 31,500) a cargo del cliente.</p>
+    <p><b>El suscriptor debe firmar:</b>Declaración Jurada Res. UIF + Anexo UIF para sociedad + Persona expuesta políticamente + Declaración jurada de salud (Personas física/Soc. de Hecho únicamente).</p>
+    <p>Los precios de referencias deben tomarlos de la Lista de Precios de Fabrica.</p>
+    <p>Especificar la unidad y el precio de referencia de Lista de Fabrica en la Solicitud.</p>
+    <p><b>Presentar fotocopia frente y dorso de DNI</b></p>
+</div>
+
+<script>
+    function calcular() {
+        const valorBasico = parseFloat(document.getElementById('valorBasicoMovil').value);
+        
+        // Validación del valor
+        if (isNaN(valorBasico) || valorBasico < 34000000 || valorBasico > 66000000) {
+            alert("Por favor, ingrese un valor entre 34,000,000 y 66,000,000.");
+            return;
+        }
+
+        // Cálculos
+        const cuotaPura = valorBasico / 60;
+        const mensualJuridica = (valorBasico * 0.08 + (valorBasico * 0.08 * 0.21) + valorBasico) / 60;
+        const segVida = valorBasico * 0.00083;
+        const mensualFisca = mensualJuridica + segVida;
+
+        // Actualizar resultados en los campos
+        document.getElementById('cuotaPura').value = cuotaPura.toFixed(2);
+        document.getElementById('mensualJuridica').value = mensualJuridica.toFixed(2);
+        document.getElementById('segVida').value = segVida.toFixed(2);
+        document.getElementById('mensualFisca').value = mensualFisca.toFixed(2);
+    }
+</script>
+
+</body>
+</html>
