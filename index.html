@@ -87,6 +87,9 @@
 
     <label for="impuestoSello">Impuesto al Sello (cuota 1 a 6)</label>
     <input type="text" id="impuestoSello" placeholder="Impuesto al Sello" disabled>
+
+    <label for="mensualFisca">Debito y Creditos varios</label>
+    <input type="text" id="mensualFisca" placeholder="Debito y Creditos varios" disabled>
     
     <label for="mensualJuridica"><b>Mensual Jurídica</b></label>
     <input type="text" id="mensualJuridica" placeholder="Mensual Jurídica" disabled>
@@ -150,7 +153,8 @@
 
         const cuotaPura = valorBasico / 60;
         const impuestoSello = (valorBasico * 0.12) / 60;
-        const mensualJuridica = ((valorBasico * 0.08 + (valorBasico * 0.08 * 0.21) + valorBasico) / 60) + impuestoSello;
+        const mensualJuridica = ((valorBasico * 0.08 + (valorBasico * 0.08 * 0.21) + valorBasico) / 60);
+        const DebitoyCreditosvarios = cuotaPura * 1.2 / 100;
         const segVida = valorBasico * 0.0833 / 100;
         const mensualFisca = mensualJuridica + segVida;
 
@@ -159,6 +163,7 @@
         document.getElementById('segVida').value = currencyFormat(segVida);
         document.getElementById('mensualFisca').value = currencyFormat(mensualFisca);
         document.getElementById('impuestoSello').value = currencyFormat(impuestoSello);
+        document.getElementById('DebitoyCreditosvarios').value = currencyFormat(DebitoyCreditosvarios);
     }
 
     document.getElementById('valorBasicoMovil').addEventListener('input', function(event) {
