@@ -84,12 +84,6 @@
     <label for="cuotaPura">Cuota Pura</label>
     <input type="text" id="cuotaPura" placeholder="Cuota Pura" disabled>
 
-    <label for="impuestoSello">Impuesto al Sello (cuota 1 a 6)</label>
-    <input type="text" id="impuestoSello" placeholder="Impuesto al Sello" disabled>
-    
-    <label for="debitoCredito">Débito y Créditos Varios (1,2% de Cuota Pura)</label>
-    <input type="text" id="debitoCredito" placeholder="Débito y Créditos Varios" disabled>
-    
     <label for="mensualJuridica"><b>Mensual Jurídica</b></label>
     <input type="text" id="mensualJuridica" placeholder="Mensual Jurídica" disabled>
     
@@ -98,6 +92,9 @@
     
     <label for="mensualFisca"><b>Mensual Física</b></label>
     <input type="text" id="mensualFisca" placeholder="Mensual Física" disabled>
+
+    <label for="impuestoSello">Impuesto al Sello (cuota 1 a 6)</label>
+    <input type="text" id="impuestoSello" placeholder="Impuesto al Sello" disabled>
 
     <button class="button" onclick="calcular()">Calcular</button>
 </div>
@@ -162,7 +159,7 @@
         document.getElementById('segVida').value = currencyFormat(segVida);
         document.getElementById('mensualFisca').value = currencyFormat(mensualFisca);
         document.getElementById('impuestoSello').value = currencyFormat(impuestoSello);
-        document.getElementById('debitoCredito').value = currencyFormat(debitoCredito); // Mostrar en la sección nueva
+        // Mostrar en la sección nueva
     }
 
     document.getElementById('valorBasicoMovil').addEventListener('input', function(event) {
