@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="img/Icono-Cerdito-Extranet_2.svg" type="image/x-icon">
     <title>Calculador de Cuota</title>
+    <link rel="icon" href="img/Icono-Cerdito-Extranet_2.svg" type="image/x-icon">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -72,37 +72,36 @@
 <body>
 
 <div class="logo">
-    <img src="img/LogoAgro-04.svg" alt="Logo" style="max-width: 300px;">
+    <img src="img/LogoAgro-04.svg" alt="Logo" style="max-width: 200px;">
 </div>
 
 <div class="container">
-    <h1>CALCULADOR DE CUOTA</h1>
-    <p>Para valores vigentes desde $34.000.000 hasta $66.000.000</p>
-    <label for="valorBasicoMovil">Valor Básico Móvil</label>
+    <h1>Calculador de Cuota</h1>
+    <label for="valorBasicoMovil">Valor Básico Móvil ($34.000.000 a $66.000.000)</label>
     <input type="text" id="valorBasicoMovil" placeholder="Ingrese el valor" required 
            oninput="formatearValor(this)" />
     
     <label for="cuotaPura">Cuota Pura</label>
     <input type="text" id="cuotaPura" placeholder="Cuota Pura" disabled>
 
-    <label for="impuestoSello">Impuesto al Sello (cuota 1 a 6)</label>
+    <label for="impuestoSello">Impuesto al Sello</label>
     <input type="text" id="impuestoSello" placeholder="Impuesto al Sello" disabled>
-
-    <label for="mensualFisca">Debito y Creditos varios</label>
-    <input type="text" id="mensualFisca" placeholder="Debito y Creditos varios" disabled>
     
-    <label for="mensualJuridica"><b>Mensual Jurídica</b></label>
+    <label for="debitoCredito">Débito y Créditos Varios (1,2% de Cuota Pura)</label>
+    <input type="text" id="debitoCredito" placeholder="Débito y Créditos Varios" disabled>
+    
+    <label for="mensualJuridica">Mensual Jurídica</label>
     <input type="text" id="mensualJuridica" placeholder="Mensual Jurídica" disabled>
     
     <label for="segVida">Seg. de Vida</label>
     <input type="text" id="segVida" placeholder="Seg. de Vida" disabled>
     
-    <label for="mensualFisca"><b>Mensual Física</b></label>
+    <label for="mensualFisca">Mensual Física</label>
     <input type="text" id="mensualFisca" placeholder="Mensual Física" disabled>
-    
+
     <button class="button" onclick="calcular()">Calcular</button>
 </div>
-
+    
 <div class="specifications">
     <h2>Especificaciones del Plan</h2>
 
@@ -152,18 +151,18 @@
         }
 
         const cuotaPura = valorBasico / 60;
-        const impuestoSello = (valorBasico * 0.12) / 60;
-        const mensualJuridica = ((valorBasico * 0.08 + (valorBasico * 0.08 * 0.21) + valorBasico) / 60);
-        const DebitoyCreditosvarios = cuotaPura * 1.2 / 100;
-        const segVida = valorBasico * 0.0833 / 100;
+        const mensualJuridica = (valorBasico * 0.08 + (valorBasico * 0.08 * 0.21) + valorBasico) / 60;
+        const segVida = valorBasico * 0.00083;
         const mensualFisca = mensualJuridica + segVida;
+        const impuestoSello = (valorBasico * 0.12) / 60;
+        const debitoCredito = cuotaPura * 0.012; // 1,2% de Cuota Pura
 
         document.getElementById('cuotaPura').value = currencyFormat(cuotaPura);
         document.getElementById('mensualJuridica').value = currencyFormat(mensualJuridica);
         document.getElementById('segVida').value = currencyFormat(segVida);
         document.getElementById('mensualFisca').value = currencyFormat(mensualFisca);
         document.getElementById('impuestoSello').value = currencyFormat(impuestoSello);
-        document.getElementById('DebitoyCreditosvarios').value = currencyFormat(DebitoyCreditosvarios);
+        document.getElementById('debitoCredito').value = currencyFormat(debitoCredito); // Mostrar en la sección nueva
     }
 
     document.getElementById('valorBasicoMovil').addEventListener('input', function(event) {
