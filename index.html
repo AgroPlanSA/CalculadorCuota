@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculador de Cuota</title>
     <link rel="icon" href="img/Icono-Cerdito-Extranet_2.svg" type="image/x-icon">
+    <title>Calculador de Cuota</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -67,12 +67,39 @@
                 font-size: 16px;
             }
         }
+
+        /* Estilos anteriores... */
+        .share-button {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .share-button a {
+            display: inline-flex;
+            align-items: center;
+            background-color: #25D366;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .share-button a:hover {
+            background-color: #128C7E;
+        }
+        .share-button i {
+            margin-right: 8px;
+            font-size: 20px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     </style>
 </head>
+
 <body>
 
 <div class="logo">
-    <img src="img/LogoAgro-04.svg" alt="Logo" style="max-width: 200px;">
+    <img src="img/LogoAgro-04.svg" alt="Logo" style="max-width: 400px;">
 </div>
 
 <div class="container">
@@ -83,22 +110,31 @@
     
     <label for="cuotaPura">Cuota Pura</label>
     <input type="text" id="cuotaPura" placeholder="Cuota Pura" disabled>
-
-    <label for="mensualJuridica"><b><h3>Mensual Jurídica</h3></b></label>
+    
+    <label for="mensualJuridica">Mensual Jurídica</label>
     <input type="text" id="mensualJuridica" placeholder="Mensual Jurídica" disabled>
-
-    <label for="mensualFisca"><b><h3>Mensual Física</h3></b></label>
-    <input type="text" id="mensualFisca" placeholder="Mensual Física" disabled>
     
     <label for="segVida">Seg. de Vida</label>
     <input type="text" id="segVida" placeholder="Seg. de Vida" disabled>
+    
+    <label for="mensualFisca">Mensual Física</label>
+    <input type="text" id="mensualFisca" placeholder="Mensual Física" disabled>
 
-    <label for="impuestoSello">Impuesto al Sello (Sumar en cuota 1 a 6)</label>
+    <label for="impuestoSello">Impuesto al Sello</label>
     <input type="text" id="impuestoSello" placeholder="Impuesto al Sello" disabled>
-
+    
     <button class="button" onclick="calcular()">Calcular</button>
 </div>
-    
+
+        <!-- Contenido anterior... -->
+
+        <div class="share-button">
+            <a id="shareButton" href="#" target="_blank">
+                <i class="fab fa-whatsapp"></i>
+                Compartir por WhatsApp
+            </a>
+        </div>
+
 <div class="specifications">
     <h2>Especificaciones del Plan</h2>
 
@@ -152,14 +188,12 @@
         const segVida = valorBasico * 0.00083;
         const mensualFisca = mensualJuridica + segVida;
         const impuestoSello = (valorBasico * 0.12) / 60;
-        const debitoCredito = cuotaPura * 0.012; // 1,2% de Cuota Pura
 
         document.getElementById('cuotaPura').value = currencyFormat(cuotaPura);
         document.getElementById('mensualJuridica').value = currencyFormat(mensualJuridica);
         document.getElementById('segVida').value = currencyFormat(segVida);
         document.getElementById('mensualFisca').value = currencyFormat(mensualFisca);
         document.getElementById('impuestoSello').value = currencyFormat(impuestoSello);
-        // Mostrar en la sección nueva
     }
 
     document.getElementById('valorBasicoMovil').addEventListener('input', function(event) {
@@ -172,7 +206,28 @@
             calcular();
         }
     });
+
+            // Código anterior...
+
+            function shareScreenshot() {
+            // Captura la pantalla y obtiene la URL de la imagen
+            html2canvas(document.body).then(function(canvas) {
+                var imgData = canvas.toDataURL("image/jpeg", 0.8);
+                var whatsappUrl = "https://api.whatsapp.com/send?text=¡Mira esto!&image=" + encodeURIComponent(imgData);
+                window.open(whatsappUrl, '_blank');
+            });
+        }
+
+        document.getElementById('shareButton').addEventListener('click', function(event) {
+            event.preventDefault();
+            shareScreenshot();
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </script>
+
+</body>
+</html>
 
 </body>
 </html>
