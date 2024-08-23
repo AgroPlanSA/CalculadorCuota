@@ -7,7 +7,7 @@
     <title>Calculador de Cuota</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body {
+ body {
             font-family: Arial, sans-serif;
             background-color: #fff;
             margin: 0;
@@ -42,23 +42,6 @@
             border-radius: 5px;
             font-size: 16px;
         }
-
-        .whatsapp-share-btn {
-            background-color: #25D366;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .whatsapp-share-btn i {
-             font-size: 20px;
-             margin-right: 8px;
-        }
         .button {
             width: 100%;
             padding: 15px;
@@ -86,6 +69,34 @@
             justify-content: center;
             margin-top: 20px;
         }
+        .share-button a {
+            display: inline-flex;
+            align-items: center;
+            background-color: #25D366;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .share-button a:hover {
+            background-color: #128C7E;
+        }
+        .share-button i {
+            margin-right: 8px;
+            font-size: 20px;
+        }
+        @media (max-width: 600px) {
+            input[type="text"], .button {
+                font-size: 16px;
+            }
+        }
+
+        .share-button {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
 
         .share-button a {
             display: inline-flex;
@@ -106,16 +117,8 @@
             margin-right: 8px;
             font-size: 20px;
         }
-       
-        
-        @media (max-width: 600px) {
-            input[type="text"], .button {
-                font-size: 16px;
-            }
-        }
-
     </style>
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 
 <body>
@@ -145,7 +148,7 @@
     <label for="impuestoSello">Impuesto al Sello</label>
     <input type="text" id="impuestoSello" placeholder="Impuesto al Sello" disabled>
     
-    <button class="button" onclick="calcular()">Calcular</button>    
+    <button class="button" onclick="calcular()">Calcular</button>
 </div>
 
 <div class="share-button">
@@ -153,7 +156,6 @@
         <i class="fab fa-whatsapp"></i> Compartir
     </a>
 </div>
-
 
 <div class="specifications">
     <h2>Especificaciones del Plan</h2>
@@ -228,23 +230,16 @@
     });
 
     function compartirWhatsApp() {
-        html2canvas(document.body).then(function(canvas) {
-            canvas.toBlob(function(blob) {
-                const file = new File([blob], "captura.png", { type: "image/png" });
-                const url = URL.createObjectURL(file);
+        html2canvas(document.querySelector(".container")).then(function(canvas) {
+            const imageUrl = canvas.toDataURL("image/png");
 
-                const mensaje = "¡Mira esta captura de pantalla!";
-                const linkWhatsApp = `https://wa.me/?text=${encodeURIComponent(mensaje)}&url=${url}`;
+            const linkWhatsApp = `https://wa.me/?text=${encodeURIComponent("Consulta esta información:")}%0A${imageUrl}`;
 
-                window.location.href = linkWhatsApp;
-            });
+            window.open(linkWhatsApp, '_blank');
         });
     }
-  </script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
-
 </script>
 
 </body>
 </html>
+
