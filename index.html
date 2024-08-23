@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="img/Icono-Cerdito-Extranet_2.svg" type="image/x-icon">
     <title>Calculador de Cuota</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -41,6 +42,23 @@
             border-radius: 5px;
             font-size: 16px;
         }
+
+        .whatsapp-share-btn {
+            background-color: #25D366;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .whatsapp-share-btn i {
+             font-size: 20px;
+             margin-right: 8px;
+        }
         .button {
             width: 100%;
             padding: 15px;
@@ -68,6 +86,7 @@
             justify-content: center;
             margin-top: 20px;
         }
+
         .share-button a {
             display: inline-flex;
             align-items: center;
@@ -78,44 +97,25 @@
             border-radius: 5px;
             transition: background-color 0.3s ease;
         }
+
         .share-button a:hover {
             background-color: #128C7E;
         }
+
         .share-button i {
             margin-right: 8px;
             font-size: 20px;
         }
+       
+        
         @media (max-width: 600px) {
             input[type="text"], .button {
                 font-size: 16px;
             }
         }
 
-        /* Estilos anteriores... */
-        .share-button {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        .share-button a {
-            display: inline-flex;
-            align-items: center;
-            background-color: #25D366;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-        .share-button a:hover {
-            background-color: #128C7E;
-        }
-        .share-button i {
-            margin-right: 8px;
-            font-size: 20px;
-        }
-        
     </style>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 
 <body>
@@ -145,7 +145,13 @@
     <label for="impuestoSello">Impuesto al Sello</label>
     <input type="text" id="impuestoSello" placeholder="Impuesto al Sello" disabled>
     
-    <button class="button" onclick="calcular()">Calcular</button>
+    <button class="button" onclick="calcular()">Calcular</button>    
+</div>
+
+<div class="share-button">
+    <a id="shareWhatsApp" href="#" onclick="compartirWhatsApp(); return false;">
+        <i class="fab fa-whatsapp"></i> Compartir
+    </a>
 </div>
 
 
@@ -221,7 +227,23 @@
         }
     });
 
-      
+    function compartirWhatsApp() {
+        html2canvas(document.body).then(function(canvas) {
+            canvas.toBlob(function(blob) {
+                const file = new File([blob], "captura.png", { type: "image/png" });
+                const url = URL.createObjectURL(file);
+
+                const mensaje = "¡Mira esta captura de pantalla!";
+                const linkWhatsApp = `https://wa.me/?text=${encodeURIComponent(mensaje)}&url=${url}`;
+
+                window.location.href = linkWhatsApp;
+            });
+        });
+    }
+  </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
+
 </script>
 
 </body>
