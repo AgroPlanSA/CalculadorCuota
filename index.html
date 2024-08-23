@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="img/Icono-Cerdito-Extranet_2.svg" type="image/x-icon">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <title>Calculador de Cuota</title>
     <style>
         body {
@@ -149,17 +148,6 @@
     <button class="button" onclick="calcular()">Calcular</button>
 </div>
 
-        <!-- Contenido anterior... -->
-
-        <div id="content">
-                <!-- Aquí muestras los cálculos que deseas compartir -->
-                <h1>Cálculos</h1>
-                <p>Resultado: 42</p>
-          </div>
-
-  <button class="whatsapp-share-btn" onclick="shareCalculations()">
-    <i class="fab fa-whatsapp"></i> Compartir por WhatsApp
-  </button>
 
 <div class="specifications">
     <h2>Especificaciones del Plan</h2>
@@ -233,23 +221,6 @@
         }
     });
 
-    function shareCalculations() {
-      // Captura la pantalla
-      html2canvas(document.getElementById('content')).then(function(canvas) {
-        // Convierte el canvas a una imagen
-        var dataURL = canvas.toDataURL();
-
-        // Crea el enlace de WhatsApp con la imagen
-        var whatsappUrl = 'https://api.whatsapp.com/send?text=Mira%20estos%20c%C3%A1lculos%20que%20he%20realizado%20%F0%9F%93%B7&media=' + encodeURIComponent(dataURL);
-
-        // Abre el enlace en una nueva pestaña
-        window.open(whatsappUrl, '_blank');
-      });
-    }
-  </script>
-
-  <!-- Incluye la librería html2canvas -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
       
 </script>
 
