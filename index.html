@@ -2,14 +2,14 @@
 <html lang="es">
 <head>
     <meta name="description"
-           content="Agro Plan, calculador de cuota para plan de ahorro de remolques en 60 cuotas mensuales.">
+          content="Agro Plan, calculador de cuota para plan de ahorro de remolques en 60 cuotas mensuales.">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="img/Icono-Cerdito-Extranet_2.svg" type="image/x-icon">
     <title>Calculador de Cuota</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
- body {
+        body {
             font-family: Arial, sans-serif;
             background-color: #fff;
             margin: 0;
@@ -93,32 +93,6 @@
                 font-size: 16px;
             }
         }
-
-        .share-button {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .share-button a {
-            display: inline-flex;
-            align-items: center;
-            background-color: #25D366;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-
-        .share-button a:hover {
-            background-color: #128C7E;
-        }
-
-        .share-button i {
-            margin-right: 8px;
-            font-size: 20px;
-        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
@@ -131,8 +105,8 @@
 
 <div class="container">
     <h1>Calculador de Cuota</h1>
-    <label for="valorBasicoMovil">Valor Básico Móvil ($34.000.000 a $66.000.000)</label>
-    <input type="text" id="valorBasicoMovil" placeholder="Ingrese el valor" required 
+    <label for="valorBasicoMovil">Valor Básico Móvil ($34.000.000 a $66.000.000, en múltiplos de $10.000)</label>
+    <input type="text" id="valorBasicoMovil" placeholder="Ingrese el valor" required
            oninput="formatearValor(this)" />
     
     <label for="cuotaPura">Cuota Pura</label>
@@ -151,6 +125,12 @@
     <input type="text" id="impuestoSello" placeholder="Impuesto al Sello" disabled>
     
     <button class="button" onclick="calcular()">Calcular</button>
+
+    <div class="share-button">
+        <a href="#" onclick="compartirWhatsApp()">
+            <i class="fab fa-whatsapp"></i> Compartir por WhatsApp
+        </a>
+    </div>
 </div>
 
 <div class="specifications">
@@ -173,6 +153,7 @@
 </div>
 
 <script>
+    // Función para formatear valores a moneda argentina
     function currencyFormat(value) {
         return new Intl.NumberFormat('es-AR', {
             style: 'currency',
@@ -180,6 +161,7 @@
         }).format(value);
     }
 
+    // Función para formatear el input del valor básico móvil con puntos
     function formatearValor(input) {
         // Remover caracteres no numéricos
         let value = input.value.replace(/\D/g, '');
@@ -192,21 +174,28 @@
         }
     }
 
+    // Función principal para calcular las cuotas
     function calcular() {
+        // Obtener el valor básico móvil y eliminar puntos para el cálculo
         const valorString = document.getElementById('valorBasicoMovil').value.replace(/\./g, '');
         const valorBasico = parseFloat(valorString);
 
-        if (isNaN(valorBasico) || valorBasico < 34000000 || valorBasico > 66000000) {
-            alert("Por favor, ingrese un valor entre $34.000.000,00 y $66.000.000,00.");
+        // Validar que el valor esté dentro del rango permitido y sea un múltiplo de 10.000
+        if (isNaN(valorBasico) || valorBasico < 34000000 || valorBasico > 66000000 || (valorBasico % 10000 !== 0)) {
+            alert("Por favor, ingrese un valor entre $34.000.000,00 y $66.000.000,00, en múltiplos de $10.000.");
             return;
         }
 
+        // Calcular los diferentes componentes de la cuota
         const cuotaPura = valorBasico / 60;
-        const mensualJuridica = (valorBasico * 0.08 + (valorBasico * 0.08 * 0.21) + valorBasico) / 60;
-        const segVida = valorBasico * 0.00083;
+        // La Mensual Jurídica se calcula como (Valor Básico * 8% de Carga Administrativa + (Valor Básico * 8% * 21% de IVA) + Valor Básico) / 60
+        // Simplificado a: (valorBasico * (1 + 0.08 + (0.08 * 0.21))) / 60
+        const mensualJuridica = (valorBasico * 1.08 * 1.21) / 60;
+        const segVida = valorBasico * 0.00083; // 0.0833% del saldo deudor
         const mensualFisca = mensualJuridica + segVida;
-        const impuestoSello = (valorBasico * 0.12) / 60;
+        const impuestoSello = (valorBasico * 0.012) / 6; // 1.2% del valor suscripto prorrateado en 6 cuotas
 
+        // Mostrar los resultados formateados en los campos correspondientes
         document.getElementById('cuotaPura').value = currencyFormat(cuotaPura);
         document.getElementById('mensualJuridica').value = currencyFormat(mensualJuridica);
         document.getElementById('segVida').value = currencyFormat(segVida);
@@ -214,23 +203,44 @@
         document.getElementById('impuestoSello').value = currencyFormat(impuestoSello);
     }
 
+    // Event listener para formatear el valor al escribir
     document.getElementById('valorBasicoMovil').addEventListener('input', function(event) {
         formatearValor(this);
     });
 
-    // Evento para captar la tecla Enter
+    // Event listener para capturar la tecla Enter y calcular
     document.getElementById('valorBasicoMovil').addEventListener('keydown', function(event) {
         if (event.key === 'Enter') {
             calcular();
         }
     });
 
+    // Función para compartir los resultados por WhatsApp
     function compartirWhatsApp() {
+        // Capturar el contenido del div 'container' como imagen
         html2canvas(document.querySelector(".container")).then(function(canvas) {
+            // Convertir el canvas a una URL de imagen (no se usa directamente en el mensaje de WhatsApp, pero se podría si se sube a un servidor)
             const imageUrl = canvas.toDataURL("image/png");
 
-            const linkWhatsApp = `https://wa.me/?text=${encodeURIComponent("Consulta esta información:")}%0A${imageUrl}`;
+            const cuotaPura = document.getElementById('cuotaPura').value;
+            const mensualJuridica = document.getElementById('mensualJuridica').value;
+            const segVida = document.getElementById('segVida').value;
+            const mensualFisca = document.getElementById('mensualFisca').value;
+            const impuestoSello = document.getElementById('impuestoSello').value;
+            const valorBasicoMovil = document.getElementById('valorBasicoMovil').value;
 
+            const mensaje = `¡Hola! Aquí tienes los detalles del cálculo de cuotas de Agro Plan para un valor de: ${valorBasicoMovil}\n\n` +
+                            `Cuota Pura: ${cuotaPura}\n` +
+                            `Mensual Jurídica: ${mensualJuridica}\n` +
+                            `Seguro de Vida: ${segVida}\n` +
+                            `Mensual Física: ${mensualFisca}\n` +
+                            `Impuesto al Sello (Cuota 1 a 6): ${impuestoSello}\n\n` +
+                            `¡Calculado con el plan de ahorro de remolques de Agro Plan!`;
+
+            // Codificar el mensaje para la URL de WhatsApp
+            const linkWhatsApp = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
+
+            // Abrir WhatsApp en una nueva pestaña
             window.open(linkWhatsApp, '_blank');
         });
     }
@@ -238,4 +248,3 @@
 
 </body>
 </html>
-
