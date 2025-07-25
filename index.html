@@ -176,10 +176,10 @@
 
         <div class="share-button-group"> 
             <a href="#" class="whatsapp-text-button" onclick="compartirWhatsAppTexto()">
-                <i class="fab fa-whatsapp"></i> Compartir Texto por WhatsApp
+                <i class="fab fa-whatsapp"></i> Compartir por WhatsApp
             </a>
             <button class="download-calculation-button" onclick="descargarImagenCalculo()">
-                <i class="fas fa-download"></i> Descargar Imagen del Cálculo
+                <i class="fas fa-download"></i> Descargar Cálculo
             </button>
             <button class="download-full-report-button" onclick="descargarImagenCalculoYEspecificaciones()">
                 <i class="fas fa-download"></i> Descargar Cálculo + Especificaciones
@@ -304,13 +304,13 @@
             return;
         }
 
-        const mensaje = `¡Hola! Aquí tienes los detalles del cálculo de cuotas de Agro Plan para un valor de: ${valorBasicoMovil}\n\n` +
+        const mensaje = `Acá te paso los detalles para un Valor Básico Móvil de: ${valorBasicoMovil}\n\n` +
                         `Cuota Pura: ${cuotaPura}\n` +
                         `Mensual Jurídica: ${mensualJuridica}\n` +
                         `Seguro de Vida: ${segVida}\n` +
                         `Mensual Física: ${mensualFisca}\n` +
                         `Impuesto al Sello (Cuota 1 a 6): ${impuestoSello}\n\n` +
-                        `¡Calculado con el plan de ahorro de remolques de Agro Plan!`;
+                        `¡A disposición para lo que necesite!`;
 
         const linkWhatsApp = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
         window.open(linkWhatsApp, '_blank');
