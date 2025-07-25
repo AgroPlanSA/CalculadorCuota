@@ -147,10 +147,10 @@
 
     <div class="share-button">
         <a href="#" class="whatsapp-text-button" onclick="compartirWhatsAppTexto()">
-            <i class="fab fa-whatsapp"></i> Compartir
+            <i class="fab fa-whatsapp"></i> Compartir Texto por WhatsApp
         </a>
         <button class="download-image-button" onclick="descargarImagenCalculo()">
-            <i class="fas fa-download"></i> Descargar Imagen
+            <i class="fas fa-download"></i> Descargar Imagen del Cálculo
         </button>
     </div>
 </div>
@@ -183,14 +183,16 @@
         }).format(value);
     }
 
-    // Función para formatear el input del valor básico móvil con puntos
+    // Función para formatear el input del valor básico móvil con puntos y el signo de pesos
     function formatearValor(input) {
-        // Remover caracteres no numéricos
-        let value = input.value.replace(/\D/g, '');
+        let value = input.value.replace(/\D/g, ''); // Remover caracteres no numéricos
+        let formattedValue = '';
 
         if (value) {
             // Formatear el número con puntos cada 3 dígitos
-            input.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            formattedValue = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            // Añadir el signo de pesos al principio
+            input.value = '$' + formattedValue;
         } else {
             input.value = '';
         }
@@ -198,8 +200,8 @@
 
     // Función principal para calcular las cuotas
     function calcular() {
-        // Obtener el valor básico móvil y eliminar puntos para el cálculo
-        const valorString = document.getElementById('valorBasicoMovil').value.replace(/\./g, '');
+        // Obtener el valor básico móvil y eliminar el signo de pesos y puntos para el cálculo
+        const valorString = document.getElementById('valorBasicoMovil').value.replace(/\$/g, '').replace(/\./g, '');
         const valorBasico = parseFloat(valorString);
 
         // Validar que el valor esté dentro del rango permitido y sea un múltiplo de 10.000
@@ -246,13 +248,13 @@
         const impuestoSello = document.getElementById('impuestoSello').value;
         const valorBasicoMovil = document.getElementById('valorBasicoMovil').value;
 
-        const mensaje = `Acá te paso los detalles para un valor de: ${valorBasicoMovil}\n\n` +
+        const mensaje = `¡Hola! Aquí tienes los detalles del cálculo de cuotas de Agro Plan para un valor de: ${valorBasicoMovil}\n\n` +
                         `Cuota Pura: ${cuotaPura}\n` +
                         `Mensual Jurídica: ${mensualJuridica}\n` +
                         `Seguro de Vida: ${segVida}\n` +
                         `Mensual Física: ${mensualFisca}\n` +
                         `Impuesto al Sello (Cuota 1 a 6): ${impuestoSello}\n\n` +
-                        `¡A disposición para lo que necesite!`;
+                        `¡Calculado con el plan de ahorro de remolques de Agro Plan!`;
 
         const linkWhatsApp = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
         window.open(linkWhatsApp, '_blank');
