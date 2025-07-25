@@ -147,10 +147,10 @@
 
     <div class="share-button">
         <a href="#" class="whatsapp-text-button" onclick="compartirWhatsAppTexto()">
-            <i class="fab fa-whatsapp"></i> Compartir Texto por WhatsApp
+            <i class="fab fa-whatsapp"></i> Compartir
         </a>
         <button class="download-image-button" onclick="descargarImagenCalculo()">
-            <i class="fas fa-download"></i> Descargar Imagen del Cálculo
+            <i class="fas fa-download"></i> Descargar Imagen
         </button>
     </div>
 </div>
@@ -248,7 +248,7 @@
         const impuestoSello = document.getElementById('impuestoSello').value;
         const valorBasicoMovil = document.getElementById('valorBasicoMovil').value;
 
-        const mensaje = `¡Hola! Aquí tienes los detalles del cálculo de cuotas de Agro Plan para un valor de: ${valorBasicoMovil}\n\n` +
+        const mensaje = `Acá te paso los detalles para un Valor Básico Móvil de: ${valorBasicoMovil}\n\n` +
                         `Cuota Pura: ${cuotaPura}\n` +
                         `Mensual Jurídica: ${mensualJuridica}\n` +
                         `Seguro de Vida: ${segVida}\n` +
@@ -281,7 +281,7 @@
             link.click(); // Simular clic en el enlace para iniciar la descarga
             document.body.removeChild(link); // Remover el enlace
             
-            alert("La imagen con los detalles del cálculo ha sido descargada. Ahora puedes compartirla manualmente en WhatsApp.");
+            alert("La imagen ha sido descargada. Ahora podés compartirla en WhatsApp.");
         });
     }
 </script>
