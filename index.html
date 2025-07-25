@@ -138,6 +138,13 @@
                 flex-direction: column;
                 align-items: center;
             }
+            /* **AJUSTE CLAVE AQUI** */
+            .share-button-group a,
+            .share-button-group button {
+                width: 100%; /* Hacen que tomen el ancho completo */
+                box-sizing: border-box; /* Asegura que el padding se incluya en el width */
+                max-width: 300px; /* Opcional: limitar el ancho máximo en pantallas pequeñas para que no sean demasiado anchos */
+            }
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -172,10 +179,11 @@
         <label for="impuestoSello">Impuesto al Sello (Cuota 1 a 6)</label>
         <input type="text" id="impuestoSello" placeholder="Impuesto al Sello" disabled>
         
+        <button class="button" onclick="calcular()">Calcular</button>
 
         <div class="share-button-group"> 
             <a href="#" class="whatsapp-text-button" onclick="compartirWhatsAppTexto()">
-                <i class="fab fa-whatsapp"></i> Compartir
+                <i class="fab fa-whatsapp"></i> Compartir 
             </a>
             <button class="download-calculation-button" onclick="descargarImagenCalculo()">
                 <i class="fas fa-download"></i> Descargar Cálculo
@@ -204,8 +212,9 @@
         <p>Especificar la unidad y el precio de referencia de Lista de Fabrica en la Solicitud.</p>
         <p><b>Presentar fotocopia frente y dorso de DNI</b></p>
     </div>
-</div> <script>
-    // Función para formatear valores a moneda argentina
+</div>
+
+<script>
     function currencyFormat(value) {
         return new Intl.NumberFormat('es-AR', {
             style: 'currency',
@@ -213,7 +222,6 @@
         }).format(value);
     }
 
-    // Función para formatear el input del valor básico móvil con puntos y el signo de pesos
     function formatearValor(input) {
         let cursorPosition = input.selectionStart;
         const originalValue = input.value;
@@ -235,7 +243,6 @@
         }
     }
 
-    // Función para limpiar los campos de resultado
     function limpiarResultados() {
         document.getElementById('cuotaPura').value = '';
         document.getElementById('mensualJuridica').value = '';
@@ -244,16 +251,15 @@
         document.getElementById('impuestoSello').value = '';
     }
 
-    // Función para el cálculo automático
     function calcularAutomatico() {
         const valorInput = document.getElementById('valorBasicoMovil');
         const errorMensaje = document.getElementById('errorMensaje');
         const valorString = valorInput.value.replace(/\$/g, '').replace(/\./g, '');
         const valorBasico = parseFloat(valorString);
 
-        errorMensaje.textContent = ''; // Limpiar mensaje de error
+        errorMensaje.textContent = '';
 
-        if (valorString === '') { // Si el campo está vacío
+        if (valorString === '') {
             limpiarResultados();
             return;
         }
@@ -288,8 +294,6 @@
         }
     });
 
-    // --- Funciones para Compartir y Descargar ---
-
     function compartirWhatsAppTexto() {
         const cuotaPura = document.getElementById('cuotaPura').value;
         const mensualJuridica = document.getElementById('mensualJuridica').value;
@@ -315,7 +319,6 @@
         window.open(linkWhatsApp, '_blank');
     }
 
-    // Función principal para generar y descargar una imagen de un elemento específico
     async function generateAndDownloadImage(elementId, filename) {
         const targetElement = document.getElementById(elementId);
         if (!targetElement) {
@@ -324,17 +327,19 @@
         }
 
         const shareButtonGroup = document.querySelector('.share-button-group');
-        let originalDisplay = ''; // Para guardar el estilo original
+        let originalDisplay = ''; 
 
         if (shareButtonGroup) {
-            originalDisplay = shareButtonGroup.style.display; // Guarda el display actual
-            shareButtonGroup.classList.add('hide-on-capture'); // Oculta los botones
+            originalDisplay = shareButtonGroup.style.display; 
+            shareButtonGroup.classList.add('hide-on-capture'); 
+            // Fuerza el reflow para asegurar que el display: none se aplique antes de la captura
+            void shareButtonGroup.offsetWidth; 
         }
 
         try {
             const options = {
                 scale: 2,
-                backgroundColor: '#f8f8f8', // Fondo predeterminado del calculador
+                backgroundColor: '#f8f8f8',
                 windowWidth: targetElement.scrollWidth, 
                 windowHeight: targetElement.scrollHeight
             };
@@ -355,24 +360,24 @@
             console.error("Error al generar la imagen:", error);
             alert("Hubo un error al descargar la imagen. Por favor, inténtelo de nuevo.");
         } finally {
-            // Asegura que los botones se vuelvan a mostrar
             if (shareButtonGroup) {
                 shareButtonGroup.classList.remove('hide-on-capture');
-                shareButtonGroup.style.display = originalDisplay; // Restaura el display original
+                shareButtonGroup.style.display = originalDisplay; 
             }
         }
     }
 
-    // Descarga solo la imagen del cálculo
     function descargarImagenCalculo() {
         generateAndDownloadImage('calculator-container', 'calculo_agroplan.png');
     }
 
-    // Descarga la imagen del cálculo y las especificaciones
     function descargarImagenCalculoYEspecificaciones() {
         generateAndDownloadImage('main-content-wrapper', 'calculo_y_especificaciones_agroplan.png');
     }
 </script>
+
+</body>
+</html>
 
 </body>
 </html>
