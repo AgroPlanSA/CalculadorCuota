@@ -39,10 +39,16 @@
         input[type="text"], input[type="number"] {
             width: calc(100% - 20px);
             padding: 10px;
-            margin-bottom: 15px;
+            margin-bottom: 5px; /* Ajustado para dejar espacio para el mensaje de error */
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 16px;
+        }
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            height: 1.2em; /* Para evitar que el diseño "salte" si aparece/desaparece el error */
         }
         .button {
             width: 100%;
@@ -71,8 +77,9 @@
             justify-content: center;
             margin-top: 20px;
             gap: 10px; /* Espacio entre los botones */
+            flex-wrap: wrap; /* Permite que los botones se envuelvan en pantallas pequeñas */
         }
-        .share-button a, .share-button button { /* Aplicar estilos a ambos enlaces y botones */
+        .share-button a, .share-button button {
             display: inline-flex;
             align-items: center;
             color: white;
@@ -80,9 +87,10 @@
             text-decoration: none;
             border-radius: 5px;
             transition: background-color 0.3s ease;
-            cursor: pointer; /* Asegurar que el botón tenga cursor de puntero */
-            border: none; /* Quitar borde predeterminado de botón */
-            font-size: 16px; /* Asegurar consistencia de tamaño de fuente */
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+            text-align: center; /* Centrar texto dentro del botón */
         }
 
         /* Estilos específicos para cada botón */
@@ -123,58 +131,57 @@
     <img src="img/LogoAgro-04.svg" alt="Logo" style="max-width: 400px;">
 </div>
 
-<div class="container" id="calculator-container"> <h1>Calculador de Cuota</h1>
-    <label for="valorBasicoMovil">Valor Básico Móvil ($34.000.000 a $66.000.000, en múltiplos de $10.000)</label>
-    <input type="text" id="valorBasicoMovil" placeholder="Ingrese el valor" required
-           oninput="formatearValor(this)" />
-    
-    <label for="cuotaPura">Cuota Pura</label>
-    <input type="text" id="cuotaPura" placeholder="Cuota Pura" disabled>
-    
-    <label for="mensualJuridica">Mensual Jurídica</label>
-    <input type="text" id="mensualJuridica" placeholder="Mensual Jurídica" disabled>
-    
-    <label for="segVida">Seg. de Vida</label>
-    <input type="text" id="segVida" placeholder="Seg. de Vida" disabled>
-    
-    <label for="mensualFisca">Mensual Física</label>
-    <input type="text" id="mensualFisca" placeholder="Mensual Física" disabled>
+<div id="capture-area"> 
+    <div class="container" id="calculator-container">
+        <h1>Calculador de Cuota</h1>
+        <label for="valorBasicoMovil">Valor Básico Móvil ($34.000.000 a $66.000.000, en múltiplos de $10.000)</label>
+        <input type="text" id="valorBasicoMovil" placeholder="Ingrese el valor" required
+               oninput="formatearValor(this); calcularAutomatico();" /> <span id="errorMensaje" class="error-message"></span> <label for="cuotaPura">Cuota Pura</label>
+        <input type="text" id="cuotaPura" placeholder="Cuota Pura" disabled>
+        
+        <label for="mensualJuridica">Mensual Jurídica</label>
+        <input type="text" id="mensualJuridica" placeholder="Mensual Jurídica" disabled>
+        
+        <label for="segVida">Seg. de Vida</label>
+        <input type="text" id="segVida" placeholder="Seg. de Vida" disabled>
+        
+        <label for="mensualFisca">Mensual Física</label>
+        <input type="text" id="mensualFisca" placeholder="Mensual Física" disabled>
 
-    <label for="impuestoSello">Impuesto al Sello (Cuota 1 a 6)</label>
-    <input type="text" id="impuestoSello" placeholder="Impuesto al Sello" disabled>
-    
-    <button class="button" onclick="calcular()">Calcular</button>
+        <label for="impuestoSello">Impuesto al Sello (Cuota 1 a 6)</label>
+        <input type="text" id="impuestoSello" placeholder="Impuesto al Sello" disabled>
+        
+        <button class="button" onclick="calcular()">Calcular</button> 
 
-    <div class="share-button">
-        <a href="#" class="whatsapp-text-button" onclick="compartirWhatsAppTexto()">
-            <i class="fab fa-whatsapp"></i> Compartir
-        </a>
-        <button class="download-image-button" onclick="descargarImagenCalculo()">
-            <i class="fas fa-download"></i> Descargar Imagen
-        </button>
+        <div class="share-button">
+            <a href="#" class="whatsapp-text-button" onclick="compartirWhatsAppTexto()">
+                <i class="fab fa-whatsapp"></i> Compartir Texto por WhatsApp
+            </a>
+            <button class="download-image-button" onclick="descargarImagenCalculo()">
+                <i class="fas fa-download"></i> Descargar Imagen del Cálculo
+            </button>
+        </div>
     </div>
-</div>
 
-<div class="specifications">
-    <h2>Especificaciones del Plan</h2>
+    <div class="specifications">
+        <h2>Especificaciones del Plan</h2>
 
-    <p><b>Plazo:</b> 60 meses / cuotas en pesos y sin interés</p>
-    <p><b>Carga Administrativa:</b>8.0% fija para financiación a 5 años</p>
-    <p><b>Adjudicaciones mensuales:</b>por sorteo o licitación</p>
-    <p>* Al adjudicar si el cliente ordena un bien de MENOR valor al Valor Móvil Adjudicado, la diferencia será acreditado como cuotas adelantadas.</p>
-    <p>* Si ordena un bien de MAYOR valor al Valor Adjudicado, la diferencia será abonada por el cliente.</p>
-    <p><b>Impuesto al sello:</b>del valor suscripto es: 1,2% para todas las provincias a excepción de Córdoba. (Se abonara prorrateado en las primeras 6 cuotas detallado en el cupón de pago)</p>
-    <p><b>Impuesto al débito y crédito (Ley 25.413):</b> 0,804% sobre el valor de la cuota pura correspondiente al mes en curso.</p>
-    <p><b>Seguro de Vida (Personas física/Soc. de Hecho únicamente):</b>0,0833 % del saldo deudor. Hasta 64 años inclusive.</p>
-    <p><b>Derecho de Adjudicación:</b>Cupón de pago único que se genera al aceptar la adjudicación 1% + IVA del valor Móvil adjudicado.</p>
-    <p><b>Gastos de Patentamiento</b> No Aplica y <b>Prenda</b> No aplica <b>Gestoría</b> $ 54,500 + Formularios $ 43,200 a cargo del cliente.</p>
-    <p><b>El suscriptor debe firmar:</b>Declaración Jurada Res. UIF + Anexo UIF para sociedad + Persona expuesta políticamente + Declaración jurada de salud (Personas física/Soc. de Hecho únicamente).</p>
-    <p>Los precios de referencias deben tomarlos de la Lista de Precios de Fabrica.</p>
-    <p>Especificar la unidad y el precio de referencia de Lista de Fabrica en la Solicitud.</p>
-    <p><b>Presentar fotocopia frente y dorso de DNI</b></p>
-</div>
-
-<script>
+        <p><b>Plazo:</b> 60 meses / cuotas en pesos y sin interés</p>
+        <p><b>Carga Administrativa:</b>8.0% fija para financiación a 5 años</p>
+        <p><b>Adjudicaciones mensuales:</b>por sorteo o licitación</p>
+        <p>* Al adjudicar si el cliente ordena un bien de MENOR valor al Valor Móvil Adjudicado, la diferencia será acreditado como cuotas adelantadas.</p>
+        <p>* Si ordena un bien de MAYOR valor al Valor Adjudicado, la diferencia será abonada por el cliente.</p>
+        <p><b>Impuesto al sello:</b>del valor suscripto es: 1,2% para todas las provincias a excepción de Córdoba. (Se abonara prorrateado en las primeras 6 cuotas detallado en el cupón de pago)</p>
+        <p><b>Impuesto al débito y crédito (Ley 25.413):</b> 0,804% sobre el valor de la cuota pura correspondiente al mes en curso.</p>
+        <p><b>Seguro de Vida (Personas física/Soc. de Hecho únicamente):</b>0,0833 % del saldo deudor. Hasta 64 años inclusive.</p>
+        <p><b>Derecho de Adjudicación:</b>Cupón de pago único que se genera al aceptar la adjudicación 1% + IVA del valor Móvil adjudicado.</p>
+        <p><b>Gastos de Patentamiento</b> No Aplica y <b>Prenda</b> No aplica <b>Gestoría</b> $ 54,500 + Formularios $ 43,200 a cargo del cliente.</p>
+        <p><b>El suscriptor debe firmar:</b>Declaración Jurada Res. UIF + Anexo UIF para sociedad + Persona expuesta políticamente + Declaración jurada de salud (Personas física/Soc. de Hecho únicamente).</p>
+        <p>Los precios de referencias deben tomarlos de la Lista de Precios de Fabrica.</p>
+        <p>Especificar la unidad y el precio de referencia de Lista de Fabrica en la Solicitud.</p>
+        <p><b>Presentar fotocopia frente y dorso de DNI</b></p>
+    </div>
+</div> <script>
     // Función para formatear valores a moneda argentina
     function currencyFormat(value) {
         return new Intl.NumberFormat('es-AR', {
@@ -185,39 +192,67 @@
 
     // Función para formatear el input del valor básico móvil con puntos y el signo de pesos
     function formatearValor(input) {
-        let value = input.value.replace(/\D/g, ''); // Remover caracteres no numéricos
-        let formattedValue = '';
+        // Guarda la posición actual del cursor
+        let cursorPosition = input.selectionStart;
+        const originalLength = input.value.length;
+
+        let value = input.value.replace(/\$/g, '').replace(/\./g, ''); // Remover signo $ y puntos para el cálculo
 
         if (value) {
             // Formatear el número con puntos cada 3 dígitos
-            formattedValue = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            let formattedValue = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
             // Añadir el signo de pesos al principio
             input.value = '$' + formattedValue;
+
+            // Ajustar la posición del cursor
+            const newLength = input.value.length;
+            const diff = newLength - originalLength;
+            input.setSelectionRange(cursorPosition + diff, cursorPosition + diff);
+
         } else {
             input.value = '';
         }
     }
 
-    // Función principal para calcular las cuotas
-    function calcular() {
-        // Obtener el valor básico móvil y eliminar el signo de pesos y puntos para el cálculo
-        const valorString = document.getElementById('valorBasicoMovil').value.replace(/\$/g, '').replace(/\./g, '');
+    // Función para limpiar los campos de resultado
+    function limpiarResultados() {
+        document.getElementById('cuotaPura').value = '';
+        document.getElementById('mensualJuridica').value = '';
+        document.getElementById('segVida').value = '';
+        document.getElementById('mensualFisca').value = '';
+        document.getElementById('impuestoSello').value = '';
+    }
+
+    // Nueva función para el cálculo automático (llamada al escribir)
+    function calcularAutomatico() {
+        const valorInput = document.getElementById('valorBasicoMovil');
+        const errorMensaje = document.getElementById('errorMensaje');
+        const valorString = valorInput.value.replace(/\$/g, '').replace(/\./g, '');
         const valorBasico = parseFloat(valorString);
 
-        // Validar que el valor esté dentro del rango permitido y sea un múltiplo de 10.000
-        if (isNaN(valorBasico) || valorBasico < 34000000 || valorBasico > 66000000 || (valorBasico % 10000 !== 0)) {
-            alert("Por favor, ingrese un valor entre $34.000.000,00 y $66.000.000,00, en múltiplos de $10.000.");
+        // Limpiar mensaje de error y resultados previos
+        errorMensaje.textContent = '';
+        limpiarResultados();
+
+        // Si el campo está vacío, no calcular nada y salir
+        if (valorString === '') {
             return;
         }
 
-        // Calcular los diferentes componentes de la cuota
+        // Validar el valor
+        if (isNaN(valorBasico) || valorBasico < 34000000 || valorBasico > 66000000 || (valorBasico % 10000 !== 0)) {
+            errorMensaje.textContent = "Ingrese un valor entre $34.000.000 y $66.000.000, en múltiplos de $10.000.";
+            return;
+        }
+
+        // Si el valor es válido, proceder con los cálculos
         const cuotaPura = valorBasico / 60;
         const mensualJuridica = (valorBasico * 1.08 * 1.21) / 60;
-        const segVida = valorBasico * 0.00083; // 0.0833% del saldo deudor
+        const segVida = valorBasico * 0.00083;
         const mensualFisca = mensualJuridica + segVida;
-        const impuestoSello = (valorBasico * 0.012) / 6; // 1.2% del valor suscripto prorrateado en 6 cuotas
+        const impuestoSello = (valorBasico * 0.012) / 6;
 
-        // Mostrar los resultados formateados en los campos correspondientes
+        // Mostrar los resultados formateados
         document.getElementById('cuotaPura').value = currencyFormat(cuotaPura);
         document.getElementById('mensualJuridica').value = currencyFormat(mensualJuridica);
         document.getElementById('segVida').value = currencyFormat(segVida);
@@ -225,21 +260,20 @@
         document.getElementById('impuestoSello').value = currencyFormat(impuestoSello);
     }
 
-    // Event listener para formatear el valor al escribir
-    document.getElementById('valorBasicoMovil').addEventListener('input', function(event) {
-        formatearValor(this);
-    });
+    // La función 'calcular' ahora solo llama a 'calcularAutomatico' y puede ser disparada por el botón si se desea.
+    function calcular() {
+        calcularAutomatico();
+    }
 
-    // Event listener para capturar la tecla Enter y calcular
+    // Event listener para capturar la tecla Enter
     document.getElementById('valorBasicoMovil').addEventListener('keydown', function(event) {
         if (event.key === 'Enter') {
-            calcular();
+            calcularAutomatico(); // Dispara el cálculo automático al presionar Enter
         }
     });
 
     // --- Funciones para Compartir y Descargar ---
 
-    // Función para compartir los resultados por WhatsApp (solo texto)
     function compartirWhatsAppTexto() {
         const cuotaPura = document.getElementById('cuotaPura').value;
         const mensualJuridica = document.getElementById('mensualJuridica').value;
@@ -248,40 +282,48 @@
         const impuestoSello = document.getElementById('impuestoSello').value;
         const valorBasicoMovil = document.getElementById('valorBasicoMovil').value;
 
-        const mensaje = `Acá te paso los detalles para un Valor Básico Móvil de: ${valorBasicoMovil}\n\n` +
+        // Verificar si los resultados están vacíos antes de generar el mensaje
+        if (!cuotaPura || !valorBasicoMovil) {
+            alert("Por favor, realice un cálculo válido antes de compartir.");
+            return;
+        }
+
+        const mensaje = `¡Hola! Aquí tienes los detalles del cálculo de cuotas de Agro Plan para un valor de: ${valorBasicoMovil}\n\n` +
                         `Cuota Pura: ${cuotaPura}\n` +
                         `Mensual Jurídica: ${mensualJuridica}\n` +
                         `Seguro de Vida: ${segVida}\n` +
                         `Mensual Física: ${mensualFisca}\n` +
                         `Impuesto al Sello (Cuota 1 a 6): ${impuestoSello}\n\n` +
-                        `¡A disposición para lo que necesite!`;
+                        `¡Calculado con el plan de ahorro de remolques de Agro Plan!`;
 
         const linkWhatsApp = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
         window.open(linkWhatsApp, '_blank');
     }
 
-    // Nueva función para descargar la imagen del cálculo
     function descargarImagenCalculo() {
-        const container = document.getElementById('calculator-container'); // Usamos el ID del div contenedor
+        // Captura el nuevo div padre que contiene tanto el calculador como las especificaciones
+        const containerToCapture = document.getElementById('capture-area'); 
 
         // Opciones para html2canvas (puedes ajustarlas si es necesario)
         const options = {
             scale: 2, // Aumenta la resolución de la imagen (2x, 3x, etc.)
-            backgroundColor: '#f8f8f8' // Coincide con el fondo del contenedor
+            backgroundColor: '#fff', // Fondo del cuerpo para la captura general
+            windowWidth: containerToCapture.scrollWidth, // Asegura que captura todo el ancho
+            windowHeight: containerToCapture.scrollHeight // Asegura que captura toda la altura
         };
 
-        html2canvas(container, options).then(function(canvas) {
+        html2canvas(containerToCapture, options).then(function(canvas) {
             const imageData = canvas.toDataURL("image/png"); // Obtiene la imagen en formato Data URL
 
             // Crear un enlace temporal para la descarga
             const link = document.createElement('a');
             link.href = imageData;
-            link.download = 'calculo_agroplan.png'; // Nombre del archivo que se descargará
+            link.download = 'calculo_y_especificaciones_agroplan.png'; // Nombre del archivo que se descargará
             document.body.appendChild(link); // Añadir el enlace al DOM temporalmente
             link.click(); // Simular clic en el enlace para iniciar la descarga
             document.body.removeChild(link); // Remover el enlace
             
-            alert("La imagen ha sido descargada. Ahora podés compartirla en WhatsApp.");
+            alert("La imagen con los detalles del cálculo y las especificaciones ha sido descargada. Ahora puedes compartirla manualmente en WhatsApp.");
         });
     }
 </script>
