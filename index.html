@@ -85,8 +85,9 @@
             flex-wrap: wrap;
         }
         .share-button-group a, .share-button-group button {
-            display: inline-flex;
+            display: flex; /* Cambiado de inline-flex a flex */
             align-items: center;
+            justify-content: center; /* Centra el contenido del botón */
             color: white;
             padding: 10px 20px;
             text-decoration: none;
@@ -95,7 +96,12 @@
             cursor: pointer;
             border: none;
             font-size: 16px;
-            text-align: center;
+        }
+
+        /* Contenedor para el texto del botón (sin el ícono) */
+        .button-text {
+            flex-grow: 1; /* Permite que el texto ocupe el espacio disponible */
+            text-align: center; /* Centra el texto dentro de su propio contenedor */
         }
 
         /* Estilos específicos para cada botón */
@@ -121,8 +127,10 @@
         }
 
         .share-button-group i {
-            margin-right: 8px;
+            margin-right: 8px; /* Espacio a la derecha del icono */
             font-size: 20px;
+            /* Asegura que el ícono permanezca a la izquierda del contenido principal */
+            flex-shrink: 0; /* Evita que el ícono se encoja */
         }
 
         /* Clase para ocultar elementos temporalmente durante la captura */
@@ -138,12 +146,11 @@
                 flex-direction: column;
                 align-items: center;
             }
-            /* **AJUSTE CLAVE AQUI** */
             .share-button-group a,
             .share-button-group button {
-                width: 100%; /* Hacen que tomen el ancho completo */
-                box-sizing: border-box; /* Asegura que el padding se incluya en el width */
-                max-width: 300px; /* Opcional: limitar el ancho máximo en pantallas pequeñas para que no sean demasiado anchos */
+                width: 100%;
+                box-sizing: border-box;
+                max-width: 300px; 
             }
         }
     </style>
@@ -179,17 +186,16 @@
         <label for="impuestoSello">Impuesto al Sello (Cuota 1 a 6)</label>
         <input type="text" id="impuestoSello" placeholder="Impuesto al Sello" disabled>
         
-        <button class="button" onclick="calcular()">Calcular</button>
 
         <div class="share-button-group"> 
             <a href="#" class="whatsapp-text-button" onclick="compartirWhatsAppTexto()">
-                <i class="fab fa-whatsapp"></i> Compartir 
+                <i class="fab fa-whatsapp"></i> <span class="button-text">Compartir Texto por WhatsApp</span>
             </a>
             <button class="download-calculation-button" onclick="descargarImagenCalculo()">
-                <i class="fas fa-download"></i> Descargar Cálculo
+                <i class="fas fa-download"></i> <span class="button-text">Descargar Imagen del Cálculo</span>
             </button>
             <button class="download-full-report-button" onclick="descargarImagenCalculoYEspecificaciones()">
-                <i class="fas fa-download"></i> Descargar Cálculo + Especificaciones
+                <i class="fas fa-download"></i> <span class="button-text">Descargar Cálculo + Especificaciones</span>
             </button>
         </div>
     </div>
@@ -332,7 +338,6 @@
         if (shareButtonGroup) {
             originalDisplay = shareButtonGroup.style.display; 
             shareButtonGroup.classList.add('hide-on-capture'); 
-            // Fuerza el reflow para asegurar que el display: none se aplique antes de la captura
             void shareButtonGroup.offsetWidth; 
         }
 
