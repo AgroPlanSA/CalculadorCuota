@@ -77,7 +77,7 @@
             border-radius: 5px;
         }
 
-        .share-button-group { /* Nuevo contenedor para los botones de compartir */
+        .share-button-group { /* Contenedor para los botones de compartir */
             display: flex;
             justify-content: center;
             margin-top: 20px;
@@ -106,15 +106,15 @@
             background-color: #128C7E;
         }
 
-        .share-button-group .download-calculation-button { /* Nuevo botón para solo cálculo */
-            background-color: #007bff; /* Azul */
+        .share-button-group .download-calculation-button {
+            background-color: #007bff;
         }
         .share-button-group .download-calculation-button:hover {
             background-color: #0056b3;
         }
 
-        .share-button-group .download-full-report-button { /* Nuevo botón para cálculo + specs */
-            background-color: #6f42c1; /* Púrpura */
+        .share-button-group .download-full-report-button {
+            background-color: #6f42c1;
         }
         .share-button-group .download-full-report-button:hover {
             background-color: #5a2e9b;
@@ -174,7 +174,7 @@
         
         <button class="button" onclick="calcular()">Calcular</button>
 
-        <div class="share-button-group hide-on-capture"> 
+        <div class="share-button-group"> 
             <a href="#" class="whatsapp-text-button" onclick="compartirWhatsAppTexto()">
                 <i class="fab fa-whatsapp"></i> Compartir Texto por WhatsApp
             </a>
@@ -187,7 +187,8 @@
         </div>
     </div>
 
-    <div class="specifications" id="specifications-container"> <h2>Especificaciones del Plan</h2>
+    <div class="specifications" id="specifications-container">
+        <h2>Especificaciones del Plan</h2>
 
         <p><b>Plazo:</b> 60 meses / cuotas en pesos y sin interés</p>
         <p><b>Carga Administrativa:</b>8.0% fija para financiación a 5 años</p>
@@ -215,28 +216,23 @@
 
     // Función para formatear el input del valor básico móvil con puntos y el signo de pesos
     function formatearValor(input) {
-        // Guarda la posición actual del cursor
         let cursorPosition = input.selectionStart;
         const originalValue = input.value;
         const originalLength = originalValue.length;
 
-        let value = originalValue.replace(/\$/g, '').replace(/\./g, ''); // Remover signo $ y puntos
+        let value = originalValue.replace(/\$/g, '').replace(/\./g, '');
 
         if (value) {
-            // Formatear el número con puntos cada 3 dígitos
             let formattedValue = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-            // Añadir el signo de pesos al principio
             input.value = '$' + formattedValue;
 
-            // Ajustar la posición del cursor
             const newLength = input.value.length;
             const diff = newLength - originalLength;
-            // Solo ajustamos si el cursor estaba en la parte numérica y no antes del '$'
             if (cursorPosition > 0 || originalValue.startsWith('$')) {
                 input.setSelectionRange(cursorPosition + diff, cursorPosition + diff);
             }
         } else {
-            input.value = ''; // Limpiar completamente si no hay números
+            input.value = '';
         }
     }
 
@@ -249,37 +245,32 @@
         document.getElementById('impuestoSello').value = '';
     }
 
-    // Nueva función para el cálculo automático (llamada al escribir)
+    // Función para el cálculo automático
     function calcularAutomatico() {
         const valorInput = document.getElementById('valorBasicoMovil');
         const errorMensaje = document.getElementById('errorMensaje');
         const valorString = valorInput.value.replace(/\$/g, '').replace(/\./g, '');
         const valorBasico = parseFloat(valorString);
 
-        // Limpiar mensaje de error
-        errorMensaje.textContent = '';
+        errorMensaje.textContent = ''; // Limpiar mensaje de error
 
-        // Si el campo está vacío, limpiar resultados y salir
-        if (valorString === '') {
+        if (valorString === '') { // Si el campo está vacío
             limpiarResultados();
             return;
         }
 
-        // Validar el valor
         if (isNaN(valorBasico) || valorBasico < 34000000 || valorBasico > 66000000 || (valorBasico % 10000 !== 0)) {
             errorMensaje.textContent = "Ingrese un valor entre $34.000.000 y $66.000.000, en múltiplos de $10.000.";
-            limpiarResultados(); // Limpiar resultados si el valor es inválido
+            limpiarResultados();
             return;
         }
 
-        // Si el valor es válido, proceder con los cálculos
         const cuotaPura = valorBasico / 60;
         const mensualJuridica = (valorBasico * 1.08 * 1.21) / 60;
         const segVida = valorBasico * 0.00083;
         const mensualFisca = mensualJuridica + segVida;
         const impuestoSello = (valorBasico * 0.012) / 6;
 
-        // Mostrar los resultados formateados
         document.getElementById('cuotaPura').value = currencyFormat(cuotaPura);
         document.getElementById('mensualJuridica').value = currencyFormat(mensualJuridica);
         document.getElementById('segVida').value = currencyFormat(segVida);
@@ -287,15 +278,13 @@
         document.getElementById('impuestoSello').value = currencyFormat(impuestoSello);
     }
 
-    // La función 'calcular' ahora solo llama a 'calcularAutomatico'.
     function calcular() {
         calcularAutomatico();
     }
 
-    // Event listener para capturar la tecla Enter
     document.getElementById('valorBasicoMovil').addEventListener('keydown', function(event) {
         if (event.key === 'Enter') {
-            event.preventDefault(); // Prevenir el comportamiento por defecto de Enter (ej. submit form)
+            event.preventDefault();
             calcularAutomatico();
         }
     });
@@ -327,29 +316,31 @@
         window.open(linkWhatsApp, '_blank');
     }
 
-    // Función para generar y descargar una imagen de un elemento específico
-    function generateAndDownloadImage(elementId, filename) {
+    // Función principal para generar y descargar una imagen de un elemento específico
+    async function generateAndDownloadImage(elementId, filename) {
         const targetElement = document.getElementById(elementId);
         if (!targetElement) {
             console.error('Elemento no encontrado para captura:', elementId);
             return;
         }
 
-        // Temporalmente oculta los botones de compartir/descargar antes de la captura
         const shareButtonGroup = document.querySelector('.share-button-group');
+        let originalDisplay = ''; // Para guardar el estilo original
+
         if (shareButtonGroup) {
-            shareButtonGroup.classList.add('hide-on-capture');
+            originalDisplay = shareButtonGroup.style.display; // Guarda el display actual
+            shareButtonGroup.classList.add('hide-on-capture'); // Oculta los botones
         }
 
-        const options = {
-            scale: 2,
-            backgroundColor: '#f8f8f8', // Fondo predeterminado del calculador
-            // html2canvas intenta calcular esto, pero a veces es útil forzarlo
-            windowWidth: targetElement.scrollWidth, 
-            windowHeight: targetElement.scrollHeight
-        };
+        try {
+            const options = {
+                scale: 2,
+                backgroundColor: '#f8f8f8', // Fondo predeterminado del calculador
+                windowWidth: targetElement.scrollWidth, 
+                windowHeight: targetElement.scrollHeight
+            };
 
-        html2canvas(targetElement, options).then(function(canvas) {
+            const canvas = await html2canvas(targetElement, options);
             const imageData = canvas.toDataURL("image/png");
 
             const link = document.createElement('a');
@@ -358,29 +349,27 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-
-            // Vuelve a mostrar los botones después de la captura
-            if (shareButtonGroup) {
-                shareButtonGroup.classList.remove('hide-on-capture');
-            }
             
             alert(`La imagen "${filename}" ha sido descargada. Ahora puedes compartirla manualmente en WhatsApp.`);
-        }).catch(error => {
+
+        } catch (error) {
             console.error("Error al generar la imagen:", error);
-            // Asegúrate de que los botones se vuelvan a mostrar incluso si hay un error
+            alert("Hubo un error al descargar la imagen. Por favor, inténtelo de nuevo.");
+        } finally {
+            // Asegura que los botones se vuelvan a mostrar
             if (shareButtonGroup) {
                 shareButtonGroup.classList.remove('hide-on-capture');
+                shareButtonGroup.style.display = originalDisplay; // Restaura el display original
             }
-            alert("Hubo un error al descargar la imagen. Por favor, inténtelo de nuevo.");
-        });
+        }
     }
 
-    // Nueva función para descargar solo la imagen del cálculo
+    // Descarga solo la imagen del cálculo
     function descargarImagenCalculo() {
         generateAndDownloadImage('calculator-container', 'calculo_agroplan.png');
     }
 
-    // Nueva función para descargar la imagen del cálculo y las especificaciones
+    // Descarga la imagen del cálculo y las especificaciones
     function descargarImagenCalculoYEspecificaciones() {
         generateAndDownloadImage('main-content-wrapper', 'calculo_y_especificaciones_agroplan.png');
     }
