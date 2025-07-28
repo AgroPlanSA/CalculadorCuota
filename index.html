@@ -9,150 +9,150 @@
     <title>Calculador de Cuota</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #fff;
-            margin: 0;
-            padding: 20px;
-        }
-        .logo {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        h1 {
-            text-align: center;
-            color: #c00;
-        }
-        /* Contenedor principal para ambos bloques, para ajustar el ancho máximo */
-        #main-content-wrapper {
-            max-width: 800px; /* Mismo ancho que el .container */
-            margin: auto;
-        }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to bottom, #cc0000 0%, #fff 80%, #cc0000 100%);
+}
 
-        .container {
-            padding: 20px;
-            border: 2px solid #c00;
-            border-radius: 10px;
-            background: #f8f8f8;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px; /* Espacio entre el calculador y las specs si no están en un mismo contenedor de captura */
-        }
-        label {
-            display: block;
-            margin-top: 10px;
-        }
-        input[type="text"], input[type="number"] {
-            width: calc(100% - 20px);
-            padding: 10px;
-            margin-bottom: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        .error-message {
-            color: red;
-            font-size: 0.9em;
-            margin-bottom: 10px;
-            height: 1.2em;
-        }
-        .button {
-            width: 100%;
-            padding: 15px;
-            background-color: #c00;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 18px;
-            margin-top: 10px;
-        }
-        .button:hover {
-            background-color: #a00;
-        }
-        .specifications {
-            margin-top: 0; /* Ya hay margin-bottom en .container */
-            padding: 15px;
-            background: #f1f1f1;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
+.logo {
+    text-align: center;
+    padding: 20px 0;
+    background-color: #cc0000;
+}
 
-        .share-button-group { /* Contenedor para los botones de compartir */
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        .share-button-group a, .share-button-group button {
-            display: flex; /* Cambiado de inline-flex a flex */
-            align-items: center;
-            justify-content: center; /* Centra el contenido del botón */
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-            cursor: pointer;
-            border: none;
-            font-size: 16px;
-        }
+#main-content-wrapper {
+    max-width: 850px;
+    margin: -50px auto 0;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
 
-        /* Contenedor para el texto del botón (sin el ícono) */
-        .button-text {
-            flex-grow: 1; /* Permite que el texto ocupe el espacio disponible */
-            text-align: center; /* Centra el texto dentro de su propio contenedor */
-        }
+.container {
+    padding: 0;
+}
 
-        /* Estilos específicos para cada botón */
-        .share-button-group .whatsapp-text-button {
-            background-color: #25D366;
-        }
-        .share-button-group .whatsapp-text-button:hover {
-            background-color: #128C7E;
-        }
+h1 {
+    background-color: #cc0000;
+    color: white;
+    font-size: 22px;
+    text-align: left;
+    margin: 0;
+    padding: 15px 20px;
+}
 
-        .share-button-group .download-calculation-button {
-            background-color: #007bff;
-        }
-        .share-button-group .download-calculation-button:hover {
-            background-color: #0056b3;
-        }
+label {
+    display: block;
+    margin: 12px 0 5px;
+    padding: 0 20px;
+    color: #333;
+    font-weight: 600;
+    font-size: 14px;
+}
 
-        .share-button-group .download-full-report-button {
-            background-color: #6f42c1;
-        }
-        .share-button-group .download-full-report-button:hover {
-            background-color: #5a2e9b;
-        }
+input[type="text"], input[type="number"] {
+    width: calc(100% - 40px);
+    margin: 0 auto 10px;
+    display: block;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+    background-color: #f9f9f9;
+}
 
-        .share-button-group i {
-            margin-right: 8px; /* Espacio a la derecha del icono */
-            font-size: 20px;
-            /* Asegura que el ícono permanezca a la izquierda del contenido principal */
-            flex-shrink: 0; /* Evita que el ícono se encoja */
-        }
+.error-message {
+    padding: 0 20px;
+    color: red;
+    font-size: 13px;
+    height: 16px;
+}
 
-        /* Clase para ocultar elementos temporalmente durante la captura */
-        .hide-on-capture {
-            display: none !important;
-        }
+.share-button-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px;
+    flex-wrap: wrap;
+}
 
-        @media (max-width: 600px) {
-            input[type="text"], .button {
-                font-size: 16px;
-            }
-            .share-button-group {
-                flex-direction: column;
-                align-items: center;
-            }
-            .share-button-group a,
-            .share-button-group button {
-                width: 100%;
-                box-sizing: border-box;
-                max-width: 300px; 
-            }
-        }
+.share-button-group a,
+.share-button-group button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 6px;
+    color: white;
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button-text {
+    white-space: nowrap;
+}
+
+.whatsapp-text-button {
+    background-color: #25D366;
+}
+.whatsapp-text-button:hover {
+    background-color: #128C7E;
+}
+
+.download-calculation-button {
+    background-color: #007bff;
+}
+.download-calculation-button:hover {
+    background-color: #0056b3;
+}
+
+.download-full-report-button {
+    background-color: #6f42c1;
+}
+.download-full-report-button:hover {
+    background-color: #5a2e9b;
+}
+
+.specifications {
+    background-color: #f1f1f1;
+    padding: 20px;
+    font-size: 14px;
+    color: #333;
+    line-height: 1.6;
+    border-top: 2px solid #ccc;
+}
+
+.specifications h2 {
+    margin-top: 0;
+    font-size: 18px;
+    color: #444;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    input[type="text"], input[type="number"] {
+        width: calc(100% - 40px);
+    }
+
+    .share-button-group {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .share-button-group button,
+    .share-button-group a {
+        width: 100%;
+        max-width: 280px;
+    }
+}
+
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
