@@ -185,7 +185,35 @@
         flex-direction: column;
         align-items: flex-start;
       }
-    }
+      @media (max-width: 600px) {
+  .share-button-group {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .share-button-group button,
+  .share-button-group a {
+    width: 100%;
+    max-width: 280px;
+    position: relative;
+    justify-content: center;
+    padding-left: 40px; /* espacio para el ícono a la izquierda */
+  }
+
+  .share-button-group i {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    margin: 0;
+  }
+
+  .button-text {
+    width: 100%;
+    text-align: center;
+  }
+}
   </style>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
