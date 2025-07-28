@@ -1,267 +1,271 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="description" content="Agro Plan, calculador de cuota para plan de ahorro de remolques en 60 cuotas mensuales.">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculador de Cuota</title>
-    <link rel="icon" href="img/Icono-Cerdito-Extranet_2.svg" type="image/x-icon">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="description" content="Agro Plan, calculador de cuota para plan de ahorro de remolques en 60 cuotas mensuales." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculador de Cuota</title>
+  <link rel="icon" href="img/Icono-Cerdito-Extranet_2.svg" type="image/x-icon" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #ffffff;
-        }
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #ffffff;
+    }
 
-        header {
-            background-color: #cc0000;
-            padding: 10px 0;
-            text-align: center;
-        }
+    header {
+      background-color: #cc0000;
+      padding: 10px 0;
+      text-align: center;
+    }
 
-        header img {
-            max-height: 50px;
-        }
+    header img {
+      max-height: 50px;
+    }
 
-        footer {
-            background-color: #cc0000;
-            color: white;
-            font-size: 14px;
-            padding: 25px 20px;
-            text-align: left;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 20px;
-        }
+    #main-content-wrapper {
+      max-width: 850px;
+      margin: 30px auto;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+    }
 
-        footer .footer-column {
-            max-width: 300px;
-        }
+    .container {
+      padding: 0;
+    }
 
-        footer img.qr {
-            max-width: 100px;
-            height: auto;
-        }
+    h1 {
+      background-color: #cc0000;
+      color: white;
+      font-size: 22px;
+      text-align: left;
+      margin: 0;
+      padding: 15px 20px;
+    }
 
-        #main-content-wrapper {
-            max-width: 850px;
-            margin: 30px auto;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
-        }
+    label {
+      display: block;
+      margin: 12px 0 5px;
+      padding: 0 20px;
+      color: #333;
+      font-weight: 600;
+      font-size: 14px;
+    }
 
-        .container {
-            padding: 0;
-        }
+    input[type="text"], input[type="number"] {
+      width: calc(100% - 40px);
+      margin: 0 auto 10px;
+      display: block;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
+      background-color: #f9f9f9;
+    }
 
-        h1 {
-            background-color: #cc0000;
-            color: white;
-            font-size: 22px;
-            text-align: center;
-            margin: 0;
-            padding: 15px 20px;
-        }
+    .error-message {
+      padding: 0 20px;
+      color: red;
+      font-size: 13px;
+      height: 16px;
+    }
 
-        label {
-            display: block;
-            margin: 12px 0 5px;
-            padding: 0 20px;
-            color: #333;
-            font-weight: 600;
-            font-size: 14px;
-        }
+    .share-button-group {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      padding: 20px;
+      flex-wrap: wrap;
+    }
 
-        input[type="text"], input[type="number"] {
-            width: calc(100% - 40px);
-            margin: 0 auto 10px;
-            display: block;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 15px;
-            background-color: #f9f9f9;
-        }
+    .share-button-group a,
+    .share-button-group button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 6px;
+      color: white;
+      font-size: 15px;
+      font-weight: 500;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
 
-        .error-message {
-            padding: 0 20px;
-            color: red;
-            font-size: 13px;
-            height: 16px;
-        }
+    .button-text {
+      white-space: nowrap;
+    }
 
-        .share-button-group {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            padding: 20px;
-            flex-wrap: wrap;
-        }
+    .whatsapp-text-button {
+      background-color: #25D366;
+    }
+    .whatsapp-text-button:hover {
+      background-color: #128C7E;
+    }
 
-        .share-button-group a,
-        .share-button-group button {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 18px;
-            border-radius: 6px;
-            color: white;
-            font-size: 15px;
-            font-weight: 500;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+    .download-calculation-button {
+      background-color: #007bff;
+    }
+    .download-calculation-button:hover {
+      background-color: #0056b3;
+    }
 
-        .button-text {
-            white-space: nowrap;
-        }
+    .download-full-report-button {
+      background-color: #6f42c1;
+    }
+    .download-full-report-button:hover {
+      background-color: #5a2e9b;
+    }
 
-        .whatsapp-text-button {
-            background-color: #25D366;
-        }
-        .whatsapp-text-button:hover {
-            background-color: #128C7E;
-        }
+    .specifications {
+      background-color: #f1f1f1;
+      padding: 20px;
+      font-size: 14px;
+      color: #333;
+      line-height: 1.6;
+      border-top: 2px solid #ccc;
+    }
 
-        .download-calculation-button {
-            background-color: #007bff;
-        }
-        .download-calculation-button:hover {
-            background-color: #0056b3;
-        }
+    .specifications h2 {
+      margin-top: 0;
+      font-size: 18px;
+      color: #444;
+    }
 
-        .download-full-report-button {
-            background-color: #6f42c1;
-        }
-        .download-full-report-button:hover {
-            background-color: #5a2e9b;
-        }
+    footer {
+      background-color: #cc0000;
+      color: white;
+      font-size: 14px;
+      padding: 25px 20px;
+    }
 
-        .specifications {
-            background-color: #f1f1f1;
-            padding: 20px;
-            font-size: 14px;
-            color: #333;
-            line-height: 1.6;
-            border-top: 2px solid #ccc;
-        }
+    .footer-wrapper {
+      max-width: 850px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+      align-items: flex-start;
+    }
 
-        .specifications h2 {
-            margin-top: 0;
-            font-size: 18px;
-            color: #444;
-        }
+    .footer-column {
+      max-width: 300px;
+    }
 
-        @media (max-width: 600px) {
-            input[type="text"], input[type="number"] {
-                width: calc(100% - 40px);
-            }
+    footer img.qr {
+      max-width: 100px;
+      height: auto;
+    }
 
-            .share-button-group {
-                flex-direction: column;
-                align-items: center;
-            }
+    @media (max-width: 600px) {
+      input[type="text"], input[type="number"] {
+        width: calc(100% - 40px);
+      }
 
-            .share-button-group button,
-            .share-button-group a {
-                width: 100%;
-                max-width: 280px;
-            }
+      .share-button-group {
+        flex-direction: column;
+        align-items: center;
+      }
 
-            footer {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-        }
-    </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+      .share-button-group button,
+      .share-button-group a {
+        width: 100%;
+        max-width: 280px;
+      }
+
+      .footer-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
-
 <body>
 
 <header>
-    <img src="img/AgroPlan blanco.svg" alt="AgroPlan Logo">
+  <img src="img/LogoAgro-04.svg" alt="AgroPlan Logo">
 </header>
 
 <div id="main-content-wrapper">
-    <div class="container" id="calculator-container">
-        <h1>Calculador de Cuota</h1>
-        <label for="valorBasicoMovil">Valor Básico Móvil ($34.000.000 a $66.000.000, en múltiplos de $10.000)</label>
-        <input type="text" id="valorBasicoMovil" placeholder="Ingrese el valor" required
-               oninput="formatearValor(this); calcularAutomatico();" />
-        <span id="errorMensaje" class="error-message"></span>
+  <div class="container" id="calculator-container">
+    <h1>Calculador de Cuota</h1>
 
-        <label for="cuotaPura">Cuota Pura</label>
-        <input type="text" id="cuotaPura" placeholder="Cuota Pura" disabled>
+    <label for="valorBasicoMovil">Valor Básico Móvil ($34.000.000 a $66.000.000, en múltiplos de $10.000)</label>
+    <input type="text" id="valorBasicoMovil" placeholder="Ingrese el valor" required oninput="formatearValor(this); calcularAutomatico();" />
+    <span id="errorMensaje" class="error-message"></span>
 
-        <label for="mensualJuridica">Mensual Jurídica</label>
-        <input type="text" id="mensualJuridica" placeholder="Mensual Jurídica" disabled>
+    <label for="cuotaPura">Cuota Pura</label>
+    <input type="text" id="cuotaPura" placeholder="Cuota Pura" disabled>
 
-        <label for="segVida">Seg. de Vida</label>
-        <input type="text" id="segVida" placeholder="Seg. de Vida" disabled>
+    <label for="mensualJuridica">Mensual Jurídica</label>
+    <input type="text" id="mensualJuridica" placeholder="Mensual Jurídica" disabled>
 
-        <label for="mensualFisca">Mensual Física</label>
-        <input type="text" id="mensualFisca" placeholder="Mensual Física" disabled>
+    <label for="segVida">Seg. de Vida</label>
+    <input type="text" id="segVida" placeholder="Seg. de Vida" disabled>
 
-        <label for="impuestoSello">Impuesto al Sello (Cuota 1 a 6)</label>
-        <input type="text" id="impuestoSello" placeholder="Impuesto al Sello" disabled>
+    <label for="mensualFisca">Mensual Física</label>
+    <input type="text" id="mensualFisca" placeholder="Mensual Física" disabled>
 
-        <div class="share-button-group">
-            <a href="#" class="whatsapp-text-button" onclick="compartirWhatsAppTexto()">
-                <i class="fab fa-whatsapp"></i> <span class="button-text">Compartir</span>
-            </a>
-            <button class="download-calculation-button" onclick="descargarImagenCalculo()">
-                <i class="fas fa-download"></i> <span class="button-text">Descargar Cálculo</span>
-            </button>
-            <button class="download-full-report-button" onclick="descargarImagenCalculoYEspecificaciones()">
-                <i class="fas fa-download"></i> <span class="button-text">Descargar Cálculo + Especificaciones</span>
-            </button>
-        </div>
+    <label for="impuestoSello">Impuesto al Sello (Cuota 1 a 6)</label>
+    <input type="text" id="impuestoSello" placeholder="Impuesto al Sello" disabled>
+
+    <div class="share-button-group">
+      <a href="#" class="whatsapp-text-button" onclick="compartirWhatsAppTexto()">
+        <i class="fab fa-whatsapp"></i> <span class="button-text">Compartir</span>
+      </a>
+      <button class="download-calculation-button" onclick="descargarImagenCalculo()">
+        <i class="fas fa-download"></i> <span class="button-text">Descargar Cálculo</span>
+      </button>
+      <button class="download-full-report-button" onclick="descargarImagenCalculoYEspecificaciones()">
+        <i class="fas fa-download"></i> <span class="button-text">Descargar Cálculo + Especificaciones</span>
+      </button>
     </div>
+  </div>
 
-    <div class="specifications" id="specifications-container">
-        <h2>Especificaciones del Plan</h2>
-        <p><b>Plazo:</b> 60 meses / cuotas en pesos y sin interés</p>
-        <p><b>Carga Administrativa:</b> 8.0% fija para financiación a 5 años</p>
-        <p><b>Adjudicaciones mensuales:</b> por sorteo o licitación</p>
-        <p>* Si el cliente ordena un bien de MENOR valor al Valor Móvil Adjudicado, la diferencia será acreditada como cuotas adelantadas.</p>
-        <p>* Si ordena un bien de MAYOR valor al Valor Adjudicado, la diferencia será abonada por el cliente.</p>
-        <p><b>Impuesto al sello:</b> 1,2% para todas las provincias a excepción de Córdoba. (Se abona prorrateado en las primeras 6 cuotas)</p>
-        <p><b>Impuesto al débito y crédito (Ley 25.413):</b> 0,804% sobre la cuota pura mensual.</p>
-        <p><b>Seguro de Vida:</b> 0,0833% del saldo deudor. Hasta 64 años inclusive.</p>
-        <p><b>Derecho de Adjudicación:</b> 1% + IVA del valor Móvil adjudicado.</p>
-        <p><b>Gestoría:</b> $54.500 + Formularios $43.200 a cargo del cliente.</p>
-        <p><b>Documentación requerida:</b> Declaraciones juradas UIF, salud, y datos del solicitante.</p>
-        <p><b>Precios:</b> Tomados de la Lista de Precios de Fábrica.</p>
-        <p><b>Presentar:</b> fotocopia de DNI (frente y dorso).</p>
-    </div>
+  <div class="specifications" id="specifications-container">
+    <h2>Especificaciones del Plan</h2>
+    <p><b>Plazo:</b> 60 meses / cuotas en pesos y sin interés</p>
+    <p><b>Carga Administrativa:</b> 8.0% fija para financiación a 5 años</p>
+    <p><b>Adjudicaciones mensuales:</b> por sorteo o licitación</p>
+    <p>* Si el cliente ordena un bien de MENOR valor al Valor Móvil Adjudicado, la diferencia será acreditada como cuotas adelantadas.</p>
+    <p>* Si ordena un bien de MAYOR valor al Valor Adjudicado, la diferencia será abonada por el cliente.</p>
+    <p><b>Impuesto al sello:</b> 1,2% para todas las provincias a excepción de Córdoba. (Se abona prorrateado en las primeras 6 cuotas)</p>
+    <p><b>Impuesto al débito y crédito (Ley 25.413):</b> 0,804% sobre la cuota pura mensual.</p>
+    <p><b>Seguro de Vida:</b> 0,0833% del saldo deudor. Hasta 64 años inclusive.</p>
+    <p><b>Derecho de Adjudicación:</b> 1% + IVA del valor Móvil adjudicado.</p>
+    <p><b>Gestoría:</b> $54.500 + Formularios $43.200 a cargo del cliente.</p>
+    <p><b>Documentación requerida:</b> Declaraciones juradas UIF, salud, y datos del solicitante.</p>
+    <p><b>Precios:</b> Tomados de la Lista de Precios de Fábrica.</p>
+    <p><b>Presentar:</b> fotocopia de DNI (frente y dorso).</p>
+  </div>
 </div>
 
 <footer>
+  <div class="footer-wrapper">
     <div class="footer-column">
-        <img src="img/AgroPlan blanco.svg" alt="AgroPlan Logo">
-<br>
-        <strong>Domicilio Postal:</strong> Gualeguaychú 745 - CP: 3100 <br>
+         <strong>Domicilio Postal:</strong> Gualeguaychú 745 - CP: 3100 <br>
         Paraná, Entre Ríos, Argentina<br>
        <br>  <strong>Domicilio Legal:</strong> Echeverría 2923 - Piso 9° Dpto. A - CP 1428 <br>
         C.A.B.A.<br>
         <strong>Atención:</strong> Lunes a Viernes de 8 a 16 hs
-    </div>
-    <div class="footer-column">
+        </div>
+        <div class="footer-column">
         <strong>Contacto</strong><br>
         administracion.agro@agroplansa.com.ar<br>
         Tel: (0343) 4312218
     </div>
-    <img src="img/qr-footer.jpg" alt="QR AgroPlan" class="qr">
+    <img src="img/qr-footer.png" alt="QR AgroPlan" class="qr" />
+  </div>
 </footer>
 
 <script>
