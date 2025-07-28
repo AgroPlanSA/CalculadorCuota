@@ -277,7 +277,9 @@
         }
 
         const cuotaPura = valorBasico / 60;
-        const mensualJuridica = (valorBasico * 1.08 * 1.21) / 60;
+        const parte1 = valorBasico * 1.08;
+        const parte2 = parte1 * 1.21;
+        const mensualJuridica = (valorBasico + parte1 + parte2) / 60; 
         const segVida = valorBasico * 0.00083;
         const mensualFisca = mensualJuridica + segVida;
         const impuestoSello = (valorBasico * 0.012) / 6;
