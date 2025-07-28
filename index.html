@@ -1,156 +1,185 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta name="description"
-          content="Agro Plan, calculador de cuota para plan de ahorro de remolques en 60 cuotas mensuales.">
     <meta charset="UTF-8">
+    <meta name="description" content="Agro Plan, calculador de cuota para plan de ahorro de remolques en 60 cuotas mensuales.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="img/Icono-Cerdito-Extranet_2.svg" type="image/x-icon">
     <title>Calculador de Cuota</title>
+    <link rel="icon" href="img/Icono-Cerdito-Extranet_2.svg" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
     <style>
- body {
-            font-family: Verdana, sans-serif;
-            background-color: #fff;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            background-color: #ffffff;
         }
-        .logo {
+
+        header {
+            background-color: #cc0000;
+            padding: 10px 0;
             text-align: center;
-            margin-bottom: 20px;
         }
-        h1 {
-            text-align: center;
-            color: #c00;
+
+        header img {
+            max-height: 50px;
         }
-        /* Contenedor principal para ambos bloques, para ajustar el ancho máximo */
+
+        footer {
+            background-color: #cc0000;
+            color: white;
+            font-size: 14px;
+            padding: 25px 20px;
+            text-align: left;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        footer .footer-column {
+            max-width: 300px;
+        }
+
+        footer img.qr {
+            max-width: 100px;
+            height: auto;
+        }
+
         #main-content-wrapper {
-            max-width: 800px; /* Mismo ancho que el .container */
-            margin: auto;
+            max-width: 850px;
+            margin: 30px auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
         }
 
         .container {
-            padding: 20px;
-            border: 2px solid #c00;
-            border-radius: 10px;
-            background: #f8f8f8;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px; /* Espacio entre el calculador y las specs si no están en un mismo contenedor de captura */
+            padding: 0;
         }
+
+        h1 {
+            background-color: #cc0000;
+            color: white;
+            font-size: 22px;
+            text-align: left;
+            margin: 0;
+            padding: 15px 20px;
+        }
+
         label {
             display: block;
-            margin-top: 10px;
-        }
-        input[type="text"], input[type="number"] {
-            width: calc(100% - 20px);
-            padding: 10px;
-            margin-bottom: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        .error-message {
-            color: red;
-            font-size: 0.9em;
-            margin-bottom: 10px;
-            height: 1.2em;
-        }
-        .button {
-            width: 100%;
-            padding: 15px;
-            background-color: #c00;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 18px;
-            margin-top: 10px;
-        }
-        .button:hover {
-            background-color: #a00;
-        }
-        .specifications {
-            margin-top: 0; /* Ya hay margin-bottom en .container */
-            padding: 15px;
-            background: #f1f1f1;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            margin: 12px 0 5px;
+            padding: 0 20px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
         }
 
-        .share-button-group { /* Contenedor para los botones de compartir */
+        input[type="text"], input[type="number"] {
+            width: calc(100% - 40px);
+            margin: 0 auto 10px;
+            display: block;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+            background-color: #f9f9f9;
+        }
+
+        .error-message {
+            padding: 0 20px;
+            color: red;
+            font-size: 13px;
+            height: 16px;
+        }
+
+        .share-button-group {
             display: flex;
             justify-content: center;
-            margin-top: 20px;
             gap: 10px;
+            padding: 20px;
             flex-wrap: wrap;
         }
-        .share-button-group a, .share-button-group button {
-            display: flex; /* Cambiado de inline-flex a flex */
+
+        .share-button-group a,
+        .share-button-group button {
+            display: flex;
             align-items: center;
-            justify-content: center; /* Centra el contenido del botón */
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: 6px;
             color: white;
-            padding: 10px 20px;
+            font-size: 15px;
+            font-weight: 500;
             text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-            cursor: pointer;
             border: none;
-            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
-        /* Contenedor para el texto del botón (sin el ícono) */
         .button-text {
-            flex-grow: 1; /* Permite que el texto ocupe el espacio disponible */
-            text-align: center; /* Centra el texto dentro de su propio contenedor */
+            white-space: nowrap;
         }
 
-        /* Estilos específicos para cada botón */
-        .share-button-group .whatsapp-text-button {
+        .whatsapp-text-button {
             background-color: #25D366;
         }
-        .share-button-group .whatsapp-text-button:hover {
+        .whatsapp-text-button:hover {
             background-color: #128C7E;
         }
 
-        .share-button-group .download-calculation-button {
+        .download-calculation-button {
             background-color: #007bff;
         }
-        .share-button-group .download-calculation-button:hover {
+        .download-calculation-button:hover {
             background-color: #0056b3;
         }
 
-        .share-button-group .download-full-report-button {
+        .download-full-report-button {
             background-color: #6f42c1;
         }
-        .share-button-group .download-full-report-button:hover {
+        .download-full-report-button:hover {
             background-color: #5a2e9b;
         }
 
-        .share-button-group i {
-            margin-right: 8px; /* Espacio a la derecha del icono */
-            font-size: 20px;
-            /* Asegura que el ícono permanezca a la izquierda del contenido principal */
-            flex-shrink: 0; /* Evita que el ícono se encoja */
+        .specifications {
+            background-color: #f1f1f1;
+            padding: 20px;
+            font-size: 14px;
+            color: #333;
+            line-height: 1.6;
+            border-top: 2px solid #ccc;
         }
 
-        /* Clase para ocultar elementos temporalmente durante la captura */
-        .hide-on-capture {
-            display: none !important;
+        .specifications h2 {
+            margin-top: 0;
+            font-size: 18px;
+            color: #444;
         }
 
         @media (max-width: 600px) {
-            input[type="text"], .button {
-                font-size: 16px;
+            input[type="text"], input[type="number"] {
+                width: calc(100% - 40px);
             }
+
             .share-button-group {
                 flex-direction: column;
                 align-items: center;
             }
-            .share-button-group a,
-            .share-button-group button {
+
+            .share-button-group button,
+            .share-button-group a {
                 width: 100%;
-                box-sizing: border-box;
-                max-width: 300px; 
+                max-width: 280px;
+            }
+
+            footer {
+                flex-direction: column;
+                align-items: flex-start;
             }
         }
     </style>
@@ -159,9 +188,9 @@
 
 <body>
 
-<div class="logo">
-    <img src="img/LogoAgro-04.svg" alt="Logo" style="max-width: 400px;">
-</div>
+<header>
+    <img src="img/LogoAgro-04.svg" alt="AgroPlan Logo">
+</header>
 
 <div id="main-content-wrapper">
     <div class="container" id="calculator-container">
@@ -170,24 +199,23 @@
         <input type="text" id="valorBasicoMovil" placeholder="Ingrese el valor" required
                oninput="formatearValor(this); calcularAutomatico();" />
         <span id="errorMensaje" class="error-message"></span>
-        
+
         <label for="cuotaPura">Cuota Pura</label>
         <input type="text" id="cuotaPura" placeholder="Cuota Pura" disabled>
-        
+
         <label for="mensualJuridica">Mensual Jurídica</label>
         <input type="text" id="mensualJuridica" placeholder="Mensual Jurídica" disabled>
-        
+
         <label for="segVida">Seg. de Vida</label>
         <input type="text" id="segVida" placeholder="Seg. de Vida" disabled>
-        
+
         <label for="mensualFisca">Mensual Física</label>
         <input type="text" id="mensualFisca" placeholder="Mensual Física" disabled>
 
         <label for="impuestoSello">Impuesto al Sello (Cuota 1 a 6)</label>
         <input type="text" id="impuestoSello" placeholder="Impuesto al Sello" disabled>
-        
 
-        <div class="share-button-group"> 
+        <div class="share-button-group">
             <a href="#" class="whatsapp-text-button" onclick="compartirWhatsAppTexto()">
                 <i class="fab fa-whatsapp"></i> <span class="button-text">Compartir</span>
             </a>
@@ -202,189 +230,12 @@
 
     <div class="specifications" id="specifications-container">
         <h2>Especificaciones del Plan</h2>
-
         <p><b>Plazo:</b> 60 meses / cuotas en pesos y sin interés</p>
-        <p><b>Carga Administrativa:</b>8.0% fija para financiación a 5 años</p>
-        <p><b>Adjudicaciones mensuales:</b>por sorteo o licitación</p>
-        <p>* Al adjudicar si el cliente ordena un bien de MENOR valor al Valor Móvil Adjudicado, la diferencia será acreditado como cuotas adelantadas.</p>
+        <p><b>Carga Administrativa:</b> 8.0% fija para financiación a 5 años</p>
+        <p><b>Adjudicaciones mensuales:</b> por sorteo o licitación</p>
+        <p>* Si el cliente ordena un bien de MENOR valor al Valor Móvil Adjudicado, la diferencia será acreditada como cuotas adelantadas.</p>
         <p>* Si ordena un bien de MAYOR valor al Valor Adjudicado, la diferencia será abonada por el cliente.</p>
-        <p><b>Impuesto al sello:</b>del valor suscripto es: 1,2% para todas las provincias a excepción de Córdoba. (Se abonara prorrateado en las primeras 6 cuotas detallado en el cupón de pago)</p>
-        <p><b>Impuesto al débito y crédito (Ley 25.413):</b> 0,804% sobre el valor de la cuota pura correspondiente al mes en curso.</p>
-        <p><b>Seguro de Vida (Personas física/Soc. de Hecho únicamente):</b>0,0833 % del saldo deudor. Hasta 64 años inclusive.</p>
-        <p><b>Derecho de Adjudicación:</b>Cupón de pago único que se genera al aceptar la adjudicación 1% + IVA del valor Móvil adjudicado.</p>
-        <p><b>Gastos de Patentamiento</b> No Aplica y <b>Prenda</b> No aplica <b>Gestoría</b> $ 54,500 + Formularios $ 43,200 a cargo del cliente.</p>
-        <p><b>El suscriptor debe firmar:</b>Declaración Jurada Res. UIF + Anexo UIF para sociedad + Persona expuesta políticamente + Declaración jurada de salud (Personas física/Soc. de Hecho únicamente).</p>
-        <p>Los precios de referencias deben tomarlos de la Lista de Precios de Fabrica.</p>
-        <p>Especificar la unidad y el precio de referencia de Lista de Fabrica en la Solicitud.</p>
-        <p><b>Presentar fotocopia frente y dorso de DNI</b></p>
-    </div>
-</div>
-
-<script>
-    function currencyFormat(value) {
-        return new Intl.NumberFormat('es-AR', {
-            style: 'currency',
-            currency: 'ARS',
-        }).format(value);
-    }
-
-    function formatearValor(input) {
-        let cursorPosition = input.selectionStart;
-        const originalValue = input.value;
-        const originalLength = originalValue.length;
-
-        let value = originalValue.replace(/\$/g, '').replace(/\./g, '');
-
-        if (value) {
-            let formattedValue = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-            input.value = '$' + formattedValue;
-
-            const newLength = input.value.length;
-            const diff = newLength - originalLength;
-            if (cursorPosition > 0 || originalValue.startsWith('$')) {
-                input.setSelectionRange(cursorPosition + diff, cursorPosition + diff);
-            }
-        } else {
-            input.value = '';
-        }
-    }
-
-    function limpiarResultados() {
-        document.getElementById('cuotaPura').value = '';
-        document.getElementById('mensualJuridica').value = '';
-        document.getElementById('segVida').value = '';
-        document.getElementById('mensualFisca').value = '';
-        document.getElementById('impuestoSello').value = '';
-    }
-
-    function calcularAutomatico() {
-        const valorInput = document.getElementById('valorBasicoMovil');
-        const errorMensaje = document.getElementById('errorMensaje');
-        const valorString = valorInput.value.replace(/\$/g, '').replace(/\./g, '');
-        const valorBasico = parseFloat(valorString);
-
-        errorMensaje.textContent = '';
-
-        if (valorString === '') {
-            limpiarResultados();
-            return;
-        }
-
-        if (isNaN(valorBasico) || valorBasico < 34000000 || valorBasico > 66000000 || (valorBasico % 10000 !== 0)) {
-            errorMensaje.textContent = "Ingrese un valor entre $34.000.000 y $66.000.000, en múltiplos de $10.000.";
-            limpiarResultados();
-            return;
-        }
-
-        const cuotaPura = valorBasico / 60;
-        const parte1 = valorBasico * 0.08;
-        const parte2 = parte1 * 0.21;
-        const mensualJuridica = (valorBasico + parte1 + parte2) / 60; 
-        const segVida = valorBasico * 0.00083;
-        const mensualFisca = mensualJuridica + segVida;
-        const impuestoSello = (valorBasico * 0.012) / 6;
-
-        document.getElementById('cuotaPura').value = currencyFormat(cuotaPura);
-        document.getElementById('mensualJuridica').value = currencyFormat(mensualJuridica);
-        document.getElementById('segVida').value = currencyFormat(segVida);
-        document.getElementById('mensualFisca').value = currencyFormat(mensualFisca);
-        document.getElementById('impuestoSello').value = currencyFormat(impuestoSello);
-    }
-
-    function calcular() {
-        calcularAutomatico();
-    }
-
-    document.getElementById('valorBasicoMovil').addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            calcularAutomatico();
-        }
-    });
-
-    function compartirWhatsAppTexto() {
-        const cuotaPura = document.getElementById('cuotaPura').value;
-        const mensualJuridica = document.getElementById('mensualJuridica').value;
-        const segVida = document.getElementById('segVida').value;
-        const mensualFisca = document.getElementById('mensualFisca').value;
-        const impuestoSello = document.getElementById('impuestoSello').value;
-        const valorBasicoMovil = document.getElementById('valorBasicoMovil').value;
-
-        if (!cuotaPura || !valorBasicoMovil) {
-            alert("Por favor, realice un cálculo válido antes de compartir.");
-            return;
-        }
-
-        const mensaje = `Acá te paso los detalles para un Valor Básico Móvil de: ${valorBasicoMovil}\n\n` +
-                        `Cuota Pura: ${cuotaPura}\n` +
-                        `Mensual Jurídica: ${mensualJuridica}\n` +
-                        `Seguro de Vida: ${segVida}\n` +
-                        `Mensual Física: ${mensualFisca}\n` +
-                        `Impuesto al Sello (Cuota 1 a 6): ${impuestoSello}\n\n` +
-                        `¡A disposición para lo que necesite!`;
-
-        const linkWhatsApp = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
-        window.open(linkWhatsApp, '_blank');
-    }
-
-    async function generateAndDownloadImage(elementId, filename) {
-        const targetElement = document.getElementById(elementId);
-        if (!targetElement) {
-            console.error('Elemento no encontrado para captura:', elementId);
-            return;
-        }
-
-        const shareButtonGroup = document.querySelector('.share-button-group');
-        let originalDisplay = ''; 
-
-        if (shareButtonGroup) {
-            originalDisplay = shareButtonGroup.style.display; 
-            shareButtonGroup.classList.add('hide-on-capture'); 
-            void shareButtonGroup.offsetWidth; 
-        }
-
-        try {
-            const options = {
-                scale: 2,
-                backgroundColor: '#f8f8f8',
-                windowWidth: targetElement.scrollWidth, 
-                windowHeight: targetElement.scrollHeight
-            };
-
-            const canvas = await html2canvas(targetElement, options);
-            const imageData = canvas.toDataURL("image/png");
-
-            const link = document.createElement('a');
-            link.href = imageData;
-            link.download = filename;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            
-            alert(`La imagen "${filename}" ha sido descargada. Ahora puedes compartirla manualmente en WhatsApp.`);
-
-        } catch (error) {
-            console.error("Error al generar la imagen:", error);
-            alert("Hubo un error al descargar la imagen. Por favor, inténtelo de nuevo.");
-        } finally {
-            if (shareButtonGroup) {
-                shareButtonGroup.classList.remove('hide-on-capture');
-                shareButtonGroup.style.display = originalDisplay; 
-            }
-        }
-    }
-
-    function descargarImagenCalculo() {
-        generateAndDownloadImage('calculator-container', 'calculo_agroplan.png');
-    }
-
-    function descargarImagenCalculoYEspecificaciones() {
-        generateAndDownloadImage('main-content-wrapper', 'calculo_y_especificaciones_agroplan.png');
-    }
-</script>
-
-</body>
-</html>
-
-</body>
-</html>
+        <p><b>Impuesto al sello:</b> 1,2% para todas las provincias a excepción de Córdoba. (Se abona prorrateado en las primeras 6 cuotas)</p>
+        <p><b>Impuesto al débito y crédito (Ley 25.413):</b> 0,804% sobre la cuota pura mensual.</p>
+        <p><b>Seguro de Vida:</b> 0,0833% del saldo deudor. Hasta 64 años inclusive.</p>
+        <p><b>Derecho de Adjudicación:</b> 1% + IVA del
