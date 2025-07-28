@@ -75,6 +75,11 @@
       height: 16px;
     }
 
+    /* Clase para ocultar elementos temporalmente durante la captura */
+    .hide-on-capture {
+        display: none !important;
+    }
+
     .share-button-group {
       display: flex;
       justify-content: center;
@@ -175,50 +180,38 @@
         align-items: center;
       }
 
-      .share-button-group button,
-      .share-button-group a {
+      .share-button-group a,
+      .share-button-group button {
+        position: relative; /* Mantener para el posicionamiento absoluto del ícono */
         width: 100%;
-        max-width: 280px;
+        max-width: 300px;
+        min-height: 48px;
+        padding-left: 44px; /* espacio para ícono */
+        padding-right: 16px;
+        box-sizing: border-box;
+        justify-content: center; /* Centra el contenido horizontalmente */
+      }
+
+      .share-button-group i {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        margin: 0;
+        font-size: 20px;
+      }
+
+      .button-text {
+        width: 100%; /* Asegura que el texto use el ancho disponible para centrarse */
+        text-align: center;
+        display: inline-block; /* Opcional, pero ayuda con el centrado del texto */
       }
 
       .footer-wrapper {
         flex-direction: column;
         align-items: flex-start;
       }
-@media (max-width: 600px) {
-  .share-button-group {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .share-button-group a,
-  .share-button-group button {
-    position: relative;
-    width: 100%;
-    max-width: 300px;
-    min-height: 48px;
-    padding-left: 44px; /* espacio para ícono */
-    padding-right: 16px;
-    box-sizing: border-box;
-    justify-content: center;
-  }
-
-  .share-button-group i {
-    position: absolute;
-    left: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    margin: 0;
-    font-size: 20px;
-  }
-
-  .button-text {
-    width: 100%;
-    text-align: center;
-    display: inline-block;
-  }
-}
-
+    }
   </style>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -286,11 +279,11 @@
 <footer>
   <div class="footer-wrapper">
     <div class="footer-column">
-         <strong>Domicilio Postal:</strong> Gualeguaychú 745 - CP: 3100 <br>
-        Paraná, Entre Ríos, Argentina<br>
-       <br>  <strong>Domicilio Legal:</strong> Echeverría 2923 <br> Piso 9° Dpto. A - CP 1428 -
-        C.A.B.A.
-       
+          <strong>Domicilio Postal:</strong> Gualeguaychú 745 - CP: 3100 <br>
+          Paraná, Entre Ríos, Argentina<br>
+         <br> <strong>Domicilio Legal:</strong> Echeverría 2923 <br> Piso 9° Dpto. A - CP 1428 -
+          C.A.B.A.
+        
         </div>
         <div class="footer-column">
         <strong>Atención:</strong> Lunes a Viernes de 8 a 16 hs  <br>
@@ -344,13 +337,13 @@
         errorMensaje.textContent = '';
 
         if (valorString === '') {
-            limpiarResultados();
+            limpiarResults();
             return;
         }
 
         if (isNaN(valorBasico) || valorBasico < 34000000 || valorBasico > 66000000 || (valorBasico % 10000 !== 0)) {
             errorMensaje.textContent = "Ingrese un valor entre $34.000.000 y $66.000.000, en múltiplos de $10.000.";
-            limpiarResultados();
+            limpiarResults();
             return;
         }
 
@@ -408,29 +401,34 @@
             return;
         }
 
+        // Ocultar el grupo de botones antes de la captura
         const shareButtonGroup = document.querySelector('.share-button-group');
         let originalDisplay = ''; 
-
         if (shareButtonGroup) {
             originalDisplay = shareButtonGroup.style.display; 
             shareButtonGroup.classList.add('hide-on-capture'); 
-            void shareButtonGroup.offsetWidth;
+            // Fuerza el reflow para asegurar que el display: none se aplique antes de la captura
+            void shareButtonGroup.offsetWidth; 
         }
 
         try {
             const options = {
-                scale: 2,
-                backgroundColor: '#ffffff',
-                windowWidth: targetElement.scrollWidth,
+                scale: 2, // Mayor escala para mejor calidad de imagen
+                backgroundColor: '#ffffff', // Asegura un fondo blanco si el contenedor tiene transparencia
+                // Captura el área visible del elemento, ajustando a su scrollWidth/Height si es necesario
+                windowWidth: targetElement.scrollWidth, 
                 windowHeight: targetElement.scrollHeight
             };
 
             const canvas = await html2canvas(targetElement, options);
-            const imageData = canvas.toDataURL("image/png");
+            const imageData = canvas.toDataURL("image/png"); // Obtiene la imagen en formato Data URL
 
+            // Crea un enlace temporal para la descarga programática
             const link = document.createElement('a');
             link.href = imageData;
-            link.download = filename;
+            link.download = filename; // Asigna el nombre de archivo
+
+            // Simula un clic para descargar la imagen
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -441,9 +439,10 @@
             console.error("Error al generar la imagen:", error);
             alert("Hubo un error al descargar la imagen.");
         } finally {
+            // Asegúrate de mostrar el grupo de botones de nuevo, incluso si hubo un error
             if (shareButtonGroup) {
                 shareButtonGroup.classList.remove('hide-on-capture');
-                shareButtonGroup.style.display = originalDisplay;
+                shareButtonGroup.style.display = originalDisplay; // Restaura el display original
             }
         }
     }
