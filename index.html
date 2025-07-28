@@ -185,19 +185,22 @@
         flex-direction: column;
         align-items: flex-start;
       }
-      @media (max-width: 600px) {
+@media (max-width: 600px) {
   .share-button-group {
     flex-direction: column;
     align-items: center;
   }
 
-  .share-button-group button,
-  .share-button-group a {
-    width: 100%;
-    max-width: 280px;
+  .share-button-group a,
+  .share-button-group button {
     position: relative;
+    width: 100%;
+    max-width: 300px;
+    min-height: 48px;
+    padding-left: 44px; /* espacio para ícono */
+    padding-right: 16px;
+    box-sizing: border-box;
     justify-content: center;
-    padding-left: 40px; /* espacio para el ícono a la izquierda */
   }
 
   .share-button-group i {
@@ -205,15 +208,17 @@
     left: 16px;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 18px;
     margin: 0;
+    font-size: 20px;
   }
 
   .button-text {
     width: 100%;
     text-align: center;
+    display: inline-block;
   }
 }
+
   </style>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
