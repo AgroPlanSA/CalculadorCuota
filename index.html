@@ -26,6 +26,92 @@
       max-height: 50px;
     }
 
+    /* Estilos para el Carrusel */
+    .carousel-container {
+        position: relative;
+        max-width: 100%; /* O el ancho que desees para tu carrusel */
+        margin: 0 auto; /* Centra el carrusel */
+        overflow: hidden; /* Oculta las imágenes que no están activas */
+        height: 350px; /* Altura por defecto para el carrusel, ajusta según tus imágenes */
+        background-color: #f0f0f0; /* Color de fondo si las imágenes no cubren todo */
+    }
+
+    .carousel-slide {
+        display: none; /* Por defecto, todas ocultas */
+        width: 100%;
+        height: 100%; /* Para que la imagen ocupe todo el slide */
+        text-align: center; /* Centra la imagen horizontalmente */
+    }
+
+    .carousel-slide img {
+        width: 100%; /* Ocupa todo el ancho del slide */
+        height: 100%; /* Ocupa toda la altura del slide */
+        object-fit: cover; /* Recorta la imagen para que cubra el contenedor sin distorsionarse */
+        display: block; /* Elimina espacio extra debajo de la imagen */
+    }
+
+    /* Flechas de navegación */
+    .prev, .next {
+        cursor: pointer;
+        position: absolute;
+        top: 50%;
+        width: auto;
+        padding: 16px;
+        margin-top: -22px;
+        color: white;
+        font-weight: bold;
+        font-size: 20px;
+        transition: 0.6s ease;
+        border-radius: 0 3px 3px 0;
+        user-select: none;
+        background-color: rgba(0,0,0,0.5); /* Fondo semitransparente para las flechas */
+        z-index: 10; /* Para que estén por encima de los slides */
+    }
+
+    .next {
+        right: 0;
+        border-radius: 3px 0 0 3px;
+    }
+
+    .prev:hover, .next:hover {
+        background-color: rgba(0,0,0,0.8);
+    }
+
+    /* Puntos indicadores */
+    .carousel-dots {
+        position: absolute;
+        bottom: 10px; /* Ajusta la posición vertical de los puntos */
+        width: 100%;
+        text-align: center;
+        z-index: 10; /* Asegura que los puntos estén por encima de las imágenes */
+    }
+
+    .dot {
+        cursor: pointer;
+        height: 10px;
+        width: 10px;
+        margin: 0 4px;
+        background-color: #bbb;
+        border-radius: 50%;
+        display: inline-block;
+        transition: background-color 0.6s ease;
+    }
+
+    .dot.active, .dot:hover {
+        background-color: #717171;
+    }
+
+    /* Animación (opcional, para un fade in/out suave) */
+    .fade {
+        animation-name: fade;
+        animation-duration: 1.5s;
+    }
+
+    @keyframes fade {
+        from {opacity: .4}
+        to {opacity: 1}
+    }
+
     #main-content-wrapper {
       max-width: 850px;
       margin: 30px auto;
@@ -119,14 +205,14 @@
       background-color: #cc0000;
     }
     .download-calculation-button:hover {
-      background-color: #0056b3;
+      background-color: #a00000; /* Un rojo un poco más oscuro */
     }
 
     .download-full-report-button {
       background-color: #828282;
     }
     .download-full-report-button:hover {
-      background-color: #5a2e9b;
+      background-color: #6a6a6a; /* Un gris un poco más oscuro */
     }
 
     .specifications {
@@ -170,9 +256,23 @@
       height: auto;
     }
 
+    @media (max-width: 768px) {
+        .carousel-container {
+            height: 250px; /* Ajusta la altura para pantallas medianas */
+        }
+    }
+
     @media (max-width: 600px) {
       input[type="text"], input[type="number"] {
         width: calc(100% - 40px);
+      }
+
+      .carousel-container {
+          height: 200px; /* Ajusta la altura para pantallas pequeñas */
+      }
+      .prev, .next {
+          font-size: 16px;
+          padding: 10px;
       }
 
       .share-button-group {
@@ -219,9 +319,29 @@
 <body>
 
 <header>
-  <a href="https://www.agroplansa.com.ar/"> <img src="img/AgroPlan blanco.svg" alt="AgroPlan Logo">
+  <a href="https://www.agroplansa.com.ar/" target="_blank"> <img src="img/AgroPlan blanco.svg" alt="AgroPlan Logo">
   </a>
 </header>
+
+<div class="carousel-container">
+    <div class="carousel-slide">
+        <img src="img/galeria1.jpg" alt="AgroPlan Imagen 1">
+    </div>
+    <div class="carousel-slide">
+        <img src="img/galeria2.jpg" alt="AgroPlan Imagen 2">
+    </div>
+    <div class="carousel-slide">
+        <img src="img/galeria3.jpg" alt="AgroPlan Imagen 3">
+    </div>
+    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+    <a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+    <div class="carousel-dots">
+        <span class="dot" onclick="currentSlide(1)"></span>
+        <span class="dot" onclick="currentSlide(2)"></span>
+        <span class="dot" onclick="currentSlide(3)"></span>
+        </div>
+</div>
 
 <div id="main-content-wrapper">
   <div class="container" id="calculator-container">
@@ -291,7 +411,7 @@
         <br> <strong>Contacto</strong><br>
         administracion.agro@agroplansa.com.ar<br>
         Tel: (0343) 4312218
-        </div>  
+        </div>       
             <a href="https://servicioscf.afip.gob.ar/publico/denuncias/denunciaCD.aspx" target="_blank"> <img src="img/qr-footer.jpg" alt="QR AgroPlan" class="qr" />
             </a>
         </div>
@@ -322,7 +442,7 @@
         }
     }
 
-    function limpiarResultados() {
+    function limpiarResults() {
         document.getElementById('cuotaPura').value = '';
         document.getElementById('mensualJuridica').value = '';
         document.getElementById('segVida').value = '';
@@ -413,6 +533,16 @@
             void shareButtonGroup.offsetWidth; 
         }
 
+        // Ocultar el carrusel de imágenes si el id de captura es 'main-content-wrapper'
+        const carouselContainer = document.querySelector('.carousel-container');
+        let originalCarouselDisplay = '';
+        if (elementId === 'main-content-wrapper' && carouselContainer) {
+            originalCarouselDisplay = carouselContainer.style.display;
+            carouselContainer.classList.add('hide-on-capture');
+            void carouselContainer.offsetWidth;
+        }
+
+
         try {
             const options = {
                 scale: 2, // Mayor escala para mejor calidad de imagen
@@ -445,6 +575,11 @@
             if (shareButtonGroup) {
                 shareButtonGroup.classList.remove('hide-on-capture');
                 shareButtonGroup.style.display = originalDisplay; // Restaura el display original
+            }
+            // Muestra el carrusel de nuevo si se ocultó
+            if (elementId === 'main-content-wrapper' && carouselContainer) {
+                carouselContainer.classList.remove('hide-on-capture');
+                carouselContainer.style.display = originalCarouselDisplay;
             }
         }
     }
