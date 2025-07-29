@@ -37,7 +37,7 @@
     }
 
     .carousel-slide {
-        display: block; /* Por defecto, todas ocultas */
+        display: none; /* Por defecto, todas ocultas */
         width: 100%;
         height: 100%; /* Para que la imagen ocupe todo el slide */
         text-align: center; /* Centra la imagen horizontalmente */
@@ -398,23 +398,22 @@
 </div>
 
 <footer>
-  <div class="footer-wrapper">
-    <div class="footer-column">
-          <strong>Domicilio Postal:</strong> Gualeguaychú 745 - CP: 3100 <br>
-          Paraná, Entre Ríos, Argentina<br>
-         <br> <strong>Domicilio Legal:</strong> Echeverría 2923 <br> Piso 9° Dpto. A - CP 1428 -
-          C.A.B.A.
-        
+    <div class="footer-wrapper">
+        <div class="footer-column">
+            <strong>Domicilio Postal:</strong> Gualeguaychú 745 - CP: 3100 <br>
+            Paraná, Entre Ríos, Argentina<br>
+            <br> <strong>Domicilio Legal:</strong> Echeverría 2923 <br> Piso 9° Dpto. A - CP 1428 -
+            C.A.B.A.
         </div>
         <div class="footer-column">
-        <strong>Atención:</strong> Lunes a Viernes de 8 a 16 hs  <br>
-        <br> <strong>Contacto</strong><br>
-        administracion.agro@agroplansa.com.ar<br>
-        Tel: (0343) 4312218
-        </div>       
-            <a href="https://servicioscf.afip.gob.ar/publico/denuncias/denunciaCD.aspx" target="_blank"> <img src="img/qr-footer.jpg" alt="QR AgroPlan" class="qr" />
-            </a>
+            <strong>Atención:</strong> Lunes a Viernes de 8 a 16 hs <br>
+            <br> <strong>Contacto</strong><br>
+            administracion.agro@agroplansa.com.ar<br>
+            Tel: (0343) 4312218
         </div>
+        <a href="https://servicioscf.afip.gob.ar/publico/denuncias/denunciaCD.aspx" target="_blank"> <img src="img/qr-footer.jpg" alt="QR AgroPlan" class="qr" />
+        </a>
+    </div>
 </footer>
 
 <script>
@@ -472,7 +471,7 @@
         const cuotaPura = valorBasico / 60;
         const parte1 = valorBasico * 0.08;
         const parte2 = parte1 * 0.21;
-        const mensualJuridica = (valorBasico + parte1 + parte2) / 60; 
+        const mensualJuridica = (valorBasico + parte1 + parte2) / 60;
         const segVida = valorBasico * 0.00083;
         const mensualFisca = mensualJuridica + segVida;
         const impuestoSello = (valorBasico * 0.012) / 6;
@@ -505,12 +504,12 @@
         }
 
         const mensaje = `Acá te paso los detalles para un Valor Básico Móvil de: ${valorBasicoMovil}\n\n` +
-                        `Cuota Pura: ${cuotaPura}\n` +
-                        `Mensual Jurídica: ${mensualJuridica}\n` +
-                        `Seguro de Vida: ${segVida}\n` +
-                        `Mensual Física: ${mensualFisca}\n` +
-                        `Impuesto al Sello (Cuota 1 a 6): ${impuestoSello}\n\n` +
-                        `¡A disposición para lo que necesite!`;
+                            `Cuota Pura: ${cuotaPura}\n` +
+                            `Mensual Jurídica: ${mensualJuridica}\n` +
+                            `Seguro de Vida: ${segVida}\n` +
+                            `Mensual Física: ${mensualFisca}\n` +
+                            `Impuesto al Sello (Cuota 1 a 6): ${impuestoSello}\n\n` +
+                            `¡A disposición para lo que necesite!`;
 
         const linkWhatsApp = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
         window.open(linkWhatsApp, '_blank');
@@ -525,12 +524,12 @@
 
         // Ocultar el grupo de botones antes de la captura
         const shareButtonGroup = document.querySelector('.share-button-group');
-        let originalDisplay = ''; 
+        let originalDisplay = '';
         if (shareButtonGroup) {
-            originalDisplay = shareButtonGroup.style.display; 
-            shareButtonGroup.classList.add('hide-on-capture'); 
+            originalDisplay = shareButtonGroup.style.display;
+            shareButtonGroup.classList.add('hide-on-capture');
             // Fuerza el reflow para asegurar que el display: none se aplique antes de la captura
-            void shareButtonGroup.offsetWidth; 
+            void shareButtonGroup.offsetWidth;
         }
 
         // Ocultar el carrusel de imágenes si el id de captura es 'main-content-wrapper'
@@ -548,7 +547,7 @@
                 scale: 2, // Mayor escala para mejor calidad de imagen
                 backgroundColor: '#ffffff', // Asegura un fondo blanco si el contenedor tiene transparencia
                 // Captura el área visible del elemento, ajustando a su scrollWidth/Height si es necesario
-                windowWidth: targetElement.scrollWidth, 
+                windowWidth: targetElement.scrollWidth,
                 windowHeight: targetElement.scrollHeight
             };
 
@@ -591,6 +590,61 @@
     function descargarImagenCalculoYEspecificaciones() {
         generateAndDownloadImage('main-content-wrapper', 'calculo_y_especificaciones_agroplan.png');
     }
+</script>
+
+<script>
+    let slideIndex = 1; // Variable global para el índice del slide
+    let slideTimer; // Variable global para el temporizador del auto-play
+
+    function showSlides(n) {
+        let i;
+        let slides = document.getElementsByClassName("carousel-slide");
+        let dots = document.getElementsByClassName("dot");
+
+        // Reiniciar timer si se navega manualmente o si se llama a showSlides
+        clearTimeout(slideTimer);
+
+        if (n > slides.length) { slideIndex = 1 } // Si pasa el último, vuelve al primero
+        if (n < 1) { slideIndex = slides.length } // Si va antes del primero, va al último
+
+        // Ocultar todos los slides y desactivar todos los puntos
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+            slides[i].classList.remove('fade'); // Remueve la clase de animación para resetearla
+        }
+        for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" active", "");
+        }
+
+        // Muestra el slide actual y activa el punto correspondiente
+        if (slides.length > 0) {
+            slides[slideIndex - 1].style.display = "block";
+            slides[slideIndex - 1].classList.add('fade');
+        }
+        
+        if (dots.length > 0) {
+            dots[slideIndex - 1].className += " active";
+        }
+
+        // Reinicia el auto-play después de 5 segundos
+        // Asegúrate de que `plusSlides` y `slideIndex` sean accesibles
+        slideTimer = setTimeout(() => plusSlides(1), 5000);
+    }
+
+    function plusSlides(n) {
+        showSlides(slideIndex += n);
+    }
+
+    function currentSlide(n) {
+        showSlides(slideIndex = n);
+    }
+
+    // Iniciar el carrusel cuando la página cargue completamente
+    document.addEventListener('DOMContentLoaded', () => {
+        if (document.querySelector('.carousel-container')) {
+            showSlides(slideIndex);
+        }
+    });
 </script>
 
 </body>
