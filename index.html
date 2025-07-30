@@ -517,395 +517,274 @@
         </div>
     </footer>
 
-    <script>
-        function currencyFormat(value) {
-            return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(value);
+<script>
+    // Funciones de la calculadora y compartir (mantener estas tal cual)
+    function currencyFormat(value) {
+        return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(value);
+    }
+
+    function formatearValor(input) {
+        let cursorPosition = input.selectionStart;
+        const originalValue = input.value;
+        const originalLength = originalValue.length;
+
+        let value = originalValue.replace(/\$/g, '').replace(/\./g, '');
+
+        if (value) {
+            let formattedValue = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            input.value = '$' + formattedValue;
+            const newLength = input.value.length;
+            const diff = newLength - originalLength;
+            if (cursorPosition > 0 || originalValue.startsWith('$')) {
+                input.setSelectionRange(cursorPosition + diff, cursorPosition + diff);
+            }
+        } else {
+            input.value = '';
+        }
+    }
+
+    function limpiarResults() {
+        document.getElementById('cuotaPura').value = '';
+        document.getElementById('mensualJuridica').value = '';
+        document.getElementById('segVida').value = '';
+        document.getElementById('mensualFisca').value = '';
+        document.getElementById('impuestoSello').value = '';
+    }
+
+    function calcularAutomatico() {
+        const valorInput = document.getElementById('valorBasicoMovil');
+        const errorMensaje = document.getElementById('errorMensaje');
+        const valorString = valorInput.value.replace(/\$/g, '').replace(/\./g, '');
+        const valorBasico = parseFloat(valorString);
+
+        errorMensaje.textContent = '';
+
+        if (valorString === '') {
+            limpiarResults();
+            return;
         }
 
-        function formatearValor(input) {
-            let cursorPosition = input.selectionStart;
-            const originalValue = input.value;
-            const originalLength = originalValue.length;
-
-            let value = originalValue.replace(/\$/g, '').replace(/\./g, '');
-
-            if (value) {
-                let formattedValue = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-                input.value = '$' + formattedValue;
-                const newLength = input.value.length;
-                const diff = newLength - originalLength;
-                if (cursorPosition > 0 || originalValue.startsWith('$')) {
-                    input.setSelectionRange(cursorPosition + diff, cursorPosition + diff);
-                }
-            } else {
-                input.value = '';
-            }
+        if (isNaN(valorBasico) || valorBasico < 40000000 || valorBasico > 72000000 || (valorBasico % 10000 !== 0)) {
+            errorMensaje.textContent = "Ingrese un valor entre $40.000.000 y $72.000.000, en múltiplos de $10.000.";
+            limpiarResults();
+            return;
         }
 
-        function limpiarResults() {
-            document.getElementById('cuotaPura').value = '';
-            document.getElementById('mensualJuridica').value = '';
-            document.getElementById('segVida').value = '';
-            document.getElementById('mensualFisca').value = '';
-            document.getElementById('impuestoSello').value = '';
+        const cuotaPura = valorBasico / 60;
+        const parte1 = valorBasico * 0.08;
+        const parte2 = parte1 * 0.21;
+        const mensualJuridica = (valorBasico + parte1 + parte2) / 60;
+        const segVida = valorBasico * 0.00083;
+        const mensualFisca = mensualJuridica + segVida;
+        const impuestoSello = (valorBasico * 0.012) / 6;
+
+        document.getElementById('cuotaPura').value = currencyFormat(cuotaPura);
+        document.getElementById('mensualJuridica').value = currencyFormat(mensualJuridica);
+        document.getElementById('segVida').value = currencyFormat(segVida);
+        document.getElementById('mensualFisca').value = currencyFormat(mensualFisca);
+        document.getElementById('impuestoSello').value = currencyFormat(impuestoSello);
+    }
+
+    document.getElementById('valorBasicoMovil').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            calcularAutomatico();
+        }
+    });
+
+    function compartirWhatsAppTexto() {
+        const cuotaPura = document.getElementById('cuotaPura').value;
+        const mensualJuridica = document.getElementById('mensualJuridica').value;
+        const segVida = document.getElementById('segVida').value;
+        const mensualFisca = document.getElementById('mensualFisca').value;
+        const impuestoSello = document.getElementById('impuestoSello').value;
+        const valorBasicoMovil = document.getElementById('valorBasicoMovil').value;
+
+        if (!cuotaPura || !valorBasicoMovil) {
+            alert("Por favor, realice un cálculo válido antes de compartir.");
+            return;
         }
 
-        function calcularAutomatico() {
-            const valorInput = document.getElementById('valorBasicoMovil');
-            const errorMensaje = document.getElementById('errorMensaje');
-            const valorString = valorInput.value.replace(/\$/g, '').replace(/\./g, '');
-            const valorBasico = parseFloat(valorString);
+        const mensaje = `Acá te paso los detalles para un Valor Básico Móvil de: ${valorBasicoMovil}\n\n` +
+                            `Cuota Pura: ${cuotaPura}\n` +
+                            `Mensual Jurídica: ${mensualJuridica}\n` +
+                            `Seguro de Vida: ${segVida}\n` +
+                            `Mensual Física: ${mensualFisca}\n` +
+                            `Impuesto al Sello (Cuota 1 a 6): ${impuestoSello}\n\n` +
+                            `¡A disposición para lo que necesite!`;
 
-            errorMensaje.textContent = '';
+        const linkWhatsApp = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
+        window.open(linkWhatsApp, '_blank');
+    }
 
-            if (valorString === '') {
-                limpiarResults();
-                return;
-            }
-
-            if (isNaN(valorBasico) || valorBasico < 40000000 || valorBasico > 72000000 || (valorBasico % 10000 !== 0)) {
-                errorMensaje.textContent = "Ingrese un valor entre $40.000.000 y $72.000.000, en múltiplos de $10.000.";
-                limpiarResults();
-                return;
-            }
-
-            const cuotaPura = valorBasico / 60;
-            const parte1 = valorBasico * 0.08;
-            const parte2 = parte1 * 0.21;
-            const mensualJuridica = (valorBasico + parte1 + parte2) / 60;
-            const segVida = valorBasico * 0.00083;
-            const mensualFisca = mensualJuridica + segVida;
-            const impuestoSello = (valorBasico * 0.012) / 6;
-
-            document.getElementById('cuotaPura').value = currencyFormat(cuotaPura);
-            document.getElementById('mensualJuridica').value = currencyFormat(mensualJuridica);
-            document.getElementById('segVida').value = currencyFormat(segVida);
-            document.getElementById('mensualFisca').value = currencyFormat(mensualFisca);
-            document.getElementById('impuestoSello').value = currencyFormat(impuestoSello);
+    async function generateAndDownloadImage(elementId, filename) {
+        const targetElement = document.getElementById(elementId);
+        if (!targetElement) {
+            console.error('Elemento no encontrado para captura:', elementId);
+            return;
         }
 
-        document.getElementById('valorBasicoMovil').addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                calcularAutomatico();
-            }
-        });
-
-        function compartirWhatsAppTexto() {
-            const cuotaPura = document.getElementById('cuotaPura').value;
-            const mensualJuridica = document.getElementById('mensualJuridica').value;
-            const segVida = document.getElementById('segVida').value;
-            const mensualFisca = document.getElementById('mensualFisca').value;
-            const impuestoSello = document.getElementById('impuestoSello').value;
-            const valorBasicoMovil = document.getElementById('valorBasicoMovil').value;
-
-            if (!cuotaPura || !valorBasicoMovil) {
-                alert("Por favor, realice un cálculo válido antes de compartir.");
-                return;
-            }
-
-            const mensaje = `Acá te paso los detalles para un Valor Básico Móvil de: ${valorBasicoMovil}\n\n` +
-                                `Cuota Pura: ${cuotaPura}\n` +
-                                `Mensual Jurídica: ${mensualJuridica}\n` +
-                                `Seguro de Vida: ${segVida}\n` +
-                                `Mensual Física: ${mensualFisca}\n` +
-                                `Impuesto al Sello (Cuota 1 a 6): ${impuestoSello}\n\n` +
-                                `¡A disposición para lo que necesite!`;
-
-            const linkWhatsApp = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
-            window.open(linkWhatsApp, '_blank');
+        // Ocultar el grupo de botones antes de la captura
+        const shareButtonGroup = document.querySelector('.share-button-group');
+        let originalDisplay = '';
+        if (shareButtonGroup) {
+            originalDisplay = shareButtonGroup.style.display;
+            shareButtonGroup.classList.add('hide-on-capture');
+            void shareButtonGroup.offsetWidth; // Fuerza el reflow
         }
 
-        async function generateAndDownloadImage(elementId, filename) {
-            const targetElement = document.getElementById(elementId);
-            if (!targetElement) {
-                console.error('Elemento no encontrado para captura:', elementId);
-                return;
-            }
-
-            // Ocultar el grupo de botones antes de la captura
-            const shareButtonGroup = document.querySelector('.share-button-group');
-            let originalDisplay = '';
-            if (shareButtonGroup) {
-                originalDisplay = shareButtonGroup.style.display;
-                shareButtonGroup.classList.add('hide-on-capture');
-                // Fuerza el reflow para asegurar que el display: none se aplique antes de la captura
-                void shareButtonGroup.offsetWidth;
-            }
-
-            // Ocultar el carrusel de imágenes si el id de captura es 'main-content-wrapper'
-            const carouselContainer = document.querySelector('.carousel-container');
-            let originalCarouselDisplay = '';
-            if (elementId === 'main-content-wrapper' && carouselContainer) {
-                originalCarouselDisplay = carouselContainer.style.display;
-                carouselContainer.classList.add('hide-on-capture');
-                void carouselContainer.offsetWidth;
-            }
-
-
-            try {
-                const options = {
-                    scale: 2, // Mayor escala para mejor calidad de imagen
-                    backgroundColor: '#ffffff', // Asegura un fondo blanco si el contenedor tiene transparencia
-                    // Captura el área visible del elemento, ajustando a su scrollWidth/Height si es necesario
-                    windowWidth: targetElement.scrollWidth,
-                    windowHeight: targetElement.scrollHeight
-                };
-
-                const canvas = await html2canvas(targetElement, options);
-                const imageData = canvas.toDataURL("image/png"); // Obtiene la imagen en formato Data URL
-
-                // Crea un enlace temporal para la descarga programática
-                const link = document.createElement('a');
-                link.href = imageData;
-                link.download = filename; // Asigna el nombre de archivo
-
-                // Simula un clic para descargar la imagen
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                
-                alert(`La imagen "${filename}" ha sido descargada. Ahora podés compartirla en WhatsApp.`);
-
-            } catch (error) {
-                console.error("Error al generar la imagen:", error);
-                alert("Hubo un error al descargar la imagen.");
-            } finally {
-                // Asegúrate de mostrar el grupo de botones de nuevo, incluso si hubo un error
-                if (shareButtonGroup) {
-                    shareButtonGroup.classList.remove('hide-on-capture');
-                    shareButtonGroup.style.display = originalDisplay; // Restaura el display original
-                }
-                // Muestra el carrusel de nuevo si se ocultó
-                if (elementId === 'main-content-wrapper' && carouselContainer) {
-                    carouselContainer.classList.remove('hide-on-capture');
-                    carouselContainer.style.display = originalCarouselDisplay;
-                }
-            }
+        // Ocultar el carrusel de imágenes si el id de captura es 'main-content-wrapper'
+        const carouselContainer = document.querySelector('.carousel-container');
+        let originalCarouselDisplay = '';
+        if (elementId === 'main-content-wrapper' && carouselContainer) {
+            originalCarouselDisplay = carouselContainer.style.display;
+            carouselContainer.classList.add('hide-on-capture');
+            void carouselContainer.offsetWidth; // Fuerza el reflow
         }
 
-        function descargarImagenCalculo() {
-            generateAndDownloadImage('calculator-container', 'calculo_agroplan.png');
-        }
+        try {
+            const options = {
+                scale: 2, // Mayor escala para mejor calidad de imagen
+                backgroundColor: '#ffffff', // Asegura un fondo blanco
+                windowWidth: targetElement.scrollWidth,
+                windowHeight: targetElement.scrollHeight
+            };
 
-        function descargarImagenCalculoYEspecificaciones() {
-            generateAndDownloadImage('main-content-wrapper', 'calculo_y_especificaciones_agroplan.png');
-        }
-    </script>
+            const canvas = await html2canvas(targetElement, options);
+            const imageData = canvas.toDataURL("image/png");
 
-    <script>
-        let slideIndex = 1;
-        let slideTimer;
+            const link = document.createElement('a');
+            link.href = imageData;
+            link.download = filename;
 
-        function showSlides(n) {
-            let i;
-            let slides = document.getElementsByClassName("carousel-slide");
-            let dots = document.getElementsByClassName("dot");
-
-            clearTimeout(slideTimer);
-
-            if (n > slides.length) { slideIndex = 1 }
-            if (n < 1) { slideIndex = slides.length }
-
-            for (i = 0; i < slides.length; i++) {
-                slides[i].style.display = "none";
-                slides[i].classList.remove('fade');
-            }
-            for (i = 0; i < dots.length; i++) {
-                dots[i].className = dots[i].className.replace(" active", "");
-            }
-
-            if (slides.length > 0) {
-                slides[slideIndex - 1].style.display = "block";
-                slides[slideIndex - 1].classList.add('fade');
-            }
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
             
-            if (dots.length > 0) {
-                dots[slideIndex - 1].className += " active";
-            }
+            alert(`La imagen "${filename}" ha sido descargada. Ahora podés compartirla en WhatsApp.`);
 
-            slideTimer = setTimeout(() => plusSlides(1), 5000);
+        } catch (error) {
+            console.error("Error al generar la imagen:", error);
+            alert("Hubo un error al descargar la imagen.");
+        } finally {
+            if (shareButtonGroup) {
+                shareButtonGroup.classList.remove('hide-on-capture');
+                shareButtonGroup.style.display = originalDisplay;
+            }
+            if (elementId === 'main-content-wrapper' && carouselContainer) {
+                carouselContainer.classList.remove('hide-on-capture');
+                carouselContainer.style.display = originalCarouselDisplay;
+            }
+        }
+    }
+
+    function descargarImagenCalculo() {
+        generateAndDownloadImage('calculator-container', 'calculo_agroplan.png');
+    }
+
+    function descargarImagenCalculoYEspecificaciones() {
+        generateAndDownloadImage('main-content-wrapper', 'calculo_y_especificaciones_agroplan.png');
+    }
+
+    // Carrusel principal de imágenes (mantener tal cual)
+    let slideIndex = 1;
+    let slideTimer;
+
+    function showSlides(n) {
+        let i;
+        let slides = document.getElementsByClassName("carousel-slide");
+        let dots = document.getElementsByClassName("dot");
+
+        clearTimeout(slideTimer);
+
+        if (n > slides.length) { slideIndex = 1 }
+        if (n < 1) { slideIndex = slides.length }
+
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+            slides[i].classList.remove('fade');
+        }
+        for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" active", "");
         }
 
-        function plusSlides(n) {
-            showSlides(slideIndex += n);
+        if (slides.length > 0) {
+            slides[slideIndex - 1].style.display = "block";
+            slides[slideIndex - 1].classList.add('fade');
+        }
+        
+        if (dots.length > 0) {
+            dots[slideIndex - 1].className += " active";
         }
 
-        function currentSlide(n) {
-            showSlides(slideIndex = n);
+        slideTimer = setTimeout(() => plusSlides(1), 5000);
+    }
+
+    function plusSlides(n) {
+        showSlides(slideIndex += n);
+    }
+
+    function currentSlide(n) {
+        showSlides(slideIndex = n);
+    }
+
+    // Inicializar carrusel principal al cargar el DOM
+    document.addEventListener('DOMContentLoaded', () => {
+        if (document.querySelector('.carousel-container')) {
+            showSlides(slideIndex);
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            if (document.querySelector('.carousel-container')) {
-                showSlides(slideIndex);
+        // --- Lógica del Carrusel de Logos (UNIFICADA y MEJORADA) ---
+        const logoTrack = document.querySelector('.logo-carousel-track');
+        if (logoTrack) {
+            // Asumimos que en el HTML ya están los 18 logos duplicados (36 en total)
+            const logosInHTML = Array.from(logoTrack.children);
+            const numberOfUniqueLogos = 18; // Definimos el número de logos únicos
+
+            // Calculamos el ancho de UN SOLO SET de los 18 logos únicos
+            let singleSetWidth = 0;
+            for (let i = 0; i < numberOfUniqueLogos; i++) {
+                const logo = logosInHTML[i]; // Tomamos solo los primeros 18 para calcular el ancho del set
+                singleSetWidth += logo.offsetWidth;
+                const computedStyle = window.getComputedStyle(logo);
+                singleSetWidth += parseFloat(computedStyle.marginLeft) + parseFloat(computedStyle.marginRight);
             }
-        });
-    </script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const logoTrack = document.querySelector('.logo-carousel-track');
-            if (logoTrack) {
-                const logos = Array.from(logoTrack.children);
-                const originalLogosCount = logos.length;
+            // Asegurar que el ancho del track es suficiente para los logos visibles y sus copias
+            // Si ya tienes 36 logos en HTML (18 originales + 18 copias), el track debe ser capaz de contenerlos.
+            // Para el cálculo de la animación, solo necesitamos el ancho de un set (18 logos).
+            // Si el carrusel no cubre todo el ancho, asegúrate que .logo-carousel-track
+            // tenga display: inline-block y white-space: nowrap en CSS, y que su ancho se adapte al contenido.
+            // No necesitamos forzar un ancho aquí si el CSS ya lo maneja para inline-block.
 
-                // Clonar y añadir los logos para asegurar al menos 2 sets completos
-                // Esto es vital para el bucle infinito sin "saltos"
-                logos.forEach(logo => {
-                    const clone = logo.cloneNode(true);
-                    logoTrack.appendChild(clone);
-                });
-                
-                // Si tienes pocos logos, puedes clonar más veces para que el track sea más largo
-                // y la animación se vea mejor. Por ejemplo, clonar 2 veces más:
-                logos.forEach(logo => {
-                    const clone = logo.cloneNode(true);
-                    logoTrack.appendChild(clone);
-                });
+            const scrollSpeedPxPerSec = 60; // Ajusta esta velocidad (píxeles por segundo), más alto es más rápido
+            const animationDuration = singleSetWidth / scrollSpeedPxPerSec; // Duración en segundos
 
+            // Inyectar la regla @keyframes dinámicamente
+            const style = document.createElement('style');
+            style.type = 'text/css';
+            style.innerHTML = `@keyframes scroll-logos {
+                0% { transform: translateX(0); }
+                100% { transform: translateX(-${singleSetWidth}px); }
+            }`;
+            document.head.appendChild(style);
 
-                // Calcular el ancho total de UN SOLO SET de logos para la animación
-                let originalSetWidth = 0;
-                // Calculamos el ancho de los hijos originales antes de cualquier clonación adicional
-                // para que la animación se desplace exactamente ese ancho.
-                for (let i = 0; i < originalLogosCount; i++) {
-                    originalSetWidth += logos[i].offsetWidth; // includes margin
-                }
+            // Aplicar las propiedades de animación individualmente
+            logoTrack.style.animationName = 'scroll-logos';
+            logoTrack.style.animationDuration = `${animationDuration}s`;
+            logoTrack.style.animationTimingFunction = 'linear';
+            logoTrack.style.animationIterationCount = 'infinite';
 
-                const scrollSpeedPxPerSec = 40; // Ajusta esta velocidad (píxeles por segundo)
-                const animationDuration = originalSetWidth / scrollSpeedPxPerSec; // Duración en segundos
-
-                // Inyectar la regla @keyframes dinámicamente
-                const styleSheet = document.styleSheets[0];
-                const keyframesRule = `@keyframes scroll-logos {
-                    0% { transform: translateX(0); }
-                    100% { transform: translateX(-${originalSetWidth}px); }
-                }`;
-                // Buscar si la regla ya existe antes de insertarla
-                let ruleExists = false;
-                for (let i = 0; i < styleSheet.cssRules.length; i++) {
-                    if (styleSheet.cssRules[i].name === 'scroll-logos') {
-                        ruleExists = true;
-                        break;
-                    }
-                }
-                if (!ruleExists) {
-                    styleSheet.insertRule(keyframesRule, styleSheet.cssRules.length);
-                }
-
-                // Aplicar la animación al track
-                logoTrack.style.animation = `scroll-logos ${animationDuration}s linear infinite`;
-
-                // Pausar al hover
-                logoTrack.addEventListener('mouseenter', () => {
-                    logoTrack.style.animationPlayState = 'paused';
-                });
-                logoTrack.addEventListener('mouseleave', () => {
-                    logoTrack.style.animationPlayState = 'running';
-                });
-            }
-        });
-    </script>
-
-        <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const logoTrack = document.querySelector('.logo-carousel-track');
-            if (logoTrack) {
-                const logos = Array.from(logoTrack.children);
-                const originalLogosCount = logos.length; // Esto debería ser 18 si tienes 18 logos únicos en el HTML
-
-                // Clonar y añadir los logos para asegurar al menos 2 sets completos
-                // Esto es vital para el bucle infinito sin "saltos"
-                // Ya tienes los logos duplicados en el HTML, pero si quieres asegurar más copias
-                // o si el número de logos originales puede variar, esta parte ayuda.
-                // Para 18 logos originales, y 18 duplicados ya en HTML, tenemos 36 elementos.
-                // Si quieres más, podrías duplicarlos de nuevo aquí.
-                // Por ahora, asumo que los 18 originales y 18 copias en el HTML son suficientes.
-                // Si solo habías puesto los 18 logos una vez, entonces esta sección de JS clonaría.
-                // Como mencionas "18 en total", asumiré que te refieres a los logos *únicos* y
-                // que la duplicación en el HTML ya los lleva a 36 elementos visibles.
-                // Si en tu HTML solo tienes 18 etiquetas <img>, entonces la siguiente línea es crucial:
-                // logos.forEach(logo => {
-                //     const clone = logo.cloneNode(true);
-                //     logoTrack.appendChild(clone);
-                // });
-                // En tu HTML actual, ya tienes la duplicación, lo cual es correcto.
-                // El `originalLogosCount` se referirá a la cantidad de elementos `img` en el HTML
-                // antes de que este JS haga cualquier clonación. Si en el HTML ya tienes 36,
-                // entonces `originalLogosCount` será 36. Si en el HTML tienes 18 y los duplicas una vez,
-                // entonces `originalLogosCount` será 18 y luego 36 al clonar.
-                // Para este ejemplo, asegúrate de que el HTML tiene el número de logos que quieres que se "repitan".
-                // Es decir, si tienes 18 logos únicos, el HTML debería tener 18 * 2 = 36 logos para un bucle simple y efectivo.
-                // He asumido que tu HTML ya tiene las 2 copias de los 18 logos, por lo que originalLogosCount es 18 y luego calculamos el ancho de ese set.
-
-                // Calcular el ancho total de UN SOLO SET de logos para la animación
-                let singleSetWidth = 0;
-                for (let i = 0; i < (originalLogosCount / 2); i++) { // Calculamos el ancho de la primera mitad si están duplicados
-                    singleSetWidth += logos[i].offsetWidth; // includes margin
-                }
-
-                // Si `originalLogosCount` es 18 (sólo los únicos), entonces clonamos para tener al menos 2 sets
-                if (originalLogosCount === 18) { // Asumo 18 logos UNICOS
-                    logos.forEach(logo => {
-                        const clone = logo.cloneNode(true);
-                        logoTrack.appendChild(clone);
-                    });
-                     // Recalcular singleSetWidth después de que todos los clones estén en el DOM,
-                     // o mejor, calcularlo antes de clonar usando los 18 elementos originales.
-                    singleSetWidth = 0;
-                    for (let i = 0; i < 18; i++) { // Asumiendo que los primeros 18 son los originales
-                        singleSetWidth += logos[i].offsetWidth;
-                    }
-                } else {
-                    // Si ya hay más de 18 (e.g., 36) significa que ya están duplicados en HTML
-                    // y originalLogosCount es el total. Dividimos para obtener el ancho de un set.
-                    singleSetWidth = 0;
-                    for (let i = 0; i < (originalLogosCount / 2); i++) {
-                         singleSetWidth += logos[i].offsetWidth;
-                    }
-                }
-
-
-                const scrollSpeedPxPerSec = 60; // Ajusta esta velocidad (píxeles por segundo), más alto es más rápido
-                const animationDuration = singleSetWidth / scrollSpeedPxPerSec; // Duración en segundos
-
-                // Inyectar la regla @keyframes dinámicamente
-                const styleSheet = document.styleSheets[0];
-                const keyframesRule = `@keyframes scroll-logos {
-                    0% { transform: translateX(0); }
-                    100% { transform: translateX(-${singleSetWidth}px); }
-                }`;
-                
-                // Remover la regla si ya existe para evitar duplicados y conflictos
-                let ruleFound = false;
-                for (let i = 0; i < styleSheet.cssRules.length; i++) {
-                    if (styleSheet.cssRules[i].name === 'scroll-logos') {
-                        styleSheet.deleteRule(i);
-                        ruleFound = true;
-                        break; // Suponemos que solo hay una regla con ese nombre
-                    }
-                }
-                styleSheet.insertRule(keyframesRule, styleSheet.cssRules.length);
-
-
-                // Aplicar las propiedades de animación individualmente para no sobrescribir el :hover
-                logoTrack.style.animationName = 'scroll-logos';
-                logoTrack.style.animationDuration = `${animationDuration}s`;
-                logoTrack.style.animationTimingFunction = 'linear';
-                logoTrack.style.animationIterationCount = 'infinite';
-
-                // Pausar al hover (ya está en CSS, pero si el JS lo sobrescribiera, este asegura)
-                // Se ha quitado la línea `animation-play-state: paused;` del CSS y se maneja por JS
-                // para evitar conflictos con la inyección dinámica.
-                logoTrack.addEventListener('mouseenter', () => {
-                    logoTrack.style.animationPlayState = 'paused';
-                });
-                logoTrack.addEventListener('mouseleave', () => {
-                    logoTrack.style.animationPlayState = 'running';
-                });
-            }
-        });
-    </script>
-
+            // Pausar al hover
+            logoTrack.addEventListener('mouseenter', () => {
+                logoTrack.style.animationPlayState = 'paused';
+            });
+            logoTrack.addEventListener('mouseleave', () => {
+                logoTrack.style.animationPlayState = 'running';
+            });
+        }
+    });
+</script>
+    
 </body>
 </html>
