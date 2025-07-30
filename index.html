@@ -1,651 +1,928 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="description" content="Agro Plan, calculador de cuota para plan de ahorro de remolques en 60 cuotas mensuales." />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Calculador de Cuota</title>
-  <link rel="icon" href="img/Icono-Cerdito-Extranet_2.svg" type="image/x-icon" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <meta charset="UTF-8" />
+    <meta name="description" content="Agro Plan, calculador de cuota para plan de ahorro de remolques en 60 cuotas mensuales." />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculador de Cuota</title>
+    <link rel="icon" href="img/Icono-Cerdito-Extranet_2.svg" type="image/x-icon" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #ffffff;
-    }
-
-    header {
-      background-color: #cc0000;
-      padding: 10px 0;
-      text-align: center;
-    }
-
-    header img {
-      max-height: 50px;
-    }
-
-    /* Estilos para el Carrusel */
-    .carousel-container {
-        position: relative;
-        max-width: 100%; /* O el ancho que desees para tu carrusel */
-        margin: 0 auto; /* Centra el carrusel */
-        overflow: hidden; /* Oculta las imágenes que no están activas */
-        height: 350px; /* Altura por defecto para el carrusel, ajusta según tus imágenes */
-        background-color: #f0f0f0; /* Color de fondo si las imágenes no cubren todo */
-    }
-
-    .carousel-slide {
-        display: none; /* Por defecto, todas ocultas */
-        width: 100%;
-        height: 100%; /* Para que la imagen ocupe todo el slide */
-        text-align: center; /* Centra la imagen horizontalmente */
-    }
-
-    .carousel-slide img {
-        width: 100%; /* Ocupa todo el ancho del slide */
-        height: 100%; /* Ocupa toda la altura del slide */
-        object-fit: cover; /* Recorta la imagen para que cubra el contenedor sin distorsionarse */
-        display: block; /* Elimina espacio extra debajo de la imagen */
-    }
-
-    /* Flechas de navegación */
-    .prev, .next {
-        cursor: pointer;
-        position: absolute;
-        top: 50%;
-        width: auto;
-        padding: 16px;
-        margin-top: -22px;
-        color: white;
-        font-weight: bold;
-        font-size: 20px;
-        transition: 0.6s ease;
-        border-radius: 0 3px 3px 0;
-        user-select: none;
-        background-color: rgba(0,0,0,0.5); /* Fondo semitransparente para las flechas */
-        z-index: 10; /* Para que estén por encima de los slides */
-    }
-
-    .next {
-        right: 0;
-        border-radius: 3px 0 0 3px;
-    }
-
-    .prev:hover, .next:hover {
-        background-color: rgba(0,0,0,0.8);
-    }
-
-    /* Puntos indicadores */
-    .carousel-dots {
-        position: absolute;
-        bottom: 10px; /* Ajusta la posición vertical de los puntos */
-        width: 100%;
-        text-align: center;
-        z-index: 10; /* Asegura que los puntos estén por encima de las imágenes */
-    }
-
-    .dot {
-        cursor: pointer;
-        height: 10px;
-        width: 10px;
-        margin: 0 4px;
-        background-color: #bbb;
-        border-radius: 50%;
-        display: inline-block;
-        transition: background-color 0.6s ease;
-    }
-
-    .dot.active, .dot:hover {
-        background-color: #717171;
-    }
-
-    /* Animación (opcional, para un fade in/out suave) */
-    .fade {
-        animation-name: fade;
-        animation-duration: 1.5s;
-    }
-
-    @keyframes fade {
-        from {opacity: .4}
-        to {opacity: 1}
-    }
-
-    #main-content-wrapper {
-      max-width: 850px;
-      margin: 30px auto;
-      background-color: white;
-      border-radius: 10px;
-      box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
-      overflow: hidden;
-    }
-
-    .container {
-      padding: 0;
-    }
-
-    h1 {
-      background-color: #cc0000;
-      color: white;
-      font-size: 22px;
-      text-align: center;
-      margin: 0;
-      padding: 15px 20px;
-    }
-
-    label {
-      display: block;
-      margin: 12px 0 5px;
-      padding: 0 20px;
-      color: #333;
-      font-weight: 600;
-      font-size: 14px;
-    }
-
-    input[type="text"], input[type="number"] {
-      width: calc(100% - 40px);
-      margin: 0 auto 10px;
-      display: block;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 15px;
-      background-color: #f9f9f9;
-    }
-
-    .error-message {
-      padding: 0 20px;
-      color: red;
-      font-size: 13px;
-      height: 16px;
-    }
-
-    /* Clase para ocultar elementos temporalmente durante la captura */
-    .hide-on-capture {
-        display: none !important;
-    }
-
-    .share-button-group {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      padding: 20px;
-      flex-wrap: wrap;
-    }
-
-    .share-button-group a,
-    .share-button-group button {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 18px;
-      border-radius: 6px;
-      color: white;
-      font-size: 15px;
-      font-weight: 500;
-      text-decoration: none;
-      border: none;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    .button-text {
-      white-space: nowrap;
-    }
-
-    .whatsapp-text-button {
-      background-color: #25D366;
-    }
-    .whatsapp-text-button:hover {
-      background-color: #128C7E;
-    }
-
-    .download-calculation-button {
-      background-color: #cc0000;
-    }
-    .download-calculation-button:hover {
-      background-color: #a00000; /* Un rojo un poco más oscuro */
-    }
-
-    .download-full-report-button {
-      background-color: #828282;
-    }
-    .download-full-report-button:hover {
-      background-color: #6a6a6a; /* Un gris un poco más oscuro */
-    }
-
-    .specifications {
-      background-color: #f1f1f1;
-      padding: 20px;
-      font-size: 14px;
-      color: #333;
-      line-height: 1.6;
-      border-top: 2px solid #ccc;
-    }
-
-    .specifications h2 {
-      margin-top: 0;
-      font-size: 18px;
-      color: #444;
-    }
-
-    footer {
-      background-color: #cc0000;
-      color: white;
-      font-size: 14px;
-      padding: 25px 20px;
-    }
-
-    .footer-wrapper {
-      max-width: 850px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 20px;
-      align-items: flex-start;
-    }
-
-    .footer-column {
-      max-width: 300px;
-    }
-
-    footer img.qr {
-      max-width: 100px;
-      height: auto;
-    }
-
-    @media (max-width: 768px) {
-        .carousel-container {
-            height: 250px; /* Ajusta la altura para pantallas medianas */
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
         }
-    }
 
-    @media (max-width: 600px) {
-      input[type="text"], input[type="number"] {
-        width: calc(100% - 40px);
-      }
+        header {
+            background-color: #cc0000;
+            padding: 10px 0;
+            text-align: center;
+        }
 
-      .carousel-container {
-          height: 200px; /* Ajusta la altura para pantallas pequeñas */
-      }
-      .prev, .next {
-          font-size: 16px;
-          padding: 10px;
-      }
+        header img {
+            max-height: 50px;
+        }
 
-      .share-button-group {
-        flex-direction: column;
-        align-items: center;
-      }
+        /* Estilos para el Carrusel Principal */
+        .carousel-container {
+            position: relative;
+            max-width: 100%; /* O el ancho que desees para tu carrusel */
+            margin: 0 auto; /* Centra el carrusel */
+            overflow: hidden; /* Oculta las imágenes que no están activas */
+            height: 350px; /* Altura por defecto para el carrusel, ajusta según tus imágenes */
+            background-color: #f0f0f0; /* Color de fondo si las imágenes no cubren todo */
+        }
 
-      .share-button-group a,
-      .share-button-group button {
-        position: relative; /* Mantener para el posicionamiento absoluto del ícono */
-        width: 100%;
-        max-width: 300px;
-        min-height: 48px;
-        padding-left: 44px; /* espacio para ícono */
-        padding-right: 16px;
-        box-sizing: border-box;
-        justify-content: center; /* Centra el contenido horizontalmente */
-      }
+        .carousel-slide {
+            display: none; /* Por defecto, todas ocultas */
+            width: 100%;
+            height: 100%; /* Para que la imagen ocupe todo el slide */
+            text-align: center; /* Centra la imagen horizontalmente */
+        }
 
-      .share-button-group i {
-        position: absolute;
-        left: 16px;
-        top: 50%;
-        transform: translateY(-50%);
-        margin: 0;
-        font-size: 20px;
-      }
+        .carousel-slide img {
+            width: 100%; /* Ocupa todo el ancho del slide */
+            height: 100%; /* Ocupa toda la altura del slide */
+            object-fit: cover; /* Recorta la imagen para que cubra el contenedor sin distorsionarse */
+            display: block; /* Elimina espacio extra debajo de la imagen */
+        }
 
-      .button-text {
-        width: 100%; /* Asegura que el texto use el ancho disponible para centrarse */
-        text-align: center;
-        display: inline-block; /* Opcional, pero ayuda con el centrado del texto */
-      }
+        /* Flechas de navegación del carrusel principal */
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            padding: 16px;
+            margin-top: -22px;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            transition: 0.6s ease;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+            background-color: rgba(0,0,0,0.5); /* Fondo semitransparente para las flechas */
+            z-index: 10; /* Para que estén por encima de los slides */
+        }
 
-      .footer-wrapper {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-    }
-  </style>
+        .next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+        .prev:hover, .next:hover {
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        /* Puntos indicadores del carrusel principal */
+        .carousel-dots {
+            position: absolute;
+            bottom: 10px; /* Ajusta la posición vertical de los puntos */
+            width: 100%;
+            text-align: center;
+            z-index: 10; /* Asegura que los puntos estén por encima de las imágenes */
+        }
+
+        .dot {
+            cursor: pointer;
+            height: 10px;
+            width: 10px;
+            margin: 0 4px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+            transition: background-color 0.6s ease;
+        }
+
+        .dot.active, .dot:hover {
+            background-color: #717171;
+        }
+
+        /* Animación del carrusel principal (opcional, para un fade in/out suave) */
+        .fade {
+            animation-name: fade;
+            animation-duration: 1.5s;
+        }
+
+        @keyframes fade {
+            from {opacity: .4}
+            to {opacity: 1}
+        }
+
+        /* Estilos de la Calculadora y secciones principales */
+        #main-content-wrapper {
+            max-width: 850px;
+            margin: 30px auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .container {
+            padding: 0;
+        }
+
+        h1 {
+            background-color: #cc0000;
+            color: white;
+            font-size: 22px;
+            text-align: center;
+            margin: 0;
+            padding: 15px 20px;
+        }
+
+        label {
+            display: block;
+            margin: 12px 0 5px;
+            padding: 0 20px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input[type="text"], input[type="number"] {
+            width: calc(100% - 40px);
+            margin: 0 auto 10px;
+            display: block;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+            background-color: #f9f9f9;
+        }
+
+        .error-message {
+            padding: 0 20px;
+            color: red;
+            font-size: 13px;
+            height: 16px;
+        }
+
+        /* Clase para ocultar elementos temporalmente durante la captura de imagen */
+        .hide-on-capture {
+            display: none !important;
+        }
+
+        .share-button-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 20px;
+            flex-wrap: wrap;
+        }
+
+        .share-button-group a,
+        .share-button-group button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: 6px;
+            color: white;
+            font-size: 15px;
+            font-weight: 500;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .button-text {
+            white-space: nowrap;
+        }
+
+        .whatsapp-text-button {
+            background-color: #25D366;
+        }
+        .whatsapp-text-button:hover {
+            background-color: #128C7E;
+        }
+
+        .download-calculation-button {
+            background-color: #cc0000;
+        }
+        .download-calculation-button:hover {
+            background-color: #a00000; /* Un rojo un poco más oscuro */
+        }
+
+        .download-full-report-button {
+            background-color: #828282;
+        }
+        .download-full-report-button:hover {
+            background-color: #6a6a6a; /* Un gris un poco más oscuro */
+        }
+
+        .specifications {
+            background-color: #f1f1f1;
+            padding: 20px;
+            font-size: 14px;
+            color: #333;
+            line-height: 1.6;
+            border-top: 2px solid #ccc;
+        }
+
+        .specifications h2 {
+            margin-top: 0;
+            font-size: 18px;
+            color: #444;
+        }
+
+        /* Estilos para el Carrusel de Logos (Nuevo) */
+        .logo-carousel-section {
+            padding: 40px 20px;
+            text-align: center;
+            background-color: #f8f8f8; /* Un fondo suave para diferenciarlo */
+            margin-top: 30px; /* Espacio con el contenido anterior */
+            margin-bottom: 30px; /* Espacio con el footer */
+        }
+
+        .logo-carousel-section h2 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .logo-carousel-container {
+            width: 100%;
+            overflow: hidden; /* Oculta los logos que están fuera de vista */
+            position: relative;
+            padding: 10px 0; /* Un poco de padding vertical */
+            white-space: nowrap; /* Evita que los logos salten de línea */
+        }
+
+        .logo-carousel-track {
+            display: inline-block; /* Para que el contenido sea tan ancho como sus hijos */
+            /* La animación de desplazamiento se aplicará aquí, se define en JS */
+        }
+
+        /* Animación para el carrusel de logos definida por JS */
+        /* @keyframes scroll-logos { ... } se inyectará dinámicamente */
+
+        .logo-carousel-track img {
+            height: 80px; /* Altura fija para tus logos, ajusta según necesidad */
+            width: auto; /* Mantiene la proporción */
+            margin: 0 40px; /* Espacio entre los logos */
+            display: inline-block; /* Crucial para el efecto de scroll */
+            vertical-align: middle; /* Alinea los logos si tienen diferentes alturas */
+            filter: grayscale(100%); /* Opcional: logos en escala de grises */
+            opacity: 0.6; /* Opcional: un poco transparentes */
+            transition: filter 0.3s ease, opacity 0.3s ease;
+        }
+
+        .logo-carousel-track img:hover {
+            filter: grayscale(0%); /* Opcional: color al pasar el ratón */
+            opacity: 1; /* Opcional: opacidad completa al pasar el ratón */
+        }
+
+        /* Estilos para el Pop-up (Nuevo) */
+        #popup-overlay {
+            display: none; /* Por defecto, oculto */
+            position: fixed; /* Fijo en la pantalla, no se desplaza con el scroll */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* Fondo oscuro semitransparente */
+            z-index: 1000; /* Asegura que esté por encima de todo lo demás */
+            display: flex; /* Para centrar el contenido fácilmente */
+            justify-content: center; /* Centrado horizontal */
+            align-items: center; /* Centrado vertical */
+        }
+
+        #popup-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative; /* Para posicionar la "X" */
+            max-width: 90%; /* Ancho máximo para el pop-up */
+            max-height: 90%; /* Altura máxima para el pop-up */
+            overflow: auto; /* Si la imagen es muy grande, permite scroll */
+        }
+
+        #popup-content img {
+            max-width: 100%; /* La imagen se ajusta al ancho del contenedor del pop-up */
+            height: auto; /* Mantiene la proporción de la imagen */
+            display: block; /* Elimina espacio extra debajo de la imagen */
+        }
+
+        #close-popup {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            z-index: 1001; /* Asegura que la X esté por encima de la imagen */
+        }
+
+        #close-popup:hover {
+            color: #cc0000; /* Color al pasar el ratón */
+        }
+
+        /* Animación de entrada del Pop-up (opcional) */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        #popup-overlay.show {
+            display: flex; /* Cambia a flexbox para mostrar */
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        #popup-content.show {
+            animation: zoomIn 0.3s ease-out forwards;
+        }
+
+
+        /* Estilos del Footer */
+        footer {
+            background-color: #cc0000;
+            color: white;
+            font-size: 14px;
+            padding: 25px 20px;
+        }
+
+        .footer-wrapper {
+            max-width: 850px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .footer-column {
+            max-width: 300px;
+        }
+
+        footer img.qr {
+            max-width: 100px;
+            height: auto;
+        }
+
+        /* Media Queries para Responsividad */
+        @media (max-width: 768px) {
+            .carousel-container {
+                height: 250px; /* Ajusta la altura para pantallas medianas */
+            }
+            .logo-carousel-track img {
+                height: 60px; /* Menos altura para móviles */
+                margin: 0 25px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            input[type="text"], input[type="number"] {
+                width: calc(100% - 40px);
+            }
+
+            .carousel-container {
+                height: 200px; /* Ajusta la altura para pantallas pequeñas */
+            }
+            .prev, .next {
+                font-size: 16px;
+                padding: 10px;
+            }
+
+            .share-button-group {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .share-button-group a,
+            .share-button-group button {
+                position: relative; /* Mantener para el posicionamiento absoluto del ícono */
+                width: 100%;
+                max-width: 300px;
+                min-height: 48px;
+                padding-left: 44px; /* espacio para ícono */
+                padding-right: 16px;
+                box-sizing: border-box;
+                justify-content: center; /* Centra el contenido horizontalmente */
+            }
+
+            .share-button-group i {
+                position: absolute;
+                left: 16px;
+                top: 50%;
+                transform: translateY(-50%);
+                margin: 0;
+                font-size: 20px;
+            }
+
+            .button-text {
+                width: 100%; /* Asegura que el texto use el ancho disponible para centrarse */
+                text-align: center;
+                display: inline-block; /* Opcional, pero ayuda con el centrado del texto */
+            }
+
+            .footer-wrapper {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            /* Pop-up en móvil */
+            #popup-content {
+                padding: 15px;
+            }
+            #close-popup {
+                font-size: 24px;
+                top: 8px;
+                right: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo-carousel-track img {
+                height: 50px; /* Aún menos altura para móviles pequeños */
+                margin: 0 15px;
+            }
+        }
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
 
-<header>
-  <a href="https://www.agroplansa.com.ar/" target="_blank"> <img src="img/AgroPlan blanco.svg" alt="AgroPlan Logo">
-  </a>
-</header>
-
-<div class="carousel-container">
-    <div class="carousel-slide">
-        <img src="img/galeria1.jpg" alt="AgroPlan Imagen 1">
-    </div>
-    <div class="carousel-slide">
-        <img src="img/galeria2.jpg" alt="AgroPlan Imagen 2">
-    </div>
-    <div class="carousel-slide">
-        <img src="img/galeria3.jpg" alt="AgroPlan Imagen 3">
-    </div>
-    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-    <a class="next" onclick="plusSlides(1)">&#10095;</a>
-
-    <div class="carousel-dots">
-        <span class="dot" onclick="currentSlide(1)"></span>
-        <span class="dot" onclick="currentSlide(2)"></span>
-        <span class="dot" onclick="currentSlide(3)"></span>
+    <div id="popup-overlay">
+        <div id="popup-content">
+            <span id="close-popup">&times;</span>
+            <img src="img/popup-image.jpg" alt="Mensaje Importante">
         </div>
-</div>
-
-<div id="main-content-wrapper">
-  <div class="container" id="calculator-container">
-    <h1>Calculador de Cuota</h1>
-
-    <label for="valorBasicoMovil">Valor Básico Móvil ($40.000.000 a $72.000.000, en múltiplos de $10.000)</label>
-    <input type="text" id="valorBasicoMovil" placeholder="Ingrese el valor" required oninput="formatearValor(this); calcularAutomatico();" />
-    <span id="errorMensaje" class="error-message"></span>
-
-    <label for="cuotaPura">Cuota Pura</label>
-    <input type="text" id="cuotaPura" placeholder="Cuota Pura" disabled>
-
-    <label for="mensualJuridica">Mensual Jurídica</label>
-    <input type="text" id="mensualJuridica" placeholder="Mensual Jurídica" disabled>
-
-    <label for="segVida">Seg. de Vida</label>
-    <input type="text" id="segVida" placeholder="Seg. de Vida" disabled>
-
-    <label for="mensualFisca">Mensual Física</label>
-    <input type="text" id="mensualFisca" placeholder="Mensual Física" disabled>
-
-    <label for="impuestoSello">Impuesto al Sello (Cuota 1 a 6)</label>
-    <input type="text" id="impuestoSello" placeholder="Impuesto al Sello" disabled>
-
-    <div class="share-button-group">
-      <a href="#" class="whatsapp-text-button" onclick="compartirWhatsAppTexto()">
-        <i class="fab fa-whatsapp"></i> <span class="button-text">Compartir</span>
-      </a>
-      <button class="download-calculation-button" onclick="descargarImagenCalculo()">
-        <i class="fas fa-download"></i> <span class="button-text">Descargar Cálculo</span>
-      </button>
-      <button class="download-full-report-button" onclick="descargarImagenCalculoYEspecificaciones()">
-        <i class="fas fa-download"></i> <span class="button-text">Descargar Cálculo + Especificaciones</span>
-      </button>
     </div>
-  </div>
-
-  <div class="specifications" id="specifications-container">
-    <h2>Especificaciones del Plan</h2>
-    <p><b>Plazo:</b> 60 meses / cuotas en pesos y sin interés</p>
-    <p><b>Carga Administrativa:</b> 8.0% fija para financiación a 5 años</p>
-    <p><b>Adjudicaciones mensuales:</b> por sorteo o licitación</p>
-    <p>* Si el cliente ordena un bien de MENOR valor al Valor Móvil Adjudicado, la diferencia será acreditada como cuotas adelantadas.</p>
-    <p>* Si ordena un bien de MAYOR valor al Valor Adjudicado, la diferencia será abonada por el cliente.</p>
-    <p><b>Impuesto al sello:</b> 1,2% para todas las provincias a excepción de Córdoba. (Se abona prorrateado en las primeras 6 cuotas)</p>
-    <p><b>Impuesto al débito y crédito (Ley 25.413):</b> 0,804% sobre la cuota pura mensual.</p>
-    <p><b>Seguro de Vida:</b> 0,0833% del saldo deudor. Hasta 64 años inclusive.</p>
-    <p><b>Derecho de Adjudicación:</b> 1% + IVA del valor Móvil adjudicado.</p>
-    <p><b>Gestoría:</b> $54.500 + Formularios $43.200 a cargo del cliente.</p>
-    <p><b>Documentación requerida:</b> Declaraciones juradas UIF, salud, y datos del solicitante.</p>
-    <p><b>Precios:</b> Tomados de la Lista de Precios de Fábrica.</p>
-    <p><b>Presentar:</b> fotocopia de DNI (frente y dorso).</p>
-  </div>
-</div>
-
-<footer>
-    <div class="footer-wrapper">
-        <div class="footer-column">
-            <strong>Domicilio Postal:</strong> Gualeguaychú 745 - CP: 3100 <br>
-            Paraná, Entre Ríos, Argentina<br>
-            <br> <strong>Domicilio Legal:</strong> Echeverría 2923 <br> Piso 9° Dpto. A - CP 1428 -
-            C.A.B.A.
-        </div>
-        <div class="footer-column">
-            <strong>Atención:</strong> Lunes a Viernes de 8 a 16 hs <br>
-            <br> <strong>Contacto</strong><br>
-            administracion.agro@agroplansa.com.ar<br>
-            Tel: (0343) 4312218
-        </div>
-        <a href="https://servicioscf.afip.gob.ar/publico/denuncias/denunciaCD.aspx" target="_blank"> <img src="img/qr-footer.jpg" alt="QR AgroPlan" class="qr" />
+    <header>
+        <a href="https://www.agroplansa.com.ar/" target="_blank"> <img src="img/AgroPlan blanco.svg" alt="AgroPlan Logo">
         </a>
+    </header>
+
+    <div class="carousel-container">
+        <div class="carousel-slide">
+            <img src="img/galeria1.jpg" alt="AgroPlan Imagen 1">
+        </div>
+        <div class="carousel-slide">
+            <img src="img/galeria2.jpg" alt="AgroPlan Imagen 2">
+        </div>
+        <div class="carousel-slide">
+            <img src="img/galeria3.jpg" alt="AgroPlan Imagen 3">
+        </div>
+        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+        <div class="carousel-dots">
+            <span class="dot" onclick="currentSlide(1)"></span>
+            <span class="dot" onclick="currentSlide(2)"></span>
+            <span class="dot" onclick="currentSlide(3)"></span>
+        </div>
     </div>
-</footer>
 
-<script>
-    function currencyFormat(value) {
-        return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(value);
-    }
+    <div id="main-content-wrapper">
+        <div class="container" id="calculator-container">
+            <h1>Calculador de Cuota</h1>
 
-    function formatearValor(input) {
-        let cursorPosition = input.selectionStart;
-        const originalValue = input.value;
-        const originalLength = originalValue.length;
+            <label for="valorBasicoMovil">Valor Básico Móvil ($34.000.000 a $66.000.000, en múltiplos de $10.000)</label>
+            <input type="text" id="valorBasicoMovil" placeholder="Ingrese el valor" required oninput="formatearValor(this); calcularAutomatico();" />
+            <span id="errorMensaje" class="error-message"></span>
 
-        let value = originalValue.replace(/\$/g, '').replace(/\./g, '');
+            <label for="cuotaPura">Cuota Pura</label>
+            <input type="text" id="cuotaPura" placeholder="Cuota Pura" disabled>
 
-        if (value) {
-            let formattedValue = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-            input.value = '$' + formattedValue;
-            const newLength = input.value.length;
-            const diff = newLength - originalLength;
-            if (cursorPosition > 0 || originalValue.startsWith('$')) {
-                input.setSelectionRange(cursorPosition + diff, cursorPosition + diff);
+            <label for="mensualJuridica">Mensual Jurídica</label>
+            <input type="text" id="mensualJuridica" placeholder="Mensual Jurídica" disabled>
+
+            <label for="segVida">Seg. de Vida</label>
+            <input type="text" id="segVida" placeholder="Seg. de Vida" disabled>
+
+            <label for="mensualFisca">Mensual Física</label>
+            <input type="text" id="mensualFisca" placeholder="Mensual Física" disabled>
+
+            <label for="impuestoSello">Impuesto al Sello (Cuota 1 a 6)</label>
+            <input type="text" id="impuestoSello" placeholder="Impuesto al Sello" disabled>
+
+            <div class="share-button-group">
+                <a href="#" class="whatsapp-text-button" onclick="compartirWhatsAppTexto()">
+                    <i class="fab fa-whatsapp"></i> <span class="button-text">Compartir</span>
+                </a>
+                <button class="download-calculation-button" onclick="descargarImagenCalculo()">
+                    <i class="fas fa-download"></i> <span class="button-text">Descargar Cálculo</span>
+                </button>
+                <button class="download-full-report-button" onclick="descargarImagenCalculoYEspecificaciones()">
+                    <i class="fas fa-download"></i> <span class="button-text">Descargar Cálculo + Especificaciones</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="specifications" id="specifications-container">
+            <h2>Especificaciones del Plan</h2>
+            <p><b>Plazo:</b> 60 meses / cuotas en pesos y sin interés</p>
+            <p><b>Carga Administrativa:</b> 8.0% fija para financiación a 5 años</p>
+            <p><b>Adjudicaciones mensuales:</b> por sorteo o licitación</p>
+            <p>* Si el cliente ordena un bien de MENOR valor al Valor Móvil Adjudicado, la diferencia será acreditada como cuotas adelantadas.</p>
+            <p>* Si ordena un bien de MAYOR valor al Valor Adjudicado, la diferencia será abonada por el cliente.</p>
+            <p><b>Impuesto al sello:</b> 1,2% para todas las provincias a excepción de Córdoba. (Se abona prorrateado en las primeras 6 cuotas)</p>
+            <p><b>Impuesto al débito y crédito (Ley 25.413):</b> 0,804% sobre la cuota pura mensual.</p>
+            <p><b>Seguro de Vida:</b> 0,0833% del saldo deudor. Hasta 64 años inclusive.</p>
+            <p><b>Derecho de Adjudicación:</b> 1% + IVA del valor Móvil adjudicado.</p>
+            <p><b>Gestoría:</b> $54.500 + Formularios $43.200 a cargo del cliente.</p>
+            <p><b>Documentación requerida:</b> Declaraciones juradas UIF, salud, y datos del solicitante.</p>
+            <p><b>Precios:</b> Tomados de la Lista de Precios de Fábrica.</p>
+            <p><b>Presentar:</b> fotocopia de DNI (frente y dorso).</p>
+        </div>
+    </div>
+
+    <section class="logo-carousel-section">
+        <h2>Nuestros Clientes Confían en Nosotros</h2>
+        <div class="logo-carousel-container">
+            <div class="logo-carousel-track">
+                <img src="img/logo-cliente-1.png" alt="Logo Cliente 1">
+                <img src="img/logo-cliente-2.png" alt="Logo Cliente 2">
+                <img src="img/logo-cliente-3.png" alt="Logo Cliente 3">
+                <img src="img/logo-cliente-4.png" alt="Logo Cliente 4">
+                <img src="img/logo-cliente-5.png" alt="Logo Cliente 5">
+                <img src="img/logo-cliente-6.png" alt="Logo Cliente 6">
+                
+                <img src="img/logo-cliente-1.png" alt="Logo Cliente 1">
+                <img src="img/logo-cliente-2.png" alt="Logo Cliente 2">
+                <img src="img/logo-cliente-3.png" alt="Logo Cliente 3">
+                <img src="img/logo-cliente-4.png" alt="Logo Cliente 4">
+                <img src="img/logo-cliente-5.png" alt="Logo Cliente 5">
+                <img src="img/logo-cliente-6.png" alt="Logo Cliente 6">
+
+                <img src="img/logo-cliente-1.png" alt="Logo Cliente 1">
+                <img src="img/logo-cliente-2.png" alt="Logo Cliente 2">
+                <img src="img/logo/logo-cliente-3.png" alt="Logo Cliente 3">
+                <img src="img/logo-cliente-4.png" alt="Logo Cliente 4">
+                <img src="img/logo-cliente-5.png" alt="Logo Cliente 5">
+                <img src="img/logo-cliente-6.png" alt="Logo Cliente 6">
+            </div>
+        </div>
+    </section>
+    <footer>
+        <div class="footer-wrapper">
+            <div class="footer-column">
+                <strong>Domicilio Postal:</strong> Gualeguaychú 745 - CP: 3100 <br>
+                Paraná, Entre Ríos, Argentina<br>
+                <br> <strong>Domicilio Legal:</strong> Echeverría 2923 <br> Piso 9° Dpto. A - CP 1428 -
+                C.A.B.A.
+            </div>
+            <div class="footer-column">
+                <strong>Atención:</strong> Lunes a Viernes de 8 a 16 hs <br>
+                <br> <strong>Contacto</strong><br>
+                administracion.agro@agroplansa.com.ar<br>
+                Tel: (0343) 4312218
+            </div>
+            <a href="https://servicioscf.afip.gob.ar/publico/denuncias/denunciaCD.aspx" target="_blank"> <img src="img/qr-footer.jpg" alt="QR AgroPlan" class="qr" />
+            </a>
+        </div>
+    </footer>
+
+    <script>
+        function currencyFormat(value) {
+            return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(value);
+        }
+
+        function formatearValor(input) {
+            let cursorPosition = input.selectionStart;
+            const originalValue = input.value;
+            const originalLength = originalValue.length;
+
+            let value = originalValue.replace(/\$/g, '').replace(/\./g, '');
+
+            if (value) {
+                let formattedValue = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+                input.value = '$' + formattedValue;
+                const newLength = input.value.length;
+                const diff = newLength - originalLength;
+                if (cursorPosition > 0 || originalValue.startsWith('$')) {
+                    input.setSelectionRange(cursorPosition + diff, cursorPosition + diff);
+                }
+            } else {
+                input.value = '';
             }
-        } else {
-            input.value = '';
-        }
-    }
-
-    function limpiarResults() {
-        document.getElementById('cuotaPura').value = '';
-        document.getElementById('mensualJuridica').value = '';
-        document.getElementById('segVida').value = '';
-        document.getElementById('mensualFisca').value = '';
-        document.getElementById('impuestoSello').value = '';
-    }
-
-    function calcularAutomatico() {
-        const valorInput = document.getElementById('valorBasicoMovil');
-        const errorMensaje = document.getElementById('errorMensaje');
-        const valorString = valorInput.value.replace(/\$/g, '').replace(/\./g, '');
-        const valorBasico = parseFloat(valorString);
-
-        errorMensaje.textContent = '';
-
-        if (valorString === '') {
-            limpiarResults();
-            return;
         }
 
-        if (isNaN(valorBasico) || valorBasico < 40000000 || valorBasico > 72000000 || (valorBasico % 10000 !== 0)) {
-            errorMensaje.textContent = "Ingrese un valor entre $40.000.000 y $72.000.000, en múltiplos de $10.000.";
-            limpiarResults();
-            return;
+        function limpiarResults() {
+            document.getElementById('cuotaPura').value = '';
+            document.getElementById('mensualJuridica').value = '';
+            document.getElementById('segVida').value = '';
+            document.getElementById('mensualFisca').value = '';
+            document.getElementById('impuestoSello').value = '';
         }
 
-        const cuotaPura = valorBasico / 60;
-        const parte1 = valorBasico * 0.08;
-        const parte2 = parte1 * 0.21;
-        const mensualJuridica = (valorBasico + parte1 + parte2) / 60;
-        const segVida = valorBasico * 0.00083;
-        const mensualFisca = mensualJuridica + segVida;
-        const impuestoSello = (valorBasico * 0.012) / 6;
+        function calcularAutomatico() {
+            const valorInput = document.getElementById('valorBasicoMovil');
+            const errorMensaje = document.getElementById('errorMensaje');
+            const valorString = valorInput.value.replace(/\$/g, '').replace(/\./g, '');
+            const valorBasico = parseFloat(valorString);
 
-        document.getElementById('cuotaPura').value = currencyFormat(cuotaPura);
-        document.getElementById('mensualJuridica').value = currencyFormat(mensualJuridica);
-        document.getElementById('segVida').value = currencyFormat(segVida);
-        document.getElementById('mensualFisca').value = currencyFormat(mensualFisca);
-        document.getElementById('impuestoSello').value = currencyFormat(impuestoSello);
-    }
+            errorMensaje.textContent = '';
 
-    document.getElementById('valorBasicoMovil').addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            calcularAutomatico();
-        }
-    });
+            if (valorString === '') {
+                limpiarResults();
+                return;
+            }
 
-    function compartirWhatsAppTexto() {
-        const cuotaPura = document.getElementById('cuotaPura').value;
-        const mensualJuridica = document.getElementById('mensualJuridica').value;
-        const segVida = document.getElementById('segVida').value;
-        const mensualFisca = document.getElementById('mensualFisca').value;
-        const impuestoSello = document.getElementById('impuestoSello').value;
-        const valorBasicoMovil = document.getElementById('valorBasicoMovil').value;
+            if (isNaN(valorBasico) || valorBasico < 34000000 || valorBasico > 66000000 || (valorBasico % 10000 !== 0)) {
+                errorMensaje.textContent = "Ingrese un valor entre $34.000.000 y $66.000.000, en múltiplos de $10.000.";
+                limpiarResults();
+                return;
+            }
 
-        if (!cuotaPura || !valorBasicoMovil) {
-            alert("Por favor, realice un cálculo válido antes de compartir.");
-            return;
-        }
+            const cuotaPura = valorBasico / 60;
+            const parte1 = valorBasico * 0.08;
+            const parte2 = parte1 * 0.21;
+            const mensualJuridica = (valorBasico + parte1 + parte2) / 60;
+            const segVida = valorBasico * 0.00083;
+            const mensualFisca = mensualJuridica + segVida;
+            const impuestoSello = (valorBasico * 0.012) / 6;
 
-        const mensaje = `Acá te paso los detalles para un Valor Básico Móvil de: ${valorBasicoMovil}\n\n` +
-                            `Cuota Pura: ${cuotaPura}\n` +
-                            `Mensual Jurídica: ${mensualJuridica}\n` +
-                            `Seguro de Vida: ${segVida}\n` +
-                            `Mensual Física: ${mensualFisca}\n` +
-                            `Impuesto al Sello (Cuota 1 a 6): ${impuestoSello}\n\n` +
-                            `¡A disposición para lo que necesite!`;
-
-        const linkWhatsApp = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
-        window.open(linkWhatsApp, '_blank');
-    }
-
-    async function generateAndDownloadImage(elementId, filename) {
-        const targetElement = document.getElementById(elementId);
-        if (!targetElement) {
-            console.error('Elemento no encontrado para captura:', elementId);
-            return;
+            document.getElementById('cuotaPura').value = currencyFormat(cuotaPura);
+            document.getElementById('mensualJuridica').value = currencyFormat(mensualJuridica);
+            document.getElementById('segVida').value = currencyFormat(segVida);
+            document.getElementById('mensualFisca').value = currencyFormat(mensualFisca);
+            document.getElementById('impuestoSello').value = currencyFormat(impuestoSello);
         }
 
-        // Ocultar el grupo de botones antes de la captura
-        const shareButtonGroup = document.querySelector('.share-button-group');
-        let originalDisplay = '';
-        if (shareButtonGroup) {
-            originalDisplay = shareButtonGroup.style.display;
-            shareButtonGroup.classList.add('hide-on-capture');
-            // Fuerza el reflow para asegurar que el display: none se aplique antes de la captura
-            void shareButtonGroup.offsetWidth;
+        document.getElementById('valorBasicoMovil').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                calcularAutomatico();
+            }
+        });
+
+        function compartirWhatsAppTexto() {
+            const cuotaPura = document.getElementById('cuotaPura').value;
+            const mensualJuridica = document.getElementById('mensualJuridica').value;
+            const segVida = document.getElementById('segVida').value;
+            const mensualFisca = document.getElementById('mensualFisca').value;
+            const impuestoSello = document.getElementById('impuestoSello').value;
+            const valorBasicoMovil = document.getElementById('valorBasicoMovil').value;
+
+            if (!cuotaPura || !valorBasicoMovil) {
+                alert("Por favor, realice un cálculo válido antes de compartir.");
+                return;
+            }
+
+            const mensaje = `Acá te paso los detalles para un Valor Básico Móvil de: ${valorBasicoMovil}\n\n` +
+                                `Cuota Pura: ${cuotaPura}\n` +
+                                `Mensual Jurídica: ${mensualJuridica}\n` +
+                                `Seguro de Vida: ${segVida}\n` +
+                                `Mensual Física: ${mensualFisca}\n` +
+                                `Impuesto al Sello (Cuota 1 a 6): ${impuestoSello}\n\n` +
+                                `¡A disposición para lo que necesite!`;
+
+            const linkWhatsApp = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
+            window.open(linkWhatsApp, '_blank');
         }
 
-        // Ocultar el carrusel de imágenes si el id de captura es 'main-content-wrapper'
-        const carouselContainer = document.querySelector('.carousel-container');
-        let originalCarouselDisplay = '';
-        if (elementId === 'main-content-wrapper' && carouselContainer) {
-            originalCarouselDisplay = carouselContainer.style.display;
-            carouselContainer.classList.add('hide-on-capture');
-            void carouselContainer.offsetWidth;
-        }
+        async function generateAndDownloadImage(elementId, filename) {
+            const targetElement = document.getElementById(elementId);
+            if (!targetElement) {
+                console.error('Elemento no encontrado para captura:', elementId);
+                return;
+            }
 
-
-        try {
-            const options = {
-                scale: 2, // Mayor escala para mejor calidad de imagen
-                backgroundColor: '#ffffff', // Asegura un fondo blanco si el contenedor tiene transparencia
-                // Captura el área visible del elemento, ajustando a su scrollWidth/Height si es necesario
-                windowWidth: targetElement.scrollWidth,
-                windowHeight: targetElement.scrollHeight
-            };
-
-            const canvas = await html2canvas(targetElement, options);
-            const imageData = canvas.toDataURL("image/png"); // Obtiene la imagen en formato Data URL
-
-            // Crea un enlace temporal para la descarga programática
-            const link = document.createElement('a');
-            link.href = imageData;
-            link.download = filename; // Asigna el nombre de archivo
-
-            // Simula un clic para descargar la imagen
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            
-            alert(`La imagen "${filename}" ha sido descargada. Ahora podés compartirla en WhatsApp.`);
-
-        } catch (error) {
-            console.error("Error al generar la imagen:", error);
-            alert("Hubo un error al descargar la imagen.");
-        } finally {
-            // Asegúrate de mostrar el grupo de botones de nuevo, incluso si hubo un error
+            // Ocultar el grupo de botones antes de la captura
+            const shareButtonGroup = document.querySelector('.share-button-group');
+            let originalDisplay = '';
             if (shareButtonGroup) {
-                shareButtonGroup.classList.remove('hide-on-capture');
-                shareButtonGroup.style.display = originalDisplay; // Restaura el display original
+                originalDisplay = shareButtonGroup.style.display;
+                shareButtonGroup.classList.add('hide-on-capture');
+                // Fuerza el reflow para asegurar que el display: none se aplique antes de la captura
+                void shareButtonGroup.offsetWidth;
             }
-            // Muestra el carrusel de nuevo si se ocultó
+
+            // Ocultar el carrusel de imágenes si el id de captura es 'main-content-wrapper'
+            const carouselContainer = document.querySelector('.carousel-container');
+            let originalCarouselDisplay = '';
             if (elementId === 'main-content-wrapper' && carouselContainer) {
-                carouselContainer.classList.remove('hide-on-capture');
-                carouselContainer.style.display = originalCarouselDisplay;
+                originalCarouselDisplay = carouselContainer.style.display;
+                carouselContainer.classList.add('hide-on-capture');
+                void carouselContainer.offsetWidth;
+            }
+
+
+            try {
+                const options = {
+                    scale: 2, // Mayor escala para mejor calidad de imagen
+                    backgroundColor: '#ffffff', // Asegura un fondo blanco si el contenedor tiene transparencia
+                    // Captura el área visible del elemento, ajustando a su scrollWidth/Height si es necesario
+                    windowWidth: targetElement.scrollWidth,
+                    windowHeight: targetElement.scrollHeight
+                };
+
+                const canvas = await html2canvas(targetElement, options);
+                const imageData = canvas.toDataURL("image/png"); // Obtiene la imagen en formato Data URL
+
+                // Crea un enlace temporal para la descarga programática
+                const link = document.createElement('a');
+                link.href = imageData;
+                link.download = filename; // Asigna el nombre de archivo
+
+                // Simula un clic para descargar la imagen
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                alert(`La imagen "${filename}" ha sido descargada. Ahora podés compartirla en WhatsApp.`);
+
+            } catch (error) {
+                console.error("Error al generar la imagen:", error);
+                alert("Hubo un error al descargar la imagen.");
+            } finally {
+                // Asegúrate de mostrar el grupo de botones de nuevo, incluso si hubo un error
+                if (shareButtonGroup) {
+                    shareButtonGroup.classList.remove('hide-on-capture');
+                    shareButtonGroup.style.display = originalDisplay; // Restaura el display original
+                }
+                // Muestra el carrusel de nuevo si se ocultó
+                if (elementId === 'main-content-wrapper' && carouselContainer) {
+                    carouselContainer.classList.remove('hide-on-capture');
+                    carouselContainer.style.display = originalCarouselDisplay;
+                }
             }
         }
-    }
 
-    function descargarImagenCalculo() {
-        generateAndDownloadImage('calculator-container', 'calculo_agroplan.png');
-    }
-
-    function descargarImagenCalculoYEspecificaciones() {
-        generateAndDownloadImage('main-content-wrapper', 'calculo_y_especificaciones_agroplan.png');
-    }
-</script>
-
-<script>
-    let slideIndex = 1; // Variable global para el índice del slide
-    let slideTimer; // Variable global para el temporizador del auto-play
-
-    function showSlides(n) {
-        let i;
-        let slides = document.getElementsByClassName("carousel-slide");
-        let dots = document.getElementsByClassName("dot");
-
-        // Reiniciar timer si se navega manualmente o si se llama a showSlides
-        clearTimeout(slideTimer);
-
-        if (n > slides.length) { slideIndex = 1 } // Si pasa el último, vuelve al primero
-        if (n < 1) { slideIndex = slides.length } // Si va antes del primero, va al último
-
-        // Ocultar todos los slides y desactivar todos los puntos
-        for (i = 0; i < slides.length; i++) {
-            slides[i].style.display = "none";
-            slides[i].classList.remove('fade'); // Remueve la clase de animación para resetearla
-        }
-        for (i = 0; i < dots.length; i++) {
-            dots[i].className = dots[i].className.replace(" active", "");
+        function descargarImagenCalculo() {
+            generateAndDownloadImage('calculator-container', 'calculo_agroplan.png');
         }
 
-        // Muestra el slide actual y activa el punto correspondiente
-        if (slides.length > 0) {
-            slides[slideIndex - 1].style.display = "block";
-            slides[slideIndex - 1].classList.add('fade');
+        function descargarImagenCalculoYEspecificaciones() {
+            generateAndDownloadImage('main-content-wrapper', 'calculo_y_especificaciones_agroplan.png');
         }
-        
-        if (dots.length > 0) {
-            dots[slideIndex - 1].className += " active";
+    </script>
+
+    <script>
+        let slideIndex = 1;
+        let slideTimer;
+
+        function showSlides(n) {
+            let i;
+            let slides = document.getElementsByClassName("carousel-slide");
+            let dots = document.getElementsByClassName("dot");
+
+            clearTimeout(slideTimer);
+
+            if (n > slides.length) { slideIndex = 1 }
+            if (n < 1) { slideIndex = slides.length }
+
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+                slides[i].classList.remove('fade');
+            }
+            for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+
+            if (slides.length > 0) {
+                slides[slideIndex - 1].style.display = "block";
+                slides[slideIndex - 1].classList.add('fade');
+            }
+            
+            if (dots.length > 0) {
+                dots[slideIndex - 1].className += " active";
+            }
+
+            slideTimer = setTimeout(() => plusSlides(1), 5000);
         }
 
-        // Reinicia el auto-play después de 5 segundos
-        // Asegúrate de que `plusSlides` y `slideIndex` sean accesibles
-        slideTimer = setTimeout(() => plusSlides(1), 5000);
-    }
-
-    function plusSlides(n) {
-        showSlides(slideIndex += n);
-    }
-
-    function currentSlide(n) {
-        showSlides(slideIndex = n);
-    }
-
-    // Iniciar el carrusel cuando la página cargue completamente
-    document.addEventListener('DOMContentLoaded', () => {
-        if (document.querySelector('.carousel-container')) {
-            showSlides(slideIndex);
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
         }
-    });
-</script>
+
+        function currentSlide(n) {
+            showSlides(slideIndex = n);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (document.querySelector('.carousel-container')) {
+                showSlides(slideIndex);
+            }
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const logoTrack = document.querySelector('.logo-carousel-track');
+            if (logoTrack) {
+                const logos = Array.from(logoTrack.children);
+                const originalLogosCount = logos.length;
+
+                // Clonar y añadir los logos para asegurar al menos 2 sets completos
+                // Esto es vital para el bucle infinito sin "saltos"
+                logos.forEach(logo => {
+                    const clone = logo.cloneNode(true);
+                    logoTrack.appendChild(clone);
+                });
+                
+                // Si tienes pocos logos, puedes clonar más veces para que el track sea más largo
+                // y la animación se vea mejor. Por ejemplo, clonar 2 veces más:
+                logos.forEach(logo => {
+                    const clone = logo.cloneNode(true);
+                    logoTrack.appendChild(clone);
+                });
+
+
+                // Calcular el ancho total de UN SOLO SET de logos para la animación
+                let originalSetWidth = 0;
+                // Calculamos el ancho de los hijos originales antes de cualquier clonación adicional
+                // para que la animación se desplace exactamente ese ancho.
+                for (let i = 0; i < originalLogosCount; i++) {
+                    originalSetWidth += logos[i].offsetWidth; // includes margin
+                }
+
+                const scrollSpeedPxPerSec = 40; // Ajusta esta velocidad (píxeles por segundo)
+                const animationDuration = originalSetWidth / scrollSpeedPxPerSec; // Duración en segundos
+
+                // Inyectar la regla @keyframes dinámicamente
+                const styleSheet = document.styleSheets[0];
+                const keyframesRule = `@keyframes scroll-logos {
+                    0% { transform: translateX(0); }
+                    100% { transform: translateX(-${originalSetWidth}px); }
+                }`;
+                // Buscar si la regla ya existe antes de insertarla
+                let ruleExists = false;
+                for (let i = 0; i < styleSheet.cssRules.length; i++) {
+                    if (styleSheet.cssRules[i].name === 'scroll-logos') {
+                        ruleExists = true;
+                        break;
+                    }
+                }
+                if (!ruleExists) {
+                    styleSheet.insertRule(keyframesRule, styleSheet.cssRules.length);
+                }
+
+                // Aplicar la animación al track
+                logoTrack.style.animation = `scroll-logos ${animationDuration}s linear infinite`;
+
+                // Pausar al hover
+                logoTrack.addEventListener('mouseenter', () => {
+                    logoTrack.style.animationPlayState = 'paused';
+                });
+                logoTrack.addEventListener('mouseleave', () => {
+                    logoTrack.style.animationPlayState = 'running';
+                });
+            }
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const popupOverlay = document.getElementById('popup-overlay');
+            const popupContent = document.getElementById('popup-content');
+            const closePopupButton = document.getElementById('close-popup');
+
+            function showPopup() {
+                popupOverlay.style.display = 'flex';
+                popupOverlay.classList.add('show');
+                popupContent.classList.add('show');
+            }
+
+            function hidePopup() {
+                popupOverlay.classList.remove('show');
+                popupContent.classList.remove('show');
+                setTimeout(() => {
+                    popupOverlay.style.display = 'none';
+                }, 300); // Coincide con la duración de la animación fadeIn/zoomIn
+            }
+
+            // Muestra el pop-up automáticamente después de un breve retraso (ej. 500ms)
+            // Esto permite que la página se cargue un poco antes de que aparezca el pop-up.
+            setTimeout(showPopup, 500); 
+
+            // Event listener para cerrar con la "X"
+            closePopupButton.addEventListener('click', hidePopup);
+
+            // Event listener para cerrar haciendo clic fuera de la imagen (en el overlay)
+            popupOverlay.addEventListener('click', (event) => {
+                if (event.target === popupOverlay) {
+                    hidePopup();
+                }
+            });
+
+            // Opcional: Controlar que el pop-up aparezca solo una vez por sesión o una vez para siempre
+            /*
+            const hasSeenPopup = localStorage.getItem('hasSeenPopup');
+            if (!hasSeenPopup) {
+                setTimeout(showPopup, 500); 
+                localStorage.setItem('hasSeenPopup', 'true'); // Marca que ya lo vio
+            }
+            */
+        });
+    </script>
 
 </body>
 </html>
