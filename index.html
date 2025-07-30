@@ -475,6 +475,25 @@
                 <img src="img/logo-clientes-16.svg" alt="Logo Cliente 16">
                 <img src="img/logo-clientes-17.svg" alt="Logo Cliente 17">
                 <img src="img/logo-clientes-18.svg" alt="Logo Cliente 18">
+
+                <img src="img/logo-clientes-01.svg" alt="Logo Cliente 1">
+                <img src="img/logo-clientes-02.svg" alt="Logo Cliente 2">
+                <img src="img/logo-clientes-03.svg" alt="Logo Cliente 3">
+                <img src="img/logo-clientes-04.svg" alt="Logo Cliente 4">
+                <img src="img/logo-clientes-05.svg" alt="Logo Cliente 5">
+                <img src="img/logo-clientes-06.svg" alt="Logo Cliente 6">
+                <img src="img/logo-clientes-07.svg" alt="Logo Cliente 7">
+                <img src="img/logo-clientes-08.svg" alt="Logo Cliente 8">
+                <img src="img/logo-clientes-09.svg" alt="Logo Cliente 9">
+                <img src="img/logo-clientes-10.svg" alt="Logo Cliente 10">
+                <img src="img/logo-clientes-11.svg" alt="Logo Cliente 11">
+                <img src="img/logo-clientes-12.svg" alt="Logo Cliente 12">
+                <img src="img/logo-clientes-13.svg" alt="Logo Cliente 13">
+                <img src="img/logo-clientes-14.svg" alt="Logo Cliente 14">
+                <img src="img/logo-clientes-15.svg" alt="Logo Cliente 15">
+                <img src="img/logo-clientes-16.svg" alt="Logo Cliente 16">
+                <img src="img/logo-clientes-17.svg" alt="Logo Cliente 17">
+                <img src="img/logo-clientes-18.svg" alt="Logo Cliente 18">
                 
             </div>
         </div>
@@ -778,6 +797,106 @@
                 logoTrack.style.animation = `scroll-logos ${animationDuration}s linear infinite`;
 
                 // Pausar al hover
+                logoTrack.addEventListener('mouseenter', () => {
+                    logoTrack.style.animationPlayState = 'paused';
+                });
+                logoTrack.addEventListener('mouseleave', () => {
+                    logoTrack.style.animationPlayState = 'running';
+                });
+            }
+        });
+    </script>
+
+        <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const logoTrack = document.querySelector('.logo-carousel-track');
+            if (logoTrack) {
+                const logos = Array.from(logoTrack.children);
+                const originalLogosCount = logos.length; // Esto debería ser 18 si tienes 18 logos únicos en el HTML
+
+                // Clonar y añadir los logos para asegurar al menos 2 sets completos
+                // Esto es vital para el bucle infinito sin "saltos"
+                // Ya tienes los logos duplicados en el HTML, pero si quieres asegurar más copias
+                // o si el número de logos originales puede variar, esta parte ayuda.
+                // Para 18 logos originales, y 18 duplicados ya en HTML, tenemos 36 elementos.
+                // Si quieres más, podrías duplicarlos de nuevo aquí.
+                // Por ahora, asumo que los 18 originales y 18 copias en el HTML son suficientes.
+                // Si solo habías puesto los 18 logos una vez, entonces esta sección de JS clonaría.
+                // Como mencionas "18 en total", asumiré que te refieres a los logos *únicos* y
+                // que la duplicación en el HTML ya los lleva a 36 elementos visibles.
+                // Si en tu HTML solo tienes 18 etiquetas <img>, entonces la siguiente línea es crucial:
+                // logos.forEach(logo => {
+                //     const clone = logo.cloneNode(true);
+                //     logoTrack.appendChild(clone);
+                // });
+                // En tu HTML actual, ya tienes la duplicación, lo cual es correcto.
+                // El `originalLogosCount` se referirá a la cantidad de elementos `img` en el HTML
+                // antes de que este JS haga cualquier clonación. Si en el HTML ya tienes 36,
+                // entonces `originalLogosCount` será 36. Si en el HTML tienes 18 y los duplicas una vez,
+                // entonces `originalLogosCount` será 18 y luego 36 al clonar.
+                // Para este ejemplo, asegúrate de que el HTML tiene el número de logos que quieres que se "repitan".
+                // Es decir, si tienes 18 logos únicos, el HTML debería tener 18 * 2 = 36 logos para un bucle simple y efectivo.
+                // He asumido que tu HTML ya tiene las 2 copias de los 18 logos, por lo que originalLogosCount es 18 y luego calculamos el ancho de ese set.
+
+                // Calcular el ancho total de UN SOLO SET de logos para la animación
+                let singleSetWidth = 0;
+                for (let i = 0; i < (originalLogosCount / 2); i++) { // Calculamos el ancho de la primera mitad si están duplicados
+                    singleSetWidth += logos[i].offsetWidth; // includes margin
+                }
+
+                // Si `originalLogosCount` es 18 (sólo los únicos), entonces clonamos para tener al menos 2 sets
+                if (originalLogosCount === 18) { // Asumo 18 logos UNICOS
+                    logos.forEach(logo => {
+                        const clone = logo.cloneNode(true);
+                        logoTrack.appendChild(clone);
+                    });
+                     // Recalcular singleSetWidth después de que todos los clones estén en el DOM,
+                     // o mejor, calcularlo antes de clonar usando los 18 elementos originales.
+                    singleSetWidth = 0;
+                    for (let i = 0; i < 18; i++) { // Asumiendo que los primeros 18 son los originales
+                        singleSetWidth += logos[i].offsetWidth;
+                    }
+                } else {
+                    // Si ya hay más de 18 (e.g., 36) significa que ya están duplicados en HTML
+                    // y originalLogosCount es el total. Dividimos para obtener el ancho de un set.
+                    singleSetWidth = 0;
+                    for (let i = 0; i < (originalLogosCount / 2); i++) {
+                         singleSetWidth += logos[i].offsetWidth;
+                    }
+                }
+
+
+                const scrollSpeedPxPerSec = 60; // Ajusta esta velocidad (píxeles por segundo), más alto es más rápido
+                const animationDuration = singleSetWidth / scrollSpeedPxPerSec; // Duración en segundos
+
+                // Inyectar la regla @keyframes dinámicamente
+                const styleSheet = document.styleSheets[0];
+                const keyframesRule = `@keyframes scroll-logos {
+                    0% { transform: translateX(0); }
+                    100% { transform: translateX(-${singleSetWidth}px); }
+                }`;
+                
+                // Remover la regla si ya existe para evitar duplicados y conflictos
+                let ruleFound = false;
+                for (let i = 0; i < styleSheet.cssRules.length; i++) {
+                    if (styleSheet.cssRules[i].name === 'scroll-logos') {
+                        styleSheet.deleteRule(i);
+                        ruleFound = true;
+                        break; // Suponemos que solo hay una regla con ese nombre
+                    }
+                }
+                styleSheet.insertRule(keyframesRule, styleSheet.cssRules.length);
+
+
+                // Aplicar las propiedades de animación individualmente para no sobrescribir el :hover
+                logoTrack.style.animationName = 'scroll-logos';
+                logoTrack.style.animationDuration = `${animationDuration}s`;
+                logoTrack.style.animationTimingFunction = 'linear';
+                logoTrack.style.animationIterationCount = 'infinite';
+
+                // Pausar al hover (ya está en CSS, pero si el JS lo sobrescribiera, este asegura)
+                // Se ha quitado la línea `animation-play-state: paused;` del CSS y se maneja por JS
+                // para evitar conflictos con la inyección dinámica.
                 logoTrack.addEventListener('mouseenter', () => {
                     logoTrack.style.animationPlayState = 'paused';
                 });
