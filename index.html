@@ -278,74 +278,6 @@
             opacity: 1; /* Opcional: opacidad completa al pasar el ratón */
         }
 
-        /* Estilos para el Pop-up (Nuevo) */
-        #popup-overlay {
-            display: none; /* Por defecto, oculto */
-            position: fixed; /* Fijo en la pantalla, no se desplaza con el scroll */
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7); /* Fondo oscuro semitransparente */
-            z-index: 1000; /* Asegura que esté por encima de todo lo demás */
-            display: flex; /* Para centrar el contenido fácilmente */
-            justify-content: center; /* Centrado horizontal */
-            align-items: center; /* Centrado vertical */
-        }
-
-        #popup-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            position: relative; /* Para posicionar la "X" */
-            max-width: 90%; /* Ancho máximo para el pop-up */
-            max-height: 90%; /* Altura máxima para el pop-up */
-            overflow: auto; /* Si la imagen es muy grande, permite scroll */
-        }
-
-        #popup-content img {
-            max-width: 100%; /* La imagen se ajusta al ancho del contenedor del pop-up */
-            height: auto; /* Mantiene la proporción de la imagen */
-            display: block; /* Elimina espacio extra debajo de la imagen */
-        }
-
-        #close-popup {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 28px;
-            font-weight: bold;
-            color: #333;
-            cursor: pointer;
-            transition: color 0.3s ease;
-            z-index: 1001; /* Asegura que la X esté por encima de la imagen */
-        }
-
-        #close-popup:hover {
-            color: #cc0000; /* Color al pasar el ratón */
-        }
-
-        /* Animación de entrada del Pop-up (opcional) */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes zoomIn {
-            from { transform: scale(0.8); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
-        #popup-overlay.show {
-            display: flex; /* Cambia a flexbox para mostrar */
-            animation: fadeIn 0.3s ease-out forwards;
-        }
-
-        #popup-content.show {
-            animation: zoomIn 0.3s ease-out forwards;
-        }
-
 
         /* Estilos del Footer */
         footer {
@@ -435,22 +367,6 @@
                 align-items: flex-start;
             }
 
-            /* Pop-up en móvil */
-            #popup-content {
-                padding: 15px;
-            }
-            #close-popup {
-                font-size: 24px;
-                top: 8px;
-                right: 12px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .logo-carousel-track img {
-                height: 50px; /* Aún menos altura para móviles pequeños */
-                margin: 0 15px;
-            }
         }
     </style>
 
@@ -458,12 +374,6 @@
 </head>
 <body>
 
-    <div id="popup-overlay">
-        <div id="popup-content">
-            <span id="close-popup">&times;</span>
-            <img src="img/popup-image.jpg" alt="Mensaje Importante">
-        </div>
-    </div>
     <header>
         <a href="https://www.agroplansa.com.ar/" target="_blank"> <img src="img/AgroPlan blanco.svg" alt="AgroPlan Logo">
         </a>
@@ -544,7 +454,7 @@
     </div>
 
     <section class="logo-carousel-section">
-        <h2>Nuestros Clientes Confían en Nosotros</h2>
+        <h2>Planes administrados</h2>
         <div class="logo-carousel-container">
             <div class="logo-carousel-track">
                 <img src="img/logo-cliente-1.png" alt="Logo Cliente 1">
@@ -553,20 +463,19 @@
                 <img src="img/logo-cliente-4.png" alt="Logo Cliente 4">
                 <img src="img/logo-cliente-5.png" alt="Logo Cliente 5">
                 <img src="img/logo-cliente-6.png" alt="Logo Cliente 6">
+                <img src="img/logo-cliente-7.png" alt="Logo Cliente 7">
+                <img src="img/logo-cliente-8.png" alt="Logo Cliente 8">
+                <img src="img/logo-cliente-9.png" alt="Logo Cliente 9">
+                <img src="img/logo-cliente-10.png" alt="Logo Cliente 10">
+                <img src="img/logo-cliente-11.png" alt="Logo Cliente 11">
+                <img src="img/logo-cliente-12.png" alt="Logo Cliente 12">
+                <img src="img/logo-cliente-13.png" alt="Logo Cliente 13">
+                <img src="img/logo-cliente-14.png" alt="Logo Cliente 14">
+                <img src="img/logo-cliente-15.png" alt="Logo Cliente 15">
+                <img src="img/logo-cliente-16.png" alt="Logo Cliente 16">
+                <img src="img/logo-cliente-17.png" alt="Logo Cliente 17">
+                <img src="img/logo-cliente-18.png" alt="Logo Cliente 18">
                 
-                <img src="img/logo-cliente-1.png" alt="Logo Cliente 1">
-                <img src="img/logo-cliente-2.png" alt="Logo Cliente 2">
-                <img src="img/logo-cliente-3.png" alt="Logo Cliente 3">
-                <img src="img/logo-cliente-4.png" alt="Logo Cliente 4">
-                <img src="img/logo-cliente-5.png" alt="Logo Cliente 5">
-                <img src="img/logo-cliente-6.png" alt="Logo Cliente 6">
-
-                <img src="img/logo-cliente-1.png" alt="Logo Cliente 1">
-                <img src="img/logo-cliente-2.png" alt="Logo Cliente 2">
-                <img src="img/logo/logo-cliente-3.png" alt="Logo Cliente 3">
-                <img src="img/logo-cliente-4.png" alt="Logo Cliente 4">
-                <img src="img/logo-cliente-5.png" alt="Logo Cliente 5">
-                <img src="img/logo-cliente-6.png" alt="Logo Cliente 6">
             </div>
         </div>
     </section>
@@ -635,8 +544,8 @@
                 return;
             }
 
-            if (isNaN(valorBasico) || valorBasico < 34000000 || valorBasico > 66000000 || (valorBasico % 10000 !== 0)) {
-                errorMensaje.textContent = "Ingrese un valor entre $34.000.000 y $66.000.000, en múltiplos de $10.000.";
+            if (isNaN(valorBasico) || valorBasico < 40000000 || valorBasico > 72000000 || (valorBasico % 10000 !== 0)) {
+                errorMensaje.textContent = "Ingrese un valor entre $40.000.000 y $72.000.000, en múltiplos de $10.000.";
                 limpiarResults();
                 return;
             }
@@ -876,51 +785,6 @@
                     logoTrack.style.animationPlayState = 'running';
                 });
             }
-        });
-    </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const popupOverlay = document.getElementById('popup-overlay');
-            const popupContent = document.getElementById('popup-content');
-            const closePopupButton = document.getElementById('close-popup');
-
-            function showPopup() {
-                popupOverlay.style.display = 'flex';
-                popupOverlay.classList.add('show');
-                popupContent.classList.add('show');
-            }
-
-            function hidePopup() {
-                popupOverlay.classList.remove('show');
-                popupContent.classList.remove('show');
-                setTimeout(() => {
-                    popupOverlay.style.display = 'none';
-                }, 300); // Coincide con la duración de la animación fadeIn/zoomIn
-            }
-
-            // Muestra el pop-up automáticamente después de un breve retraso (ej. 500ms)
-            // Esto permite que la página se cargue un poco antes de que aparezca el pop-up.
-            setTimeout(showPopup, 500); 
-
-            // Event listener para cerrar con la "X"
-            closePopupButton.addEventListener('click', hidePopup);
-
-            // Event listener para cerrar haciendo clic fuera de la imagen (en el overlay)
-            popupOverlay.addEventListener('click', (event) => {
-                if (event.target === popupOverlay) {
-                    hidePopup();
-                }
-            });
-
-            // Opcional: Controlar que el pop-up aparezca solo una vez por sesión o una vez para siempre
-            /*
-            const hasSeenPopup = localStorage.getItem('hasSeenPopup');
-            if (!hasSeenPopup) {
-                setTimeout(showPopup, 500); 
-                localStorage.setItem('hasSeenPopup', 'true'); // Marca que ya lo vio
-            }
-            */
         });
     </script>
 
