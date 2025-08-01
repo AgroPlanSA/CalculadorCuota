@@ -131,7 +131,7 @@
         }
         
         .calculator-header {
-            background-color: #CC4000; /* Rojo de tu logo */
+            background-color: #ffffff; /* Rojo de tu logo */
             padding: 20px;
             text-align: center;
             color: white;
@@ -887,8 +887,12 @@
                     carouselContainer.classList.remove('hide-on-capture');
                     carouselContainer.style.display = originalDisplays.get(carouselContainer) || 'block';
                 }
-                if (specificationsContainer && !wasSpecificationsOpen) { 
-                    specificationsContainer.open = true;
+                if (specificationsContainer) { 
+                    specificationsContainer.classList.remove('hide-on-capture'); // Asegurar que sea visible
+                    specificationsContainer.style.display = originalDisplays.get(specificationsContainer) || 'block'; // Restaurar su display original
+                    if (!wasSpecificationsOpen) { // Solo abrir si estaba originalmente cerrado por el usuario
+                        specificationsContainer.open = true;
+                    }
                 }
                 if (calculatorAndResultWrapper) {
                     calculatorAndResultWrapper.classList.remove('hide-on-capture');
