@@ -137,7 +137,8 @@
             color: white;
             border-top-left-radius: 8px;
             border-top-right-radius: 8px;
-            margin-bottom: -20px; /* Superposición con el contenedor de la calculadora */
+            /* margin-bottom: -20px; ELIMINADO para evitar superposición */
+            padding-bottom: 30px; /* Aumenta el padding para dar más espacio inferior */
             position: relative;
             z-index: 1;
         }
@@ -176,16 +177,6 @@
             font-weight: bold;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
-
-        /* OLD: h1, now part of .calculator-header */
-        /* h1 {
-            background-color: #cc0000;
-            color: white;
-            font-size: 22px;
-            text-align: center;
-            margin: 0;
-            padding: 15px 20px;
-        } */
 
         label {
             display: block;
@@ -891,6 +882,19 @@
                 void carouselContainer.offsetWidth; // Fuerza el reflow
             }
 
+            // Abrir temporalmente las especificaciones si están cerradas para la captura
+            const specificationsContainer = document.getElementById('specifications-container');
+            let wasSpecificationsOpen = false;
+
+            if (specificationsContainer) {
+                wasSpecificationsOpen = specificationsContainer.open; // Guardar el estado original
+                if (!wasSpecificationsOpen) {
+                    specificationsContainer.open = true; // Abrir para la captura
+                    // Forzar reflow para asegurar que se renderice antes de la captura
+                    void specificationsContainer.offsetHeight; 
+                }
+            }
+
             try {
                 const options = {
                     scale: 2, // Mayor escala para mejor calidad de imagen
@@ -916,6 +920,7 @@
                 console.error("Error al generar la imagen:", error);
                 alert("Hubo un error al descargar la imagen.");
             } finally {
+                // Restaurar el estado original de los elementos ocultados
                 if (shareButtonGroup) {
                     shareButtonGroup.classList.remove('hide-on-capture');
                     shareButtonGroup.style.display = originalDisplayButtonGroup;
@@ -923,6 +928,10 @@
                 if (elementId === 'main-content-wrapper' && carouselContainer) {
                     carouselContainer.classList.remove('hide-on-capture');
                     carouselContainer.style.display = originalCarouselDisplay;
+                }
+                // Restaurar el estado original de las especificaciones
+                if (specificationsContainer && !wasSpecificationsOpen) {
+                    specificationsContainer.open = false; // Cerrar si originalmente estaba cerrado
                 }
             }
         }
