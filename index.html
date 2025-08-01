@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="description" content="Agro Plan, calculador de cuota para plan de ahorro de remolques en 60 cuotas mensuales." />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Calculadora de Cuotas AgroPlan S.A. | ¡Calcula tu Plan de Ahorro!</title>
+    <title>Calculadora de Cuota | AgroPlan S.A. </title>
     <link rel="icon" href="img/Icono-Cerdito-Extranet_2.svg" type="image/x-icon" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     
@@ -829,11 +829,8 @@
                 const segVida = document.getElementById('segVida').value;
                 const mensualFisca = document.getElementById('mensualFisca').value;
                 mensaje += `*Seguro de Vida:* ${segVida}\n`;
-                mensaje += `*Mensual Física:* ${mensualFisca}\n`;
-            } else { 
-                const mensualJuridica = document.getElementById('mensualJuridica').value;
-                mensaje += `*Mensual Jurídica:* ${mensualJuridica}\n`;
-            }
+        
+            } 
             
             mensaje += `*Impuesto al Sello (Cuota 1 a 6):* ${impuestoSello}\n\n`;
             mensaje += `*Total Cuota:* ${finalTotalCuota}\n\n`;
