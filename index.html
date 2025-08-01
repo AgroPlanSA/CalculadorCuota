@@ -131,7 +131,7 @@
         }
         
         .calculator-header {
-            background-color: #cc0000; /* Rojo de tu logo */
+            background-color: #e4002b; /* Rojo de tu logo */
             padding: 20px;
             text-align: center;
             color: white;
@@ -550,7 +550,10 @@
                 <label for="cuotaPura">Cuota Pura</label>
                 <input type="text" id="cuotaPura" placeholder="Cuota Pura" readonly>
 
-                <div id="juridicaFields" class="hidden-field">
+                <label for="cuotaAdministrativaIVA">Cuota Administrativa + IVA</label>
+                <input type="text" id="cuotaAdministrativaIVA" placeholder="Cuota Administrativa + IVA" readonly>
+
+                <div id="juridicaFields">
                     <div class="hidden-field">
                         <label for="mensualJuridica">Mensual Jurídica</label>
                         <input type="text" id="mensualJuridica" placeholder="Mensual Jurídica" readonly>
@@ -697,6 +700,7 @@
 
         function limpiarResults() {
             document.getElementById('cuotaPura').value = '';
+            document.getElementById('cuotaAdministrativaIVA').value = ''; // Añadido
             document.getElementById('mensualJuridica').value = '';
             document.getElementById('segVida').value = '';
             document.getElementById('mensualFisca').value = '';
@@ -712,23 +716,20 @@
             const juridicaFields = document.getElementById('juridicaFields');
 
             if (fisicaFields && juridicaFields) {
-                // Remove hidden-field from juridicaFields and fisicaFields so they can contain the labels and inputs that will be hidden
+                // Quitamos hidden-field de los contenedores principales para que su display pueda ser controlado
                 juridicaFields.classList.remove('hidden-field');
                 fisicaFields.classList.remove('hidden-field');
 
                 if (currentTipoPersona === 'fisica') {
-                    // Hide the juridica-specific fields and display fisica-specific fields
                     juridicaFields.style.display = 'none';
                     fisicaFields.style.display = 'block';
 
                 } else { 
-                    // Hide the fisica-specific fields and display juridica-specific fields
                     fisicaFields.style.display = 'none';
                     juridicaFields.style.display = 'block';
                 }
             }
         }
-
 
         // Función para establecer el botón activo de selección de persona
         function setActiveButton(buttonId) {
@@ -766,26 +767,32 @@
             }
 
             let cuotaPura;
-            let parte1;
-            let parte2;
+            let parte1; // 8% del valor básico
+            let parte2; // 21% de parte1
+            let cuotaAdministrativaIVA; // El nuevo campo
             let mensualJuridica;
             let segVida;
             let mensualFisca;
             let impuestoSello;
             let finalCuotaTotal = 0; 
 
+            // Cálculo común para ambos tipos de persona para Cuota Pura y Cuota Administrativa + IVA
+            cuotaPura = valorBasico / 60;
+            parte1 = valorBasico * 0.08; 
+            parte2 = parte1 * 0.21;     
+            cuotaAdministrativaIVA = (parte1 + parte2) / 60; // Parte mensual de Carga Administrativa + IVA
+
+            document.getElementById('cuotaPura').value = currencyFormat(cuotaPura);
+            document.getElementById('cuotaAdministrativaIVA').value = currencyFormat(cuotaAdministrativaIVA); // Asignar al nuevo campo
+
             if (currentTipoPersona === 'fisica') {
-                cuotaPura = valorBasico / 60;
-                parte1 = valorBasico * 0.08; 
-                parte2 = parte1 * 0.21;     
                 mensualJuridica = (valorBasico + parte1 + parte2) / 60; 
                 segVida = valorBasico * 0.000833; 
                 mensualFisca = mensualJuridica + segVida;
                 impuestoSello = (valorBasico * 0.012) / 6; 
                 
-                finalCuotaTotal = mensualFisca;
+                finalCuotaTotal = mensualFisca; // El total para Persona Física incluye Seg. de Vida
                 
-                document.getElementById('cuotaPura').value = currencyFormat(cuotaPura);
                 document.getElementById('segVida').value = currencyFormat(segVida);
                 // document.getElementById('mensualFisca').value = currencyFormat(mensualFisca); // Oculto por petición del usuario
                 document.getElementById('impuestoSello').value = currencyFormat(impuestoSello);
@@ -795,21 +802,17 @@
             } else if (currentTipoPersona === 'juridica') {
                 const comisionJuridica = 0.08; 
                 const ivaJuridica = 0.21;     
-                const segVidaJuridica = 0;   
+                const segVidaJuridica = 0;   // Seguro de vida es 0 para persona jurídica
                 const impuestoSelloJuridica = 0.012; 
 
-                cuotaPura = valorBasico / 60;
-                parte1 = valorBasico * comisionJuridica;
-                parte2 = parte1 * ivaJuridica;
-                mensualJuridica = (valorBasico + parte1 + parte2) / 60;
-                segVida = valorBasico * segVidaJuridica; 
-                mensualFisca = mensualJuridica + segVida; 
+                mensualJuridica = (valorBasico + parte1 + parte2) / 60; // Usa las mismas 'parte1' y 'parte2'
+                segVida = valorBasico * segVidaJuridica; // Esto será 0
+                mensualFisca = mensualJuridica + segVida; // Esto será igual a mensualJuridica
 
                 impuestoSello = (valorBasico * impuestoSelloJuridica) / 6;
 
-                finalCuotaTotal = mensualJuridica;
+                finalCuotaTotal = mensualJuridica; // El total para Persona Jurídica no incluye Seg. de Vida
 
-                document.getElementById('cuotaPura').value = currencyFormat(cuotaPura);
                 // document.getElementById('mensualJuridica').value = currencyFormat(mensualJuridica); // Oculto por petición del usuario
                 document.getElementById('impuestoSello').value = currencyFormat(impuestoSello);
 
@@ -825,6 +828,7 @@
         function compartirWhatsAppTexto() {
             const valorBasicoMovil = document.getElementById('valorBasicoMovil').value;
             const cuotaPura = document.getElementById('cuotaPura').value;
+            const cuotaAdministrativaIVA = document.getElementById('cuotaAdministrativaIVA').value; // Obtener el valor del nuevo campo
             const impuestoSello = document.getElementById('impuestoSello').value;
             const finalTotalCuota = document.getElementById('finalTotalCuota').textContent;
 
@@ -833,11 +837,20 @@
                 return;
             }
 
-            let mensaje = `*Acá te paso los detalles*\n\n`;
+            let mensaje = `*AgroPlan S.A. - Cálculo de Cuota*\n\n`;
             mensaje += `*Valor Básico Móvil:* ${valorBasicoMovil}\n`;
             mensaje += `*Cuota Pura:* ${cuotaPura}\n`;
+            mensaje += `*Cuota Administrativa + IVA:* ${cuotaAdministrativaIVA}\n`; // Incluir en el mensaje de WhatsApp
 
-            // No incluimos "Mensual Física" ni "Mensual Jurídica" en el mensaje de WhatsApp, ya que se resumen en "Total Cuota"
+            if (currentTipoPersona === 'fisica') {
+                const segVida = document.getElementById('segVida').value;
+                // const mensualFisca = document.getElementById('mensualFisca').value; // Este campo está oculto
+                mensaje += `*Seguro de Vida:* ${segVida}\n`;
+                // mensaje += `*Mensual Física:* ${mensualFisca}\n`; // No se comparte si está oculto
+            } else { 
+                // const mensualJuridica = document.getElementById('mensualJuridica').value; // Este campo está oculto
+                // mensaje += `*Mensual Jurídica:* ${mensualJuridica}\n`; // No se comparte si está oculto
+            }
             
             mensaje += `*Impuesto al Sello (Cuota 1 a 6):* ${impuestoSello}\n\n`;
             mensaje += `*Total Cuota:* ${finalTotalCuota}\n\n`;
