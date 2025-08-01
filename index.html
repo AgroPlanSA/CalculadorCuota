@@ -4,9 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="description" content="Agro Plan, calculador de cuota para plan de ahorro de remolques en 60 cuotas mensuales." />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Calculador de Cuota</title>
+    <title>Calculadora de Cuotas AgroPlan S.A. | ¡Calcula tu Plan de Ahorro!</title>
     <link rel="icon" href="img/Icono-Cerdito-Extranet_2.svg" type="image/x-icon" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
         body {
@@ -14,6 +16,7 @@
             margin: 0;
             padding: 0;
             background-color: #ffffff;
+            line-height: 1.6;
         }
 
         header {
@@ -29,25 +32,25 @@
         /* Estilos para el Carrusel Principal */
         .carousel-container {
             position: relative;
-            max-width: 100%; /* O el ancho que desees para tu sel */
-            margin: 0 auto; /* Centra el carrusel */
-            overflow: hidden; /* Oculta las imágenes que no están activas */
-            height: 350px; /* Altura por defecto para el carrusel, ajusta según tus imágenes */
-            background-color: #f0f0f0; /* Color de fondo si las imágenes no cubren todo */
+            max-width: 100%;
+            margin: 0 auto;
+            overflow: hidden;
+            height: 350px; /* Altura por defecto, ajusta según tus imágenes */
+            background-color: #f0f0f0;
         }
 
         .carousel-slide {
-            display: none; /* Por defecto, todas ocultas */
+            display: none;
             width: 100%;
-            height: 100%; /* Para que la imagen ocupe todo el slide */
-            text-align: center; /* Centra la imagen horizontalmente */
+            height: 100%;
+            text-align: center;
         }
 
         .carousel-slide img {
-            width: 100%; /* Ocupa todo el ancho del slide */
-            height: 100%; /* Ocupa toda la altura del slide */
-            object-fit: cover; /* Recorta la imagen para que cubra el contenedor sin distorsionarse */
-            display: block; /* Elimina espacio extra debajo de la imagen */
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
 
         /* Flechas de navegación del carrusel principal */
@@ -64,8 +67,8 @@
             transition: 0.6s ease;
             border-radius: 0 3px 3px 0;
             user-select: none;
-            background-color: rgba(0,0,0,0.5); /* Fondo semitransparente para las flechas */
-            z-index: 10; /* Para que estén por encima de los slides */
+            background-color: rgba(0,0,0,0.5);
+            z-index: 10;
         }
 
         .next {
@@ -80,10 +83,10 @@
         /* Puntos indicadores del carrusel principal */
         .carousel-dots {
             position: absolute;
-            bottom: 10px; /* Ajusta la posición vertical de los puntos */
+            bottom: 10px;
             width: 100%;
             text-align: center;
-            z-index: 10; /* Asegura que los puntos estén por encima de las imágenes */
+            z-index: 10;
         }
 
         .dot {
@@ -101,7 +104,7 @@
             background-color: #717171;
         }
 
-        /* Animación del carrusel principal (opcional, para un fade in/out suave) */
+        /* Animación del carrusel principal */
         .fade {
             animation-name: fade;
             animation-duration: 1.5s;
@@ -125,15 +128,64 @@
         .container {
             padding: 0;
         }
+        
+        /* NEW: Calculator Header with Buttons */
+        .calculator-header {
+            background-color: #e4002b; /* Rojo de tu logo */
+            padding: 20px;
+            text-align: center;
+            color: white;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            margin-bottom: -20px; /* Superposición con el contenedor de la calculadora */
+            position: relative;
+            z-index: 1;
+        }
 
-        h1 {
+        .calculator-header .title {
+            margin: 0; /* Elimina el margin de h1 */
+            padding-bottom: 20px; /* Espacio antes de los botones */
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .toggle-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .toggle-button {
+            background-color: #555; /* Color por defecto */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+        }
+
+        .toggle-button:hover {
+            background-color: #666;
+            transform: translateY(-2px);
+        }
+
+        .toggle-button.active {
+            background-color: #333; /* Color para el botón activo */
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* OLD: h1, now part of .calculator-header */
+        /* h1 {
             background-color: #cc0000;
             color: white;
             font-size: 22px;
             text-align: center;
             margin: 0;
             padding: 15px 20px;
-        }
+        } */
 
         label {
             display: block;
@@ -155,11 +207,46 @@
             background-color: #f9f9f9;
         }
 
+        input[readonly] {
+            background-color: #eee;
+            cursor: not-allowed;
+        }
+
         .error-message {
             padding: 0 20px;
             color: red;
             font-size: 13px;
             height: 16px;
+        }
+
+        /* NEW: Hidden fields for conditional display */
+        .hidden-field {
+            display: none !important;
+        }
+
+        /* NEW: Final Result Section */
+        .final-result-container {
+            background-color: #f0f0f0;
+            padding: 20px 30px;
+            margin-top: 20px;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .final-result-label {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .final-result-value {
+            font-size: 2.2em;
+            font-weight: bolder;
+            color: #e4002b;
         }
 
         /* Clase para ocultar elementos temporalmente durante la captura de imagen */
@@ -198,6 +285,7 @@
         .whatsapp-text-button {
             background-color: #25D366;
         }
+
         .whatsapp-text-button:hover {
             background-color: #128C7E;
         }
@@ -205,39 +293,72 @@
         .download-calculation-button {
             background-color: #cc0000;
         }
+
         .download-calculation-button:hover {
-            background-color: #a00000; /* Un rojo un poco más oscuro */
+            background-color: #a00000;
         }
 
         .download-full-report-button {
             background-color: #828282;
         }
+
         .download-full-report-button:hover {
-            background-color: #6a6a6a; /* Un gris un poco más oscuro */
+            background-color: #6a6a6a;
         }
 
-        .specifications {
+        /* Acordeon Especificaciones */
+        .accordion {
             background-color: #f1f1f1;
             padding: 20px;
             font-size: 14px;
             color: #333;
             line-height: 1.6;
             border-top: 2px solid #ccc;
+            margin-top: 20px; /* Espacio con la calculadora */
         }
 
-        .specifications h2 {
-            margin-top: 0;
+        .accordion summary {
             font-size: 18px;
             color: #444;
+            font-weight: bold;
+            cursor: pointer;
+            outline: none;
+            list-style: none; /* Oculta el marcador predeterminado */
+            position: relative;
+            padding-right: 25px; /* Espacio para el ícono */
         }
 
-        /* Estilos para el Carrusel de Logos (Nuevo) */
+        .accordion summary::-webkit-details-marker {
+            display: none; /* Para Safari/Chrome */
+        }
+
+        .accordion summary::after {
+            content: '+'; /* Ícono de "cerrado" */
+            position: absolute;
+            right: 0;
+            font-size: 1.2em;
+            transition: transform 0.3s ease;
+        }
+
+        .accordion[open] summary::after {
+            content: '-'; /* Ícono de "abierto" */
+            transform: rotate(0deg);
+        }
+        
+        .accordion-content {
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+            margin-top: 15px;
+        }
+
+
+        /* Estilos para el Carrusel de Logos */
         .logo-carousel-section {
             padding: 40px 20px;
             text-align: center;
-            background-color: #f8f8f8; /* Un fondo suave para diferenciarlo */
-            margin-top: 30px; /* Espacio con el contenido anterior */
-            margin-bottom: 30px; /* Espacio con el footer */
+            background-color: #f8f8f8;
+            margin-top: 30px;
+            margin-bottom: 30px;
         }
 
         .logo-carousel-section h2 {
@@ -248,36 +369,34 @@
 
         .logo-carousel-container {
             width: 100%;
-            overflow: hidden; /* Oculta los logos que están fuera de vista */
+            overflow: hidden;
             position: relative;
-            padding: 10px 0; /* Un poco de padding vertical */
-            white-space: nowrap; /* Evita que los logos salten de línea */
+            padding: 10px 0;
+            white-space: nowrap;
         }
 
         .logo-carousel-track {
-            display: inline-block; /* Para que el contenido sea tan ancho como sus hijos */
+            display: inline-block;
             /* La animación de desplazamiento se aplicará aquí, se define en JS */
         }
 
         /* Animación para el carrusel de logos definida por JS */
         /* @keyframes scroll-logos { ... } se inyectará dinámicamente */
-
         .logo-carousel-track img {
-            height: 80px; /* Altura fija para tus logos, ajusta según necesidad */
-            width: auto; /* Mantiene la proporción */
-            margin: 0 40px; /* Espacio entre los logos */
-            display: inline-block; /* Crucial para el efecto de scroll */
-            vertical-align: middle; /* Alinea los logos si tienen diferentes alturas */
-            filter: grayscale(100%); /* Opcional: logos en escala de grises */
-            opacity: 0.6; /* Opcional: un poco transparentes */
+            height: 80px;
+            width: auto;
+            margin: 0 40px;
+            display: inline-block;
+            vertical-align: middle;
+            filter: grayscale(100%);
+            opacity: 0.6;
             transition: filter 0.3s ease, opacity 0.3s ease;
         }
 
         .logo-carousel-track img:hover {
-            filter: grayscale(0%); /* Opcional: color al pasar el ratón */
-            opacity: 1; /* Opcional: opacidad completa al pasar el ratón */
+            filter: grayscale(0%);
+            opacity: 1;
         }
-
 
         /* Estilos del Footer */
         footer {
@@ -309,25 +428,38 @@
         /* Media Queries para Responsividad */
         @media (max-width: 768px) {
             .carousel-container {
-                height: 250px; /* Ajusta la altura para pantallas medianas */
+                height: 250px;
             }
+
             .logo-carousel-track img {
-                height: 60px; /* Menos altura para móviles */
+                height: 60px;
                 margin: 0 25px;
             }
-        }
 
-        @media (max-width: 600px) {
-            input[type="text"], input[type="number"] {
-                width: calc(100% - 40px);
+            .calculator-header .title {
+                font-size: 1.5em;
+                padding-bottom: 10px;
             }
 
-            .carousel-container {
-                height: 200px; /* Ajusta la altura para pantallas pequeñas */
+            .toggle-buttons {
+                flex-direction: column;
+                gap: 5px;
             }
-            .prev, .next {
-                font-size: 16px;
-                padding: 10px;
+
+            .toggle-button {
+                width: 80%;
+                margin: auto;
+            }
+
+            .final-result-container {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 15px;
+            }
+
+            .final-result-value {
+                font-size: 1.8em;
+                margin-top: 10px;
             }
 
             .share-button-group {
@@ -337,14 +469,14 @@
 
             .share-button-group a,
             .share-button-group button {
-                position: relative; /* Mantener para el posicionamiento absoluto del ícono */
+                position: relative;
                 width: 100%;
                 max-width: 300px;
                 min-height: 48px;
                 padding-left: 44px; /* espacio para ícono */
                 padding-right: 16px;
                 box-sizing: border-box;
-                justify-content: center; /* Centra el contenido horizontalmente */
+                justify-content: center;
             }
 
             .share-button-group i {
@@ -357,9 +489,9 @@
             }
 
             .button-text {
-                width: 100%; /* Asegura que el texto use el ancho disponible para centrarse */
+                width: 100%;
                 text-align: center;
-                display: inline-block; /* Opcional, pero ayuda con el centrado del texto */
+                display: inline-block;
             }
 
             .footer-wrapper {
@@ -367,16 +499,30 @@
                 align-items: flex-start;
             }
 
+            .accordion summary {
+                font-size: 1em;
+            }
+        }
+
+        @media (max-width: 600px) {
+            input[type="text"], input[type="number"] {
+                width: calc(100% - 40px);
+            }
+
+            .carousel-container {
+                height: 200px;
+            }
+
+            .prev, .next {
+                font-size: 16px;
+                padding: 10px;
+            }
         }
     </style>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
-
     <header>
-        <a href="https://www.agroplansa.com.ar/" target="_blank"> <img src="img/AgroPlan blanco.svg" alt="AgroPlan Logo">
-        </a>
+        <a href="https://www.agroplansa.com.ar/" target="_blank"> <img src="img/AgroPlan blanco.svg" alt="AgroPlan Logo"> </a>
     </header>
 
     <div class="carousel-container">
@@ -384,16 +530,16 @@
             <img src="img/galeria1.jpg" alt="AgroPlan Imagen 1">
         </div>
         <div class="carousel-slide">
-             <a href="https://www.agroplan.com.ar/acto-de-adjudicacion" target="_blank">
-                 <img src="img/galeria2.jpg" alt="AgroPlan Imagen 2"> 
-             </a>
+            <a href="https://www.agroplan.com.ar/acto-de-adjudicacion" target="_blank">
+                <img src="img/galeria2.jpg" alt="AgroPlan Imagen 2">
+            </a>
         </div>
         <div class="carousel-slide">
             <img src="img/galeria3.jpg" alt="AgroPlan Imagen 3">
         </div>
+
         <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
         <a class="next" onclick="plusSlides(1)">&#10095;</a>
-
         <div class="carousel-dots">
             <span class="dot" onclick="currentSlide(1)"></span>
             <span class="dot" onclick="currentSlide(2)"></span>
@@ -402,57 +548,73 @@
     </div>
 
     <div id="main-content-wrapper">
-        <div class="container" id="calculator-container">
-            <h1>Calculador de Cuota</h1>
+        <div class="calculator-header">
+            <h2 class="title">Calculador de cuota</h2>
+            <div class="toggle-buttons">
+                <button id="btnFisica" class="toggle-button active">Persona física</button>
+                <button id="btnJuridica" class="toggle-button">Persona jurídica</button>
+            </div>
+        </div>
 
+        <div class="container" id="calculator-container">
             <label for="valorBasicoMovil">Valor Básico Móvil ($40.000.000 a $72.000.000, en múltiplos de $10.000)</label>
             <input type="text" id="valorBasicoMovil" placeholder="Ingrese el valor" required oninput="formatearValor(this); calcularAutomatico();" />
             <span id="errorMensaje" class="error-message"></span>
 
             <label for="cuotaPura">Cuota Pura</label>
-            <input type="text" id="cuotaPura" placeholder="Cuota Pura" disabled>
+            <input type="text" id="cuotaPura" placeholder="Cuota Pura" readonly>
 
-            <label for="mensualJuridica">Mensual Jurídica</label>
-            <input type="text" id="mensualJuridica" placeholder="Mensual Jurídica" disabled>
-
-            <label for="segVida">Seg. de Vida</label>
-            <input type="text" id="segVida" placeholder="Seg. de Vida" disabled>
-
-            <label for="mensualFisca">Mensual Física</label>
-            <input type="text" id="mensualFisca" placeholder="Mensual Física" disabled>
-
-            <label for="impuestoSello">Impuesto al Sello (Cuota 1 a 6)</label>
-            <input type="text" id="impuestoSello" placeholder="Impuesto al Sello" disabled>
-
-            <div class="share-button-group">
-                <a href="#" class="whatsapp-text-button" onclick="compartirWhatsAppTexto()">
-                    <i class="fab fa-whatsapp"></i> <span class="button-text">Compartir</span>
-                </a>
-                <button class="download-calculation-button" onclick="descargarImagenCalculo()">
-                    <i class="fas fa-download"></i> <span class="button-text">Descargar Cálculo</span>
-                </button>
-                <button class="download-full-report-button" onclick="descargarImagenCalculoYEspecificaciones()">
-                    <i class="fas fa-download"></i> <span class="button-text">Descargar Cálculo + Especificaciones</span>
-                </button>
+            <div id="juridicaFields" class="hidden-field">
+                <label for="mensualJuridica">Mensual Jurídica</label>
+                <input type="text" id="mensualJuridica" placeholder="Mensual Jurídica" readonly>
             </div>
+
+            <div id="fisicaFields">
+                <label for="segVida">Seg. de Vida</label>
+                <input type="text" id="segVida" placeholder="Seg. de Vida" readonly>
+                <label for="mensualFisca">Mensual Física</label>
+                <input type="text" id="mensualFisca" placeholder="Mensual Física" readonly>
+            </div>
+            
+            <label for="impuestoSello">Impuesto al Sello (Cuota 1 a 6)</label>
+            <input type="text" id="impuestoSello" placeholder="Impuesto al Sello" readonly>
         </div>
 
-        <div class="specifications" id="specifications-container">
-            <h2>Especificaciones del Plan</h2>
-            <p><b>Plazo:</b> 60 meses / cuotas en pesos y sin interés</p>
-            <p><b>Carga Administrativa:</b> 8.0% fija para financiación a 5 años</p>
-            <p><b>Adjudicaciones mensuales:</b> por sorteo o licitación</p>
-            <p>* Si el cliente ordena un bien de MENOR valor al Valor Móvil Adjudicado, la diferencia será acreditada como cuotas adelantadas.</p>
-            <p>* Si ordena un bien de MAYOR valor al Valor Adjudicado, la diferencia será abonada por el cliente.</p>
-            <p><b>Impuesto al sello:</b> 1,2% para todas las provincias a excepción de Córdoba. (Se abona prorrateado en las primeras 6 cuotas)</p>
-            <p><b>Impuesto al débito y crédito (Ley 25.413):</b> 0,804% sobre la cuota pura mensual.</p>
-            <p><b>Seguro de Vida:</b> 0,0833% del saldo deudor. Hasta 64 años inclusive.</p>
-            <p><b>Derecho de Adjudicación:</b> 1% + IVA del valor Móvil adjudicado.</p>
-            <p><b>Gestoría:</b> $54.500 + Formularios $43.200 a cargo del cliente.</p>
-            <p><b>Documentación requerida:</b> Declaraciones juradas UIF, salud, y datos del solicitante.</p>
-            <p><b>Precios:</b> Tomados de la Lista de Precios de Fábrica.</p>
-            <p><b>Presentar:</b> fotocopia de DNI (frente y dorso).</p>
+        <div class="final-result-container">
+            <div class="final-result-label">Total Cuota</div>
+            <div class="final-result-value" id="finalTotalCuota">$0</div>
         </div>
+
+        <div class="share-button-group">
+            <a href="#" class="whatsapp-text-button" onclick="compartirWhatsAppTexto()">
+                <i class="fab fa-whatsapp"></i> <span class="button-text">Compartir</span>
+            </a>
+            <button class="download-calculation-button" onclick="descargarImagenCalculo()">
+                <i class="fas fa-download"></i> <span class="button-text">Descargar Cálculo</span>
+            </button>
+            <button class="download-full-report-button" onclick="descargarImagenCalculoYEspecificaciones()">
+                <i class="fas fa-download"></i> <span class="button-text">Descargar Cálculo + Especificaciones</span>
+            </button>
+        </div>
+
+        <details class="accordion" id="specifications-container">
+            <summary>Especificaciones del Plan</summary>
+            <div class="accordion-content">
+                <p><b>Plazo:</b> 60 meses / cuotas en pesos y sin interés</p>
+                <p><b>Carga Administrativa:</b> 8.0% fija para financiación a 5 años</p>
+                <p><b>Adjudicaciones mensuales:</b> por sorteo o licitación</p>
+                <p>* Si el cliente ordena un bien de MENOR valor al Valor Móvil Adjudicado, la diferencia será acreditada como cuotas adelantadas.</p>
+                <p>* Si ordena un bien de MAYOR valor al Valor Adjudicado, la diferencia será abonada por el cliente.</p>
+                <p><b>Impuesto al sello:</b> 1,2% para todas las provincias a excepción de Córdoba. (Se abona prorrateado en las primeras 6 cuotas)</p>
+                <p><b>Impuesto al débito y crédito (Ley 25.413):</b> 0,804% sobre la cuota pura mensual.</p>
+                <p><b>Seguro de Vida:</b> 0,0833% del saldo deudor. Hasta 64 años inclusive.</p>
+                <p><b>Derecho de Adjudicación:</b> 1% + IVA del valor Móvil adjudicado.</p>
+                <p><b>Gestoría:</b> $54.500 + Formularios $43.200 a cargo del cliente.</p>
+                <p><b>Documentación requerida:</b> Declaraciones juradas UIF, salud, y datos del solicitante.</p>
+                <p><b>Precios:</b> Tomados de la Lista de Precios de Fábrica.</p>
+                <p><b>Presentar:</b> fotocopia de DNI (frente y dorso).</p>
+            </div>
+        </details>
     </div>
 
     <section class="logo-carousel-section">
@@ -476,7 +638,6 @@
                 <img src="img/logo-clientes-16.svg" alt="Logo Cliente 16">
                 <img src="img/logo-clientes-17.svg" alt="Logo Cliente 17">
                 <img src="img/logo-clientes-18.svg" alt="Logo Cliente 18">
-
                 <img src="img/logo-clientes-01.svg" alt="Logo Cliente 1">
                 <img src="img/logo-clientes-02.svg" alt="Logo Cliente 2">
                 <img src="img/logo-clientes-03.svg" alt="Logo Cliente 3">
@@ -495,17 +656,17 @@
                 <img src="img/logo-clientes-16.svg" alt="Logo Cliente 16">
                 <img src="img/logo-clientes-17.svg" alt="Logo Cliente 17">
                 <img src="img/logo-clientes-18.svg" alt="Logo Cliente 18">
-                
             </div>
         </div>
     </section>
+
     <footer>
         <div class="footer-wrapper">
             <div class="footer-column">
                 <strong>Domicilio Postal:</strong> Gualeguaychú 745 - CP: 3100 <br>
                 Paraná, Entre Ríos, Argentina<br>
-                <br> <strong>Domicilio Legal:</strong> Echeverría 2923 <br> Piso 9° Dpto. A - CP 1428 -
-                C.A.B.A.
+                <br> <strong>Domicilio Legal:</strong> Echeverría 2923 <br> Piso 9° Dpto.
+                A - CP 1428 - C.A.B.A.
             </div>
             <div class="footer-column">
                 <strong>Atención:</strong> Lunes a Viernes de 8 a 16 hs <br>
@@ -513,279 +674,411 @@
                 administracion.agro@agroplansa.com.ar<br>
                 Tel: (0343) 4312218
             </div>
-            <a href="https://servicioscf.afip.gob.ar/publico/denuncias/denunciaCD.aspx" target="_blank"> <img src="img/qr-footer.jpg" alt="QR AgroPlan" class="qr" />
-            </a>
+            <a href="https://servicioscf.afip.gob.ar/publico/denuncias/denunciaCD.aspx" target="_blank"> <img src="img/qr-footer.jpg" alt="QR AgroPlan" class="qr" /> </a>
         </div>
     </footer>
 
-<script>
-    // Funciones de la calculadora y compartir (mantener estas tal cual)
-    function currencyFormat(value) {
-        return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(value);
-    }
+    <script>
+        // Funciones de formato y limpieza
+        function currencyFormat(value) {
+            return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(value);
+        }
 
-    function formatearValor(input) {
-        let cursorPosition = input.selectionStart;
-        const originalValue = input.value;
-        const originalLength = originalValue.length;
+        function formatearValor(input) {
+            let cursorPosition = input.selectionStart;
+            const originalValue = input.value;
+            const originalLength = originalValue.length;
 
-        let value = originalValue.replace(/\$/g, '').replace(/\./g, '');
+            let value = originalValue.replace(/\$/g, '').replace(/\./g, '').replace(/,/g, '');
 
-        if (value) {
-            let formattedValue = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-            input.value = '$' + formattedValue;
-            const newLength = input.value.length;
-            const diff = newLength - originalLength;
-            if (cursorPosition > 0 || originalValue.startsWith('$')) {
-                input.setSelectionRange(cursorPosition + diff, cursorPosition + diff);
+            if (value) {
+                let formattedValue = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+                input.value = '$' + formattedValue;
+                const newLength = input.value.length;
+                const diff = newLength - originalLength;
+                if (cursorPosition > 0 || originalValue.startsWith('$')) {
+                    input.setSelectionRange(cursorPosition + diff, cursorPosition + diff);
+                }
+            } else {
+                input.value = '';
             }
-        } else {
-            input.value = '';
-        }
-    }
-
-    function limpiarResults() {
-        document.getElementById('cuotaPura').value = '';
-        document.getElementById('mensualJuridica').value = '';
-        document.getElementById('segVida').value = '';
-        document.getElementById('mensualFisca').value = '';
-        document.getElementById('impuestoSello').value = '';
-    }
-
-    function calcularAutomatico() {
-        const valorInput = document.getElementById('valorBasicoMovil');
-        const errorMensaje = document.getElementById('errorMensaje');
-        const valorString = valorInput.value.replace(/\$/g, '').replace(/\./g, '');
-        const valorBasico = parseFloat(valorString);
-
-        errorMensaje.textContent = '';
-
-        if (valorString === '') {
-            limpiarResults();
-            return;
         }
 
-        if (isNaN(valorBasico) || valorBasico < 40000000 || valorBasico > 72000000 || (valorBasico % 10000 !== 0)) {
-            errorMensaje.textContent = "Ingrese un valor entre $40.000.000 y $72.000.000, en múltiplos de $10.000.";
-            limpiarResults();
-            return;
+        function limpiarResults() {
+            document.getElementById('cuotaPura').value = '';
+            document.getElementById('mensualJuridica').value = '';
+            document.getElementById('segVida').value = '';
+            document.getElementById('mensualFisca').value = '';
+            document.getElementById('impuestoSello').value = '';
         }
 
-        const cuotaPura = valorBasico / 60;
-        const parte1 = valorBasico * 0.08;
-        const parte2 = parte1 * 0.21;
-        const mensualJuridica = (valorBasico + parte1 + parte2) / 60;
-        const segVida = valorBasico * 0.00083;
-        const mensualFisca = mensualJuridica + segVida;
-        const impuestoSello = (valorBasico * 0.012) / 6;
+        // Variable global para controlar el tipo de persona seleccionado
+        let currentTipoPersona = 'fisica'; // Por defecto, se inicia en "Persona física"
 
-        document.getElementById('cuotaPura').value = currencyFormat(cuotaPura);
-        document.getElementById('mensualJuridica').value = currencyFormat(mensualJuridica);
-        document.getElementById('segVida').value = currencyFormat(segVida);
-        document.getElementById('mensualFisca').value = currencyFormat(mensualFisca);
-        document.getElementById('impuestoSello').value = currencyFormat(impuestoSello);
-    }
+        // Función para actualizar la visibilidad de los campos de la calculadora
+        function updateDisplayFields() {
+            const fisicaFields = document.getElementById('fisicaFields');
+            const juridicaFields = document.getElementById('juridicaFields');
 
-    document.getElementById('valorBasicoMovil').addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            calcularAutomatico();
-        }
-    });
-
-    function compartirWhatsAppTexto() {
-        const cuotaPura = document.getElementById('cuotaPura').value;
-        const mensualJuridica = document.getElementById('mensualJuridica').value;
-        const segVida = document.getElementById('segVida').value;
-        const mensualFisca = document.getElementById('mensualFisca').value;
-        const impuestoSello = document.getElementById('impuestoSello').value;
-        const valorBasicoMovil = document.getElementById('valorBasicoMovil').value;
-
-        if (!cuotaPura || !valorBasicoMovil) {
-            alert("Por favor, realice un cálculo válido antes de compartir.");
-            return;
+            // Asegurarse de que ambos existan antes de manipular las clases
+            if (fisicaFields && juridicaFields) {
+                if (currentTipoPersona === 'fisica') {
+                    fisicaFields.classList.remove('hidden-field');
+                    juridicaFields.classList.add('hidden-field');
+                } else { // juridica
+                    fisicaFields.classList.add('hidden-field');
+                    juridicaFields.classList.remove('hidden-field');
+                }
+            }
         }
 
-        const mensaje = `Acá te paso los detalles para un Valor Básico Móvil de: ${valorBasicoMovil}\n\n` +
-                            `Cuota Pura: ${cuotaPura}\n` +
-                            `Mensual Jurídica: ${mensualJuridica}\n` +
-                            `Seguro de Vida: ${segVida}\n` +
-                            `Mensual Física: ${mensualFisca}\n` +
-                            `Impuesto al Sello (Cuota 1 a 6): ${impuestoSello}\n\n` +
-                            `¡A disposición para lo que necesite!`;
-
-        const linkWhatsApp = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
-        window.open(linkWhatsApp, '_blank');
-    }
-
-    async function generateAndDownloadImage(elementId, filename) {
-        const targetElement = document.getElementById(elementId);
-        if (!targetElement) {
-            console.error('Elemento no encontrado para captura:', elementId);
-            return;
+        // Función para establecer el botón activo de selección de persona
+        function setActiveButton(buttonId) {
+            document.querySelectorAll('.toggle-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            const activeButton = document.getElementById(buttonId);
+            if (activeButton) {
+                activeButton.classList.add('active');
+            }
         }
 
-        // Ocultar el grupo de botones antes de la captura
-        const shareButtonGroup = document.querySelector('.share-button-group');
-        let originalDisplay = '';
-        if (shareButtonGroup) {
-            originalDisplay = shareButtonGroup.style.display;
-            shareButtonGroup.classList.add('hide-on-capture');
-            void shareButtonGroup.offsetWidth; // Fuerza el reflow
-        }
+        // Función principal para calcular las cuotas
+        function calcularAutomatico() {
+            const valorInput = document.getElementById('valorBasicoMovil');
+            const errorMensaje = document.getElementById('errorMensaje');
+            const valorString = valorInput.value.replace(/\$/g, '').replace(/\./g, '');
+            const valorBasico = parseFloat(valorString);
 
-        // Ocultar el carrusel de imágenes si el id de captura es 'main-content-wrapper'
-        const carouselContainer = document.querySelector('.carousel-container');
-        let originalCarouselDisplay = '';
-        if (elementId === 'main-content-wrapper' && carouselContainer) {
-            originalCarouselDisplay = carouselContainer.style.display;
-            carouselContainer.classList.add('hide-on-capture');
-            void carouselContainer.offsetWidth; // Fuerza el reflow
-        }
-
-        try {
-            const options = {
-                scale: 2, // Mayor escala para mejor calidad de imagen
-                backgroundColor: '#ffffff', // Asegura un fondo blanco
-                windowWidth: targetElement.scrollWidth,
-                windowHeight: targetElement.scrollHeight
-            };
-
-            const canvas = await html2canvas(targetElement, options);
-            const imageData = canvas.toDataURL("image/png");
-
-            const link = document.createElement('a');
-            link.href = imageData;
-            link.download = filename;
-
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            errorMensaje.textContent = '';
             
-            alert(`La imagen "${filename}" ha sido descargada. Ahora podés compartirla en WhatsApp.`);
+            // Si el input está vacío, limpiar resultados y el total final
+            if (valorString === '') {
+                limpiarResults();
+                const finalTotalCuotaElement = document.getElementById('finalTotalCuota');
+                if (finalTotalCuotaElement) finalTotalCuotaElement.textContent = currencyFormat(0);
+                return;
+            }
 
-        } catch (error) {
-            console.error("Error al generar la imagen:", error);
-            alert("Hubo un error al descargar la imagen.");
-        } finally {
+            if (isNaN(valorBasico) || valorBasico < 40000000 || valorBasico > 72000000 || (valorBasico % 10000 !== 0)) {
+                errorMensaje.textContent = "Ingrese un valor entre $40.000.000 y $72.000.000, en múltiplos de $10.000.";
+                limpiarResults();
+                const finalTotalCuotaElement = document.getElementById('finalTotalCuota');
+                if (finalTotalCuotaElement) finalTotalCuotaElement.textContent = currencyFormat(0);
+                return;
+            }
+
+            let cuotaPura;
+            let parte1;
+            let parte2;
+            let mensualJuridica;
+            let segVida;
+            let mensualFisca;
+            let impuestoSello;
+            let finalCuotaTotal = 0; // Inicializar con 0
+
+            // --- LÓGICA DE CÁLCULO DIFERENCIADA POR TIPO DE PERSONA ---
+            if (currentTipoPersona === 'fisica') {
+                cuotaPura = valorBasico / 60;
+                parte1 = valorBasico * 0.08; [cite_start]// Carga Administrativa 8% [cite: 77]
+                parte2 = parte1 * 0.21;     // IVA sobre comisión (ejemplo, ajustar si es diferente)
+                mensualJuridica = (valorBasico + parte1 + parte2) / 60; // Este cálculo se hace para obtener Mensual Física
+                segVida = valorBasico * 0.000833; [cite_start]// Seguro de Vida 0,0833% del valor movil [cite: 79] (ajustado de 0.00083 a 0.000833 para ser más preciso con 0,0833%)
+                mensualFisca = mensualJuridica + segVida;
+                impuestoSello = (valorBasico * 0.012) / 6; [cite_start]// Impuesto al Sello 1,2% / 6 cuotas [cite: 78]
+                
+                finalCuotaTotal = mensualFisca;
+                
+                // Asignar valores a los campos visibles para Persona Física
+                document.getElementById('cuotaPura').value = currencyFormat(cuotaPura);
+                document.getElementById('segVida').value = currencyFormat(segVida);
+                document.getElementById('mensualFisca').value = currencyFormat(mensualFisca);
+                document.getElementById('impuestoSello').value = currencyFormat(impuestoSello);
+                
+                // Limpiar campos no visibles
+                document.getElementById('mensualJuridica').value = '';
+
+            } else if (currentTipoPersona === 'juridica') {
+                // EJEMPLOS: AJUSTA ESTOS VALORES SEGÚN LAS REGLAS DE NEGOCIO PARA PERSONA JURÍDICA DE AGROPLAN S.A.
+                const comisionJuridica = 0.08; [cite_start]// Por ejemplo, misma carga administrativa [cite: 77]
+                const ivaJuridica = 0.21;     // Por ejemplo, mismo IVA
+                const segVidaJuridica = 0;   // Jurídica no tiene seguro de vida o su % es 0
+                const impuestoSelloJuridica = 0.012; [cite_start]// Por ejemplo, mismo Impuesto al Sello [cite: 78]
+
+                cuotaPura = valorBasico / 60;
+                parte1 = valorBasico * comisionJuridica;
+                parte2 = parte1 * ivaJuridica;
+                mensualJuridica = (valorBasico + parte1 + parte2) / 60;
+                segVida = valorBasico * segVidaJuridica; // Se calcula pero no se muestra
+                mensualFisca = mensualJuridica + segVida; // Se calcula pero no se muestra
+
+                impuestoSello = (valorBasico * impuestoSelloJuridica) / 6;
+
+                finalCuotaTotal = mensualJuridica;
+
+                // Asignar valores a los campos visibles para Persona Jurídica
+                document.getElementById('cuotaPura').value = currencyFormat(cuotaPura);
+                document.getElementById('mensualJuridica').value = currencyFormat(mensualJuridica);
+                document.getElementById('impuestoSello').value = currencyFormat(impuestoSello);
+
+                // Limpiar campos no visibles
+                document.getElementById('segVida').value = '';
+                document.getElementById('mensualFisca').value = '';
+            }
+            
+            // Mostrar el resultado final con mayor jerarquía
+            const finalTotalCuotaElement = document.getElementById('finalTotalCuota');
+            if (finalTotalCuotaElement) finalTotalCuotaElement.textContent = currencyFormat(finalCuotaTotal);
+        }
+
+        // Función para compartir por WhatsApp
+        function compartirWhatsAppTexto() {
+            const valorBasicoMovil = document.getElementById('valorBasicoMovil').value;
+            const cuotaPura = document.getElementById('cuotaPura').value;
+            const impuestoSello = document.getElementById('impuestoSello').value;
+            const finalTotalCuota = document.getElementById('finalTotalCuota').textContent;
+
+            if (!finalTotalCuota || finalTotalCuota === currencyFormat(0)) {
+                alert("Por favor, realice un cálculo válido antes de compartir.");
+                return;
+            }
+
+            let mensaje = `*AgroPlan S.A. - Cálculo de Cuota*\n\n`;
+            mensaje += `*Valor Básico Móvil:* ${valorBasicoMovil}\n`;
+            mensaje += `*Cuota Pura:* ${cuotaPura}\n`;
+
+            if (currentTipoPersona === 'fisica') {
+                const segVida = document.getElementById('segVida').value;
+                const mensualFisca = document.getElementById('mensualFisca').value;
+                mensaje += `*Seguro de Vida:* ${segVida}\n`;
+                mensaje += `*Mensual Física:* ${mensualFisca}\n`;
+            } else { // juridica
+                const mensualJuridica = document.getElementById('mensualJuridica').value;
+                mensaje += `*Mensual Jurídica:* ${mensualJuridica}\n`;
+            }
+            
+            mensaje += `*Impuesto al Sello (Cuota 1 a 6):* ${impuestoSello}\n\n`;
+            mensaje += `*Total Cuota:* ${finalTotalCuota}\n\n`;
+            mensaje += `¡A disposición para lo que necesite!`;
+
+            const linkWhatsApp = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
+            window.open(linkWhatsApp, '_blank');
+        }
+
+        // Función para generar y descargar imagen
+        async function generateAndDownloadImage(elementId, filename) {
+            const targetElement = document.getElementById(elementId);
+            if (!targetElement) {
+                console.error('Elemento no encontrado para captura:', elementId);
+                return;
+            }
+
+            // Ocultar el grupo de botones antes de la captura
+            const shareButtonGroup = document.querySelector('.share-button-group');
+            let originalDisplayButtonGroup = '';
             if (shareButtonGroup) {
-                shareButtonGroup.classList.remove('hide-on-capture');
-                shareButtonGroup.style.display = originalDisplay;
+                originalDisplayButtonGroup = shareButtonGroup.style.display;
+                shareButtonGroup.classList.add('hide-on-capture');
+                void shareButtonGroup.offsetWidth; // Fuerza el reflow
             }
+
+            // Ocultar el carrusel de imágenes si el id de captura es 'main-content-wrapper'
+            const carouselContainer = document.querySelector('.carousel-container');
+            let originalCarouselDisplay = '';
             if (elementId === 'main-content-wrapper' && carouselContainer) {
-                carouselContainer.classList.remove('hide-on-capture');
-                carouselContainer.style.display = originalCarouselDisplay;
-            }
-        }
-    }
-
-    function descargarImagenCalculo() {
-        generateAndDownloadImage('calculator-container', 'calculo_agroplan.png');
-    }
-
-    function descargarImagenCalculoYEspecificaciones() {
-        generateAndDownloadImage('main-content-wrapper', 'calculo_y_especificaciones_agroplan.png');
-    }
-
-    // Carrusel principal de imágenes (mantener tal cual)
-    let slideIndex = 1;
-    let slideTimer;
-
-    function showSlides(n) {
-        let i;
-        let slides = document.getElementsByClassName("carousel-slide");
-        let dots = document.getElementsByClassName("dot");
-
-        clearTimeout(slideTimer);
-
-        if (n > slides.length) { slideIndex = 1 }
-        if (n < 1) { slideIndex = slides.length }
-
-        for (i = 0; i < slides.length; i++) {
-            slides[i].style.display = "none";
-            slides[i].classList.remove('fade');
-        }
-        for (i = 0; i < dots.length; i++) {
-            dots[i].className = dots[i].className.replace(" active", "");
-        }
-
-        if (slides.length > 0) {
-            slides[slideIndex - 1].style.display = "block";
-            slides[slideIndex - 1].classList.add('fade');
-        }
-        
-        if (dots.length > 0) {
-            dots[slideIndex - 1].className += " active";
-        }
-
-        slideTimer = setTimeout(() => plusSlides(1), 5000);
-    }
-
-    function plusSlides(n) {
-        showSlides(slideIndex += n);
-    }
-
-    function currentSlide(n) {
-        showSlides(slideIndex = n);
-    }
-
-    // Inicializar carrusel principal al cargar el DOM
-    document.addEventListener('DOMContentLoaded', () => {
-        if (document.querySelector('.carousel-container')) {
-            showSlides(slideIndex);
-        }
-
-        // --- Lógica del Carrusel de Logos (UNIFICADA y MEJORADA) ---
-        const logoTrack = document.querySelector('.logo-carousel-track');
-        if (logoTrack) {
-            // Asumimos que en el HTML ya están los 18 logos duplicados (36 en total)
-            const logosInHTML = Array.from(logoTrack.children);
-            const numberOfUniqueLogos = 18; // Definimos el número de logos únicos
-
-            // Calculamos el ancho de UN SOLO SET de los 18 logos únicos
-            let singleSetWidth = 0;
-            for (let i = 0; i < numberOfUniqueLogos; i++) {
-                const logo = logosInHTML[i]; // Tomamos solo los primeros 18 para calcular el ancho del set
-                singleSetWidth += logo.offsetWidth;
-                const computedStyle = window.getComputedStyle(logo);
-                singleSetWidth += parseFloat(computedStyle.marginLeft) + parseFloat(computedStyle.marginRight);
+                originalCarouselDisplay = carouselContainer.style.display;
+                carouselContainer.classList.add('hide-on-capture');
+                void carouselContainer.offsetWidth; // Fuerza el reflow
             }
 
-            // Asegurar que el ancho del track es suficiente para los logos visibles y sus copias
-            // Si ya tienes 36 logos en HTML (18 originales + 18 copias), el track debe ser capaz de contenerlos.
-            // Para el cálculo de la animación, solo necesitamos el ancho de un set (18 logos).
-            // Si el carrusel no cubre todo el ancho, asegúrate que .logo-carousel-track
-            // tenga display: inline-block y white-space: nowrap en CSS, y que su ancho se adapte al contenido.
-            // No necesitamos forzar un ancho aquí si el CSS ya lo maneja para inline-block.
+            try {
+                const options = {
+                    scale: 2, // Mayor escala para mejor calidad de imagen
+                    backgroundColor: '#ffffff', // Asegura un fondo blanco
+                    windowWidth: targetElement.scrollWidth,
+                    windowHeight: targetElement.scrollHeight
+                };
 
-            const scrollSpeedPxPerSec = 60; // Ajusta esta velocidad (píxeles por segundo), más alto es más rápido
-            const animationDuration = singleSetWidth / scrollSpeedPxPerSec; // Duración en segundos
+                const canvas = await html2canvas(targetElement, options);
+                const imageData = canvas.toDataURL("image/png");
 
-            // Inyectar la regla @keyframes dinámicamente
-            const style = document.createElement('style');
-            style.type = 'text/css';
-            style.innerHTML = `@keyframes scroll-logos {
-                0% { transform: translateX(0); }
-                100% { transform: translateX(-${singleSetWidth}px); }
-            }`;
-            document.head.appendChild(style);
+                const link = document.createElement('a');
+                link.href = imageData;
+                link.download = filename;
 
-            // Aplicar las propiedades de animación individualmente
-            logoTrack.style.animationName = 'scroll-logos';
-            logoTrack.style.animationDuration = `${animationDuration}s`;
-            logoTrack.style.animationTimingFunction = 'linear';
-            logoTrack.style.animationIterationCount = 'infinite';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                alert(`La imagen "${filename}" ha sido descargada. Ahora podés compartirla en WhatsApp.`);
 
-            // Pausar al hover
-            logoTrack.addEventListener('mouseenter', () => {
-                logoTrack.style.animationPlayState = 'paused';
-            });
-            logoTrack.addEventListener('mouseleave', () => {
-                logoTrack.style.animationPlayState = 'running';
-            });
+            } catch (error) {
+                console.error("Error al generar la imagen:", error);
+                alert("Hubo un error al descargar la imagen.");
+            } finally {
+                if (shareButtonGroup) {
+                    shareButtonGroup.classList.remove('hide-on-capture');
+                    shareButtonGroup.style.display = originalDisplayButtonGroup;
+                }
+                if (elementId === 'main-content-wrapper' && carouselContainer) {
+                    carouselContainer.classList.remove('hide-on-capture');
+                    carouselContainer.style.display = originalCarouselDisplay;
+                }
+            }
         }
-    });
-</script>
-    
+
+        function descargarImagenCalculo() {
+            // Captura solo el .calculator-container (que ahora incluye los campos, no el header)
+            // Para capturar header + calculadora + resultado final destacado:
+            // Tendríamos que crear un nuevo contenedor que los envuelva a los 3 y pasarlo como elementId
+            // Por simplicidad, descargamos solo la parte central de la calculadora.
+            generateAndDownloadImage('calculator-container', 'calculo_agroplan.png');
+        }
+
+        function descargarImagenCalculoYEspecificaciones() {
+            generateAndDownloadImage('main-content-wrapper', 'calculo_y_especificaciones_agroplan.png');
+        }
+
+        // Carrusel principal de imágenes (funciones)
+        let slideIndex = 1;
+        let slideTimer;
+
+        function showSlides(n) {
+            let i;
+            let slides = document.getElementsByClassName("carousel-slide");
+            let dots = document.getElementsByClassName("dot");
+
+            clearTimeout(slideTimer);
+
+            if (n > slides.length) { slideIndex = 1 }
+            if (n < 1) { slideIndex = slides.length }
+
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+                slides[i].classList.remove('fade');
+            }
+            for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", ""); // Tu clase original es "active"
+            }
+
+            if (slides.length > 0) {
+                slides[slideIndex - 1].style.display = "block";
+                slides[slideIndex - 1].classList.add('fade');
+            }
+            
+            if (dots.length > 0) {
+                dots[slideIndex - 1].className += " active"; // Tu clase original es "active"
+            }
+
+            slideTimer = setTimeout(() => plusSlides(1), 5000);
+        }
+
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+
+        function currentSlide(n) {
+            showSlides(slideIndex = n);
+        }
+
+        // Evento principal al cargar el DOM
+        document.addEventListener('DOMContentLoaded', () => {
+            // Inicializar Carrusel Principal de Imágenes
+            if (document.querySelector('.carousel-container')) {
+                showSlides(slideIndex);
+            }
+
+            // --- Lógica del Carrusel de Logos ---
+            const logoTrack = document.querySelector('.logo-carousel-track');
+            if (logoTrack) {
+                const logosInHTML = Array.from(logoTrack.children);
+                const numberOfUniqueLogos = 18; // Definimos el número de logos únicos
+                
+                let singleSetWidth = 0;
+                for (let i = 0; i < numberOfUniqueLogos; i++) {
+                    const logo = logosInHTML[i];
+                    singleSetWidth += logo.offsetWidth;
+                    const computedStyle = window.getComputedStyle(logo);
+                    singleSetWidth += parseFloat(computedStyle.marginLeft) + parseFloat(computedStyle.marginRight);
+                }
+
+                const scrollSpeedPxPerSec = 60; // Ajusta esta velocidad
+                const animationDuration = singleSetWidth / scrollSpeedPxPerSec;
+
+                // Inyectar la regla @keyframes dinámicamente
+                const style = document.createElement('style');
+                style.type = 'text/css';
+                style.innerHTML = `@keyframes scroll-logos {
+                    0% { transform: translateX(0); }
+                    100% { transform: translateX(-${singleSetWidth}px); }
+                }`;
+                document.head.appendChild(style);
+
+                logoTrack.style.animationName = 'scroll-logos';
+                logoTrack.style.animationDuration = `${animationDuration}s`;
+                logoTrack.style.animationTimingFunction = 'linear';
+                logoTrack.style.animationIterationCount = 'infinite';
+
+                logoTrack.addEventListener('mouseenter', () => {
+                    logoTrack.style.animationPlayState = 'paused';
+                });
+                logoTrack.addEventListener('mouseleave', () => {
+                    logoTrack.style.animationPlayState = 'running';
+                });
+            }
+
+            // --- Lógica de la Calculadora ---
+            const btnFisica = document.getElementById('btnFisica');
+            const btnJuridica = document.getElementById('btnJuridica');
+            const valorBasicoMovilInput = document.getElementById('valorBasicoMovil');
+
+            // Event listener para el botón Persona Física
+            if (btnFisica) {
+                btnFisica.addEventListener('click', () => {
+                    currentTipoPersona = 'fisica';
+                    setActiveButton('btnFisica');
+                    updateDisplayFields();
+                    calcularAutomatico(); // Recalcula con la nueva configuración
+                });
+            }
+
+            // Event listener para el botón Persona Jurídica
+            if (btnJuridica) {
+                btnJuridica.addEventListener('click', () => {
+                    currentTipoPersona = 'juridica';
+                    setActiveButton('btnJuridica');
+                    updateDisplayFields();
+                    calcularAutomatico(); // Recalcula con la nueva configuración
+                });
+            }
+
+            // Event listener para el input de valorBasicoMovil (Enter)
+            if (valorBasicoMovilInput) {
+                valorBasicoMovilInput.addEventListener('keydown', function(event) {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        calcularAutomatico();
+                    }
+                });
+                // El keyup ya se maneja con oninput="...calcularAutomatico();" en el HTML
+            }
+
+            // Inicializar la calculadora al cargar la página
+            setActiveButton('btnFisica');
+            updateDisplayFields();
+            calcularAutomatico(); // Realiza un cálculo inicial (si el input tiene un valor predeterminado)
+
+            // Lógica para el acordeón de Especificaciones del plan
+            const accordionSummary = document.querySelector('.accordion summary');
+            if (accordionSummary) {
+                accordionSummary.addEventListener('click', function() {
+                    const parentDetails = this.closest('details');
+                    if (parentDetails) {
+                        parentDetails.classList.toggle('open');
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
