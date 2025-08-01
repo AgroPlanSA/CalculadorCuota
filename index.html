@@ -780,12 +780,12 @@
             // --- LÓGICA DE CÁLCULO DIFERENCIADA POR TIPO DE PERSONA ---
             if (currentTipoPersona === 'fisica') {
                 cuotaPura = valorBasico / 60;
-                parte1 = valorBasico * 0.08; [cite_start]// Carga Administrativa 8% [cite: 77]
+                parte1 = valorBasico * 0.08; // Carga Administrativa 8%
                 parte2 = parte1 * 0.21;     // IVA sobre comisión (ejemplo, ajustar si es diferente)
                 mensualJuridica = (valorBasico + parte1 + parte2) / 60; // Este cálculo se hace para obtener Mensual Física
-                segVida = valorBasico * 0.000833; [cite_start]// Seguro de Vida 0,0833% del valor movil [cite: 79] (ajustado de 0.00083 a 0.000833 para ser más preciso con 0,0833%)
+                segVida = valorBasico * 0.000833; // Seguro de Vida 0,0833% del valor movil (ajustado de 0.00083 a 0.000833 para ser más preciso con 0,0833%)
                 mensualFisca = mensualJuridica + segVida;
-                impuestoSello = (valorBasico * 0.012) / 6; [cite_start]// Impuesto al Sello 1,2% / 6 cuotas [cite: 78]
+                impuestoSello = (valorBasico * 0.012) / 6; // Impuesto al Sello 1,2% / 6 cuotas
                 
                 finalCuotaTotal = mensualFisca;
                 
@@ -800,10 +800,10 @@
 
             } else if (currentTipoPersona === 'juridica') {
                 // EJEMPLOS: AJUSTA ESTOS VALORES SEGÚN LAS REGLAS DE NEGOCIO PARA PERSONA JURÍDICA DE AGROPLAN S.A.
-                const comisionJuridica = 0.08; [cite_start]// Por ejemplo, misma carga administrativa [cite: 77]
+                const comisionJuridica = 0.08; // Por ejemplo, misma carga administrativa
                 const ivaJuridica = 0.21;     // Por ejemplo, mismo IVA
                 const segVidaJuridica = 0;   // Jurídica no tiene seguro de vida o su % es 0
-                const impuestoSelloJuridica = 0.012; [cite_start]// Por ejemplo, mismo Impuesto al Sello [cite: 78]
+                const impuestoSelloJuridica = 0.012; // Por ejemplo, mismo Impuesto al Sello
 
                 cuotaPura = valorBasico / 60;
                 parte1 = valorBasico * comisionJuridica;
@@ -928,10 +928,6 @@
         }
 
         function descargarImagenCalculo() {
-            // Captura solo el .calculator-container (que ahora incluye los campos, no el header)
-            // Para capturar header + calculadora + resultado final destacado:
-            // Tendríamos que crear un nuevo contenedor que los envuelva a los 3 y pasarlo como elementId
-            // Por simplicidad, descargamos solo la parte central de la calculadora.
             generateAndDownloadImage('calculator-container', 'calculo_agroplan.png');
         }
 
