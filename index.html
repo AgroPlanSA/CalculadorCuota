@@ -43,6 +43,7 @@
             display: none;
             width: 100%;
             height: 100%;
+            object-fit: cover;
             text-align: center;
         }
 
@@ -129,23 +130,21 @@
             padding: 0;
         }
         
-        /* NEW: Calculator Header with Buttons */
         .calculator-header {
-            background-color: #e4002b; /* Rojo de tu logo */
+            background-color: #CC4000; /* Rojo de tu logo */
             padding: 20px;
             text-align: center;
             color: white;
             border-top-left-radius: 8px;
             border-top-right-radius: 8px;
-            /* margin-bottom: -20px; ELIMINADO para evitar superposición */
-            padding-bottom: 30px; /* Aumenta el padding para dar más espacio inferior */
+            padding-bottom: 30px; 
             position: relative;
             z-index: 1;
         }
 
         .calculator-header .title {
-            margin: 0; /* Elimina el margin de h1 */
-            padding-bottom: 20px; /* Espacio antes de los botones */
+            margin: 0; 
+            padding-bottom: 20px; 
             font-size: 2em;
             font-weight: bold;
         }
@@ -157,7 +156,7 @@
         }
 
         .toggle-button {
-            background-color: #555; /* Color por defecto */
+            background-color: #555; 
             color: white;
             border: none;
             padding: 10px 20px;
@@ -173,7 +172,7 @@
         }
 
         .toggle-button.active {
-            background-color: #333; /* Color para el botón activo */
+            background-color: #333; 
             font-weight: bold;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
@@ -210,12 +209,10 @@
             height: 16px;
         }
 
-        /* NEW: Hidden fields for conditional display */
         .hidden-field {
             display: none !important;
         }
 
-        /* NEW: Final Result Section */
         .final-result-container {
             background-color: #f0f0f0;
             padding: 20px 30px;
@@ -305,7 +302,7 @@
             color: #333;
             line-height: 1.6;
             border-top: 2px solid #ccc;
-            margin-top: 20px; /* Espacio con la calculadora */
+            margin-top: 20px; 
         }
 
         .accordion summary {
@@ -314,17 +311,17 @@
             font-weight: bold;
             cursor: pointer;
             outline: none;
-            list-style: none; /* Oculta el marcador predeterminado */
+            list-style: none; 
             position: relative;
-            padding-right: 25px; /* Espacio para el ícono */
+            padding-right: 25px; 
         }
 
         .accordion summary::-webkit-details-marker {
-            display: none; /* Para Safari/Chrome */
+            display: none; 
         }
 
         .accordion summary::after {
-            content: '+'; /* Ícono de "cerrado" */
+            content: '+'; 
             position: absolute;
             right: 0;
             font-size: 1.2em;
@@ -332,7 +329,7 @@
         }
 
         .accordion[open] summary::after {
-            content: '-'; /* Ícono de "abierto" */
+            content: '-'; 
             transform: rotate(0deg);
         }
         
@@ -368,11 +365,8 @@
 
         .logo-carousel-track {
             display: inline-block;
-            /* La animación de desplazamiento se aplicará aquí, se define en JS */
         }
 
-        /* Animación para el carrusel de logos definida por JS */
-        /* @keyframes scroll-logos { ... } se inyectará dinámicamente */
         .logo-carousel-track img {
             height: 80px;
             width: auto;
@@ -464,7 +458,7 @@
                 width: 100%;
                 max-width: 300px;
                 min-height: 48px;
-                padding-left: 44px; /* espacio para ícono */
+                padding-left: 44px; 
                 padding-right: 16px;
                 box-sizing: border-box;
                 justify-content: center;
@@ -547,33 +541,35 @@
             </div>
         </div>
 
-        <div class="container" id="calculator-container">
-            <label for="valorBasicoMovil">Valor Básico Móvil ($40.000.000 a $72.000.000, en múltiplos de $10.000)</label>
-            <input type="text" id="valorBasicoMovil" placeholder="Ingrese el valor" required oninput="formatearValor(this); calcularAutomatico();" />
-            <span id="errorMensaje" class="error-message"></span>
+        <div id="calculator-and-result-wrapper">
+            <div class="container" id="calculator-container">
+                <label for="valorBasicoMovil">Valor Básico Móvil ($40.000.000 a $72.000.000, en múltiplos de $10.000)</label>
+                <input type="text" id="valorBasicoMovil" placeholder="Ingrese el valor" required oninput="formatearValor(this); calcularAutomatico();" />
+                <span id="errorMensaje" class="error-message"></span>
 
-            <label for="cuotaPura">Cuota Pura</label>
-            <input type="text" id="cuotaPura" placeholder="Cuota Pura" readonly>
+                <label for="cuotaPura">Cuota Pura</label>
+                <input type="text" id="cuotaPura" placeholder="Cuota Pura" readonly>
 
-            <div id="juridicaFields" class="hidden-field">
-                <label for="mensualJuridica">Mensual Jurídica</label>
-                <input type="text" id="mensualJuridica" placeholder="Mensual Jurídica" readonly>
+                <div id="juridicaFields" class="hidden-field">
+                    <label for="mensualJuridica">Mensual Jurídica</label>
+                    <input type="text" id="mensualJuridica" placeholder="Mensual Jurídica" readonly>
+                </div>
+
+                <div id="fisicaFields">
+                    <label for="segVida">Seg. de Vida</label>
+                    <input type="text" id="segVida" placeholder="Seg. de Vida" readonly>
+                    <label for="mensualFisca">Mensual Física</label>
+                    <input type="text" id="mensualFisca" placeholder="Mensual Física" readonly>
+                </div>
+                
+                <label for="impuestoSello">Impuesto al Sello (Cuota 1 a 6)</label>
+                <input type="text" id="impuestoSello" placeholder="Impuesto al Sello" readonly>
             </div>
 
-            <div id="fisicaFields">
-                <label for="segVida">Seg. de Vida</label>
-                <input type="text" id="segVida" placeholder="Seg. de Vida" readonly>
-                <label for="mensualFisca">Mensual Física</label>
-                <input type="text" id="mensualFisca" placeholder="Mensual Física" readonly>
+            <div class="final-result-container">
+                <div class="final-result-label">Total Cuota</div>
+                <div class="final-result-value" id="finalTotalCuota">$0</div>
             </div>
-            
-            <label for="impuestoSello">Impuesto al Sello (Cuota 1 a 6)</label>
-            <input type="text" id="impuestoSello" placeholder="Impuesto al Sello" readonly>
-        </div>
-
-        <div class="final-result-container">
-            <div class="final-result-label">Total Cuota</div>
-            <div class="final-result-value" id="finalTotalCuota">$0</div>
         </div>
 
         <div class="share-button-group">
@@ -704,19 +700,18 @@
         }
 
         // Variable global para controlar el tipo de persona seleccionado
-        let currentTipoPersona = 'fisica'; // Por defecto, se inicia en "Persona física"
+        let currentTipoPersona = 'fisica'; 
 
         // Función para actualizar la visibilidad de los campos de la calculadora
         function updateDisplayFields() {
             const fisicaFields = document.getElementById('fisicaFields');
             const juridicaFields = document.getElementById('juridicaFields');
 
-            // Asegurarse de que ambos existan antes de manipular las clases
             if (fisicaFields && juridicaFields) {
                 if (currentTipoPersona === 'fisica') {
                     fisicaFields.classList.remove('hidden-field');
                     juridicaFields.classList.add('hidden-field');
-                } else { // juridica
+                } else { 
                     fisicaFields.classList.add('hidden-field');
                     juridicaFields.classList.remove('hidden-field');
                 }
@@ -743,7 +738,6 @@
 
             errorMensaje.textContent = '';
             
-            // Si el input está vacío, limpiar resultados y el total final
             if (valorString === '') {
                 limpiarResults();
                 const finalTotalCuotaElement = document.getElementById('finalTotalCuota');
@@ -766,58 +760,51 @@
             let segVida;
             let mensualFisca;
             let impuestoSello;
-            let finalCuotaTotal = 0; // Inicializar con 0
+            let finalCuotaTotal = 0; 
 
-            // --- LÓGICA DE CÁLCULO DIFERENCIADA POR TIPO DE PERSONA ---
             if (currentTipoPersona === 'fisica') {
                 cuotaPura = valorBasico / 60;
-                parte1 = valorBasico * 0.08; // Carga Administrativa 8%
-                parte2 = parte1 * 0.21;     // IVA sobre comisión (ejemplo, ajustar si es diferente)
-                mensualJuridica = (valorBasico + parte1 + parte2) / 60; // Este cálculo se hace para obtener Mensual Física
-                segVida = valorBasico * 0.000833; // Seguro de Vida 0,0833% del valor movil (ajustado de 0.00083 a 0.000833 para ser más preciso con 0,0833%)
+                parte1 = valorBasico * 0.08; 
+                parte2 = parte1 * 0.21;     
+                mensualJuridica = (valorBasico + parte1 + parte2) / 60; 
+                segVida = valorBasico * 0.000833; 
                 mensualFisca = mensualJuridica + segVida;
-                impuestoSello = (valorBasico * 0.012) / 6; // Impuesto al Sello 1,2% / 6 cuotas
+                impuestoSello = (valorBasico * 0.012) / 6; 
                 
                 finalCuotaTotal = mensualFisca;
                 
-                // Asignar valores a los campos visibles para Persona Física
                 document.getElementById('cuotaPura').value = currencyFormat(cuotaPura);
                 document.getElementById('segVida').value = currencyFormat(segVida);
                 document.getElementById('mensualFisca').value = currencyFormat(mensualFisca);
                 document.getElementById('impuestoSello').value = currencyFormat(impuestoSello);
                 
-                // Limpiar campos no visibles
                 document.getElementById('mensualJuridica').value = '';
 
             } else if (currentTipoPersona === 'juridica') {
-                // EJEMPLOS: AJUSTA ESTOS VALORES SEGÚN LAS REGLAS DE NEGOCIO PARA PERSONA JURÍDICA DE AGROPLAN S.A.
-                const comisionJuridica = 0.08; // Por ejemplo, misma carga administrativa
-                const ivaJuridica = 0.21;     // Por ejemplo, mismo IVA
-                const segVidaJuridica = 0;   // Jurídica no tiene seguro de vida o su % es 0
-                const impuestoSelloJuridica = 0.012; // Por ejemplo, mismo Impuesto al Sello
+                const comisionJuridica = 0.08; 
+                const ivaJuridica = 0.21;     
+                const segVidaJuridica = 0;   
+                const impuestoSelloJuridica = 0.012; 
 
                 cuotaPura = valorBasico / 60;
                 parte1 = valorBasico * comisionJuridica;
                 parte2 = parte1 * ivaJuridica;
                 mensualJuridica = (valorBasico + parte1 + parte2) / 60;
-                segVida = valorBasico * segVidaJuridica; // Se calcula pero no se muestra
-                mensualFisca = mensualJuridica + segVida; // Se calcula pero no se muestra
+                segVida = valorBasico * segVidaJuridica; 
+                mensualFisca = mensualJuridica + segVida; 
 
                 impuestoSello = (valorBasico * impuestoSelloJuridica) / 6;
 
                 finalCuotaTotal = mensualJuridica;
 
-                // Asignar valores a los campos visibles para Persona Jurídica
                 document.getElementById('cuotaPura').value = currencyFormat(cuotaPura);
                 document.getElementById('mensualJuridica').value = currencyFormat(mensualJuridica);
                 document.getElementById('impuestoSello').value = currencyFormat(impuestoSello);
 
-                // Limpiar campos no visibles
                 document.getElementById('segVida').value = '';
                 document.getElementById('mensualFisca').value = '';
             }
             
-            // Mostrar el resultado final con mayor jerarquía
             const finalTotalCuotaElement = document.getElementById('finalTotalCuota');
             if (finalTotalCuotaElement) finalTotalCuotaElement.textContent = currencyFormat(finalCuotaTotal);
         }
@@ -843,7 +830,7 @@
                 const mensualFisca = document.getElementById('mensualFisca').value;
                 mensaje += `*Seguro de Vida:* ${segVida}\n`;
                 mensaje += `*Mensual Física:* ${mensualFisca}\n`;
-            } else { // juridica
+            } else { 
                 const mensualJuridica = document.getElementById('mensualJuridica').value;
                 mensaje += `*Mensual Jurídica:* ${mensualJuridica}\n`;
             }
@@ -857,53 +844,69 @@
         }
 
         // Función para generar y descargar imagen
-        async function generateAndDownloadImage(elementId, filename) {
-            const targetElement = document.getElementById(elementId);
-            if (!targetElement) {
-                console.error('Elemento no encontrado para captura:', elementId);
+        async function generateAndDownloadImage(filename, captureType) {
+            const mainWrapper = document.getElementById('main-content-wrapper');
+            if (!mainWrapper) {
+                console.error('Elemento principal (main-content-wrapper) no encontrado.');
                 return;
             }
 
-            // Ocultar el grupo de botones antes de la captura
+            // Elementos a ocultar/mostrar
             const shareButtonGroup = document.querySelector('.share-button-group');
-            let originalDisplayButtonGroup = '';
-            if (shareButtonGroup) {
-                originalDisplayButtonGroup = shareButtonGroup.style.display;
-                shareButtonGroup.classList.add('hide-on-capture');
-                void shareButtonGroup.offsetWidth; // Fuerza el reflow
-            }
-
-            // Ocultar el carrusel de imágenes si el id de captura es 'main-content-wrapper'
             const carouselContainer = document.querySelector('.carousel-container');
-            let originalCarouselDisplay = '';
-            if (elementId === 'main-content-wrapper' && carouselContainer) {
-                originalCarouselDisplay = carouselContainer.style.display;
-                carouselContainer.classList.add('hide-on-capture');
-                void carouselContainer.offsetWidth; // Fuerza el reflow
-            }
-
-            // Abrir temporalmente las especificaciones si están cerradas para la captura
             const specificationsContainer = document.getElementById('specifications-container');
-            let wasSpecificationsOpen = false;
+            const calculatorAndResultWrapper = document.getElementById('calculator-and-result-wrapper'); 
 
-            if (specificationsContainer) {
-                wasSpecificationsOpen = specificationsContainer.open; // Guardar el estado original
-                if (!wasSpecificationsOpen) {
-                    specificationsContainer.open = true; // Abrir para la captura
-                    // Forzar reflow para asegurar que se renderice antes de la captura
-                    void specificationsContainer.offsetHeight; 
+            // Almacenar estados originales
+            const elementsToManage = [shareButtonGroup, carouselContainer, specificationsContainer];
+            const originalDisplays = new Map();
+
+            elementsToManage.forEach(el => {
+                if (el) {
+                    originalDisplays.set(el, el.style.display);
+                    el.classList.add('hide-on-capture'); // Aplicar ocultamiento inicial a todos los elementos controlados
+                }
+            });
+            let wasSpecificationsOpen = specificationsContainer ? specificationsContainer.open : false;
+
+
+            // === Visibilidad condicional según el tipo de captura ===
+            if (captureType === 'calculation') {
+                // Para "Descargar Cálculo": solo mostrar calculadora y resultado, ocultar carrusel, especificaciones, botones de compartir.
+                if (calculatorAndResultWrapper) {
+                    calculatorAndResultWrapper.classList.remove('hide-on-capture'); 
+                    calculatorAndResultWrapper.style.display = originalDisplays.get(calculatorAndResultWrapper) || 'block'; 
+                }
+                if (specificationsContainer) {
+                    specificationsContainer.open = false; // Asegurar que las especificaciones estén cerradas
+                }
+
+            } else if (captureType === 'full_report') {
+                // Para "Descargar Cálculo + Especificaciones": mostrar todo lo relevante.
+                if (carouselContainer) {
+                    carouselContainer.classList.remove('hide-on-capture');
+                    carouselContainer.style.display = originalDisplays.get(carouselContainer) || 'block';
+                }
+                if (specificationsContainer && !wasSpecificationsOpen) { 
+                    specificationsContainer.open = true;
+                }
+                if (calculatorAndResultWrapper) {
+                    calculatorAndResultWrapper.classList.remove('hide-on-capture');
+                    calculatorAndResultWrapper.style.display = originalDisplays.get(calculatorAndResultWrapper) || 'block';
                 }
             }
+            
+            void mainWrapper.offsetWidth; // Forzar el reflow después de todos los cambios de display
 
             try {
                 const options = {
-                    scale: 2, // Mayor escala para mejor calidad de imagen
-                    backgroundColor: '#ffffff', // Asegura un fondo blanco
-                    windowWidth: targetElement.scrollWidth,
-                    windowHeight: targetElement.scrollHeight
+                    scale: 2,
+                    backgroundColor: '#ffffff',
+                    windowWidth: mainWrapper.scrollWidth,
+                    windowHeight: mainWrapper.scrollHeight
                 };
 
-                const canvas = await html2canvas(targetElement, options);
+                const canvas = await html2canvas(mainWrapper, options); 
                 const imageData = canvas.toDataURL("image/png");
 
                 const link = document.createElement('a');
@@ -920,28 +923,25 @@
                 console.error("Error al generar la imagen:", error);
                 alert("Hubo un error al descargar la imagen.");
             } finally {
-                // Restaurar el estado original de los elementos ocultados
-                if (shareButtonGroup) {
-                    shareButtonGroup.classList.remove('hide-on-capture');
-                    shareButtonGroup.style.display = originalDisplayButtonGroup;
-                }
-                if (elementId === 'main-content-wrapper' && carouselContainer) {
-                    carouselContainer.classList.remove('hide-on-capture');
-                    carouselContainer.style.display = originalCarouselDisplay;
-                }
-                // Restaurar el estado original de las especificaciones
-                if (specificationsContainer && !wasSpecificationsOpen) {
-                    specificationsContainer.open = false; // Cerrar si originalmente estaba cerrado
+                // Restaurar estados originales
+                elementsToManage.forEach(el => {
+                    if (el) {
+                        el.classList.remove('hide-on-capture');
+                        el.style.display = originalDisplays.get(el);
+                    }
+                });
+                if (specificationsContainer && !wasSpecificationsOpen && captureType === 'full_report') {
+                    specificationsContainer.open = false;
                 }
             }
         }
 
         function descargarImagenCalculo() {
-            generateAndDownloadImage('calculator-container', 'calculo_agroplan.png');
+            generateAndDownloadImage('calculo_agroplan.png', 'calculation');
         }
 
         function descargarImagenCalculoYEspecificaciones() {
-            generateAndDownloadImage('main-content-wrapper', 'calculo_y_especificaciones_agroplan.png');
+            generateAndDownloadImage('calculo_y_especificaciones_agroplan.png', 'full_report');
         }
 
         // Carrusel principal de imágenes (funciones)
@@ -963,7 +963,7 @@
                 slides[i].classList.remove('fade');
             }
             for (i = 0; i < dots.length; i++) {
-                dots[i].className = dots[i].className.replace(" active", ""); // Tu clase original es "active"
+                dots[i].className = dots[i].className.replace(" active", ""); 
             }
 
             if (slides.length > 0) {
@@ -972,7 +972,7 @@
             }
             
             if (dots.length > 0) {
-                dots[slideIndex - 1].className += " active"; // Tu clase original es "active"
+                dots[slideIndex - 1].className += " active"; 
             }
 
             slideTimer = setTimeout(() => plusSlides(1), 5000);
@@ -997,7 +997,7 @@
             const logoTrack = document.querySelector('.logo-carousel-track');
             if (logoTrack) {
                 const logosInHTML = Array.from(logoTrack.children);
-                const numberOfUniqueLogos = 18; // Definimos el número de logos únicos
+                const numberOfUniqueLogos = 18; 
                 
                 let singleSetWidth = 0;
                 for (let i = 0; i < numberOfUniqueLogos; i++) {
@@ -1007,7 +1007,7 @@
                     singleSetWidth += parseFloat(computedStyle.marginLeft) + parseFloat(computedStyle.marginRight);
                 }
 
-                const scrollSpeedPxPerSec = 60; // Ajusta esta velocidad
+                const scrollSpeedPxPerSec = 60; 
                 const animationDuration = singleSetWidth / scrollSpeedPxPerSec;
 
                 // Inyectar la regla @keyframes dinámicamente
@@ -1043,7 +1043,7 @@
                     currentTipoPersona = 'fisica';
                     setActiveButton('btnFisica');
                     updateDisplayFields();
-                    calcularAutomatico(); // Recalcula con la nueva configuración
+                    calcularAutomatico(); 
                 });
             }
 
@@ -1053,7 +1053,7 @@
                     currentTipoPersona = 'juridica';
                     setActiveButton('btnJuridica');
                     updateDisplayFields();
-                    calcularAutomatico(); // Recalcula con la nueva configuración
+                    calcularAutomatico(); 
                 });
             }
 
@@ -1065,13 +1065,12 @@
                         calcularAutomatico();
                     }
                 });
-                // El keyup ya se maneja con oninput="...calcularAutomatico();" en el HTML
             }
 
             // Inicializar la calculadora al cargar la página
             setActiveButton('btnFisica');
             updateDisplayFields();
-            calcularAutomatico(); // Realiza un cálculo inicial (si el input tiene un valor predeterminado)
+            calcularAutomatico(); 
 
             // Lógica para el acordeón de Especificaciones del plan
             const accordionSummary = document.querySelector('.accordion summary');
