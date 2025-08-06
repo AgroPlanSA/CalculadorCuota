@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="description" content="Agro Plan, calculador de cuota para plan de ahorro de remolques en 60 cuotas mensuales." />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Calculadora de Cuotas | AgroPlan S.A </title>
+    <title>Calculadora de Cuotas AgroPlan S.A. | ¡Calcula tu Plan de Ahorro!</title>
     <link rel="icon" href="img/Icono-Cerdito-Extranet_2.svg" type="image/x-icon" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     
@@ -860,12 +860,7 @@
                 // Capturar el elemento con un margen para evitar recortes
                 const canvas = await html2canvas(calculatorAndResultWrapper, {
                     scale: 2,
-                    backgroundColor: '#ffffff',
-                    y: window.scrollY + calculatorAndResultWrapper.getBoundingClientRect().top, // Coordenada Y del elemento
-                    scrollX: 0,
-                    scrollY: -10, // Margen superior para evitar recorte
-                    width: calculatorAndResultWrapper.scrollWidth + 20, // Ajuste de ancho
-                    height: calculatorAndResultWrapper.scrollHeight + 20, // Ajuste de alto
+                    backgroundColor: '#ffffff'
                 });
                 const imageData = canvas.toDataURL("image/png");
 
@@ -1031,7 +1026,7 @@
                 });
             }
 
-           // --- Lógica de la Calculadora ---
+            // --- Lógica de la Calculadora ---
             const btnFisica = document.getElementById('btnFisica');
             const btnJuridica = document.getElementById('btnJuridica');
             const valorBasicoMovilInput = document.getElementById('valorBasicoMovil');
