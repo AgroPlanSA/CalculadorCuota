@@ -859,7 +859,7 @@
             try {
                 // Capturar el elemento con un margen para evitar recortes
                 const canvas = await html2canvas(calculatorAndResultWrapper, {
-                    scale: 2.5,
+                    scale: 1.5,
                     backgroundColor: '#ffffff'
                 });
                 const imageData = canvas.toDataURL("image/png");
@@ -910,7 +910,7 @@
             
             try {
                 const canvas = await html2canvas(element, {
-                    scale: 2.5,
+                    scale: 1.5,
                     useCORS: true,
                     backgroundColor: '#ffffff'
                 });
@@ -1080,5 +1080,6 @@
     </script>
 </body>
 </html>
+
 
 
