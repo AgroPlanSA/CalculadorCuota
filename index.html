@@ -851,33 +851,22 @@
         // Función para generar y descargar imagen
         async function descargarImagenCalculo() {
             const calculatorAndResultWrapper = document.getElementById('calculator-and-result-wrapper');
-            const mainContentWrapper = document.getElementById('main-content-wrapper');
-
-            if (!calculatorAndResultWrapper || !mainContentWrapper) {
-                console.error('Elementos no encontrados.');
+            if (!calculatorAndResultWrapper) {
+                console.error('Elemento "calculator-and-result-wrapper" no encontrado.');
                 return;
             }
-
-            // Ocultar los botones de compartir y especificaciones temporalmente
-            const elementsToHide = [
-                document.querySelector('.share-button-group'), 
-                document.getElementById('specifications-container')
-            ];
-            const originalDisplays = elementsToHide.map(el => el ? el.style.display : null);
-            elementsToHide.forEach(el => { if (el) el.style.display = 'none'; });
             
-            // Reajustar el padding del contenedor principal para evitar recortes
-            const originalPadding = mainContentWrapper.style.padding;
-            mainContentWrapper.style.padding = '20px';
-
             try {
-                const options = {
+                // Capturar el elemento con un margen para evitar recortes
+                const canvas = await html2canvas(calculatorAndResultWrapper, {
                     scale: 2,
                     backgroundColor: '#ffffff',
-                    windowWidth: mainContentWrapper.scrollWidth,
-                    windowHeight: mainContentWrapper.scrollHeight,
-                };
-                const canvas = await html2canvas(mainContentWrapper, options); 
+                    y: window.scrollY + calculatorAndResultWrapper.getBoundingClientRect().top, // Coordenada Y del elemento
+                    scrollX: 0,
+                    scrollY: -10, // Margen superior para evitar recorte
+                    width: calculatorAndResultWrapper.scrollWidth + 20, // Ajuste de ancho
+                    height: calculatorAndResultWrapper.scrollHeight + 20, // Ajuste de alto
+                });
                 const imageData = canvas.toDataURL("image/png");
 
                 const link = document.createElement('a');
@@ -893,13 +882,7 @@
             } catch (error) {
                 console.error("Error al generar la imagen:", error);
                 alert("Hubo un error al descargar la imagen.");
-            } finally {
-                // Restaurar los elementos ocultos y el padding
-                elementsToHide.forEach((el, index) => {
-                    if (el) el.style.display = originalDisplays[index];
-                });
-                mainContentWrapper.style.padding = originalPadding;
-            }
+            } 
         }
 
 
@@ -912,48 +895,37 @@
             const { jsPDF } = window.jspdf;
             const element = document.getElementById('main-content-wrapper');
 
+            if (!element) {
+                console.error('Elemento "main-content-wrapper" no encontrado.');
+                return;
+            }
+
             const carouselContainer = document.querySelector('.carousel-container');
             const shareButtonGroup = document.querySelector('.share-button-group');
 
-            const elementsToHide = [shareButtonGroup];
+            // Ocultar los botones de compartir y el carrusel para el PDF
+            const elementsToHide = [shareButtonGroup, carouselContainer];
             const originalDisplays = elementsToHide.map(el => el ? el.style.display : null);
             elementsToHide.forEach(el => { if (el) el.style.display = 'none'; });
 
-            // Asegurar que el carrusel y las especificaciones estén visibles para la captura
-            const wasCarouselHidden = carouselContainer.style.display === 'none';
-            if(wasCarouselHidden) carouselContainer.style.display = 'block';
-            
+            // Asegurar que las especificaciones estén abiertas para el PDF
             const specificationsContainer = document.getElementById('specifications-container');
             const wasSpecificationsOpen = specificationsContainer.open;
             if(!wasSpecificationsOpen) specificationsContainer.open = true;
-
-            const options = {
-                scale: 2, // Aumenta la escala para mayor calidad
-                useCORS: true,
-                backgroundColor: '#ffffff'
-            };
-
+            
             try {
-                const canvas = await html2canvas(element, options);
+                const canvas = await html2canvas(element, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#ffffff'
+                });
                 const imgData = canvas.toDataURL('image/png');
                 
-                const imgWidth = 210; // Ancho A4 en mm
-                const pageHeight = 297; // Altura A4 en mm
-                const imgHeight = canvas.height * imgWidth / canvas.width;
-                let heightLeft = imgHeight;
-
                 const doc = new jsPDF('p', 'mm', 'a4');
-                let position = 0;
+                const imgWidth = doc.internal.pageSize.getWidth();
+                const imgHeight = canvas.height * imgWidth / canvas.width;
 
-                doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                heightLeft -= pageHeight;
-
-                while (heightLeft >= 0) {
-                    position = heightLeft - imgHeight;
-                    doc.addPage();
-                    doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                    heightLeft -= pageHeight;
-                }
+                doc.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
 
                 doc.save('reporte_agroplan.pdf');
 
@@ -966,8 +938,6 @@
                 elementsToHide.forEach((el, index) => {
                     if (el) el.style.display = originalDisplays[index];
                 });
-
-                if(wasCarouselHidden) carouselContainer.style.display = 'none';
                 if(!wasSpecificationsOpen) specificationsContainer.open = false;
             }
         }
@@ -1074,44 +1044,3 @@
                     updateDisplayFields();
                     calcularAutomatico(); 
                 });
-            }
-
-            // Event listener para el botón Persona Jurídica
-            if (btnJuridica) {
-                btnJuridica.addEventListener('click', () => {
-                    currentTipoPersona = 'juridica';
-                    setActiveButton('btnJuridica');
-                    updateDisplayFields();
-                    calcularAutomatico(); 
-                });
-            }
-
-            // Event listener para el input de valorBasicoMovil (Enter)
-            if (valorBasicoMovilInput) {
-                valorBasicoMovilInput.addEventListener('keydown', function(event) {
-                    if (event.key === 'Enter') {
-                        event.preventDefault();
-                        calcularAutomatico();
-                    }
-                });
-            }
-
-            // Inicializar la calculadora al cargar la página
-            setActiveButton('btnFisica');
-            updateDisplayFields();
-            calcularAutomatico(); 
-
-            // Lógica para el acordeón de Especificaciones del plan
-            const accordionSummary = document.querySelector('.accordion summary');
-            if (accordionSummary) {
-                accordionSummary.addEventListener('click', function() {
-                    const parentDetails = this.closest('details');
-                    if (parentDetails) {
-                        parentDetails.classList.toggle('open');
-                    }
-                });
-            }
-        });
-    </script>
-</body>
-</html>
