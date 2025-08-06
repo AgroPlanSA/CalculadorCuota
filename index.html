@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="description" content="Agro Plan, calculador de cuota para plan de ahorro de remolques en 60 cuotas mensuales." />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Calculador de Cuotas | AgroPlan S.A.</title>
+    <title>Calculadora de Cuotas AgroPlan S.A. | ¡Calcula tu Plan de Ahorro!</title>
     <link rel="icon" href="img/Icono-Cerdito-Extranet_2.svg" type="image/x-icon" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     
@@ -132,7 +132,7 @@
         }
         
         .calculator-header {
-            background-color: #e4002b; /* Rojo de tu logo */
+            background-color: #e4002b;
             padding: 20px;
             text-align: center;
             color: white;
@@ -201,6 +201,8 @@
         input[readonly] {
             background-color: #eee;
             cursor: not-allowed;
+            font-size: 18px; /* Aumento para visibilidad */
+            padding: 15px; /* Aumento para evitar el corte */
         }
 
         .error-message {
@@ -232,22 +234,13 @@
             color: #555;
         }
 
-        /* Aumentar el tamaño y el espacio para el número final */
         .final-result-value {
             font-size: 2.2em;
             font-weight: bolder;
             color: #e4002b;
-            padding: 5px; /* Añade un poco de espacio */
+            padding: 5px; /* Pequeño ajuste para el espacio interno */
         }
         
-        /* Aumentar el tamaño de fuente y el padding de los campos de resultado */
-        input[readonly] {
-            font-size: 18px; 
-            padding: 15px; 
-            box-sizing: border-box; /* Asegura que el padding no desborde el ancho */
-        }
-
-        /* Clase para ocultar elementos temporalmente durante la captura de imagen */
         .hide-on-capture {
             display: none !important;
         }
@@ -776,23 +769,22 @@
             }
 
             let cuotaPura;
-            let parte1; // 8% del valor básico
-            let parte2; // 21% de parte1
-            let cuotaAdministrativaIVA; // El nuevo campo
+            let parte1;
+            let parte2;
+            let cuotaAdministrativaIVA;
             let mensualJuridica;
             let segVida;
             let mensualFisca;
             let impuestoSello;
             let finalCuotaTotal = 0; 
 
-            // Cálculo común para ambos tipos de persona para Cuota Pura y Cuota Administrativa + IVA
             cuotaPura = valorBasico / 60;
             parte1 = valorBasico * 0.08; 
             parte2 = parte1 * 0.21;     
-            cuotaAdministrativaIVA = (parte1 + parte2) / 60; // Parte mensual de Carga Administrativa + IVA
+            cuotaAdministrativaIVA = (parte1 + parte2) / 60;
 
             document.getElementById('cuotaPura').value = currencyFormat(cuotaPura);
-            document.getElementById('cuotaAdministrativaIVA').value = currencyFormat(cuotaAdministrativaIVA); // Asignar al nuevo campo
+            document.getElementById('cuotaAdministrativaIVA').value = currencyFormat(cuotaAdministrativaIVA);
 
             if (currentTipoPersona === 'fisica') {
                 mensualJuridica = (valorBasico + parte1 + parte2) / 60; 
@@ -800,24 +792,24 @@
                 mensualFisca = mensualJuridica + segVida;
                 impuestoSello = (valorBasico * 0.012) / 6; 
                 
-                finalCuotaTotal = mensualFisca; // El total para Persona Física incluye Seg. de Vida
+                finalCuotaTotal = mensualFisca;
                 
                 document.getElementById('segVida').value = currencyFormat(segVida);
                 document.getElementById('impuestoSello').value = currencyFormat(impuestoSello);
                 
             } else if (currentTipoPersona === 'juridica') {
-                const comisionJuridica = 0.08; 
-                const ivaJuridica = 0.21;     
-                const segVidaJuridica = 0;   // Seguro de vida es 0 para persona jurídica
-                const impuestoSelloJuridica = 0.012; 
+                const comisionJuridica = 0.08;
+                const ivaJuridica = 0.21;
+                const segVidaJuridica = 0;
+                const impuestoSelloJuridica = 0.012;
 
-                mensualJuridica = (valorBasico + parte1 + parte2) / 60; // Usa las mismas 'parte1' y 'parte2'
-                segVida = valorBasico * segVidaJuridica; // Esto será 0
-                mensualFisca = mensualJuridica + segVida; // Esto será igual a mensualJuridica
+                mensualJuridica = (valorBasico + parte1 + parte2) / 60;
+                segVida = valorBasico * segVidaJuridica;
+                mensualFisca = mensualJuridica + segVida;
 
                 impuestoSello = (valorBasico * impuestoSelloJuridica) / 6;
 
-                finalCuotaTotal = mensualJuridica; // El total para Persona Jurídica no incluye Seg. de Vida
+                finalCuotaTotal = mensualJuridica;
 
                 document.getElementById('impuestoSello').value = currencyFormat(impuestoSello);
             }
@@ -866,7 +858,6 @@
             }
             
             try {
-                // Capturar el elemento con una configuración que asegura que no se recorte
                 const canvas = await html2canvas(calculatorAndResultWrapper, {
                     scale: 2,
                     backgroundColor: '#ffffff',
@@ -904,8 +895,7 @@
                 console.error('Elemento "main-content-wrapper" no encontrado.');
                 return;
             }
-
-            // Ocultar los elementos no deseados de forma más robusta
+            
             const elementsToHide = [
                 document.querySelector('.share-button-group'), 
                 document.querySelector('.carousel-container'),
@@ -917,13 +907,11 @@
             const originalDisplays = elementsToHide.map(el => el ? el.style.display : null);
             elementsToHide.forEach(el => { if (el) el.style.display = 'none'; });
 
-            // Asegurar que las especificaciones estén abiertas para el PDF
             const specificationsContainer = document.getElementById('specifications-container');
             const wasSpecificationsOpen = specificationsContainer.open;
             if(!wasSpecificationsOpen) specificationsContainer.open = true;
             
             try {
-                // Agregar un padding temporal al contenedor principal para que no se corte
                 const originalPadding = element.style.padding;
                 element.style.padding = '20px';
 
@@ -932,7 +920,7 @@
                     useCORS: true,
                     backgroundColor: '#ffffff',
                     windowWidth: element.scrollWidth,
-                    windowHeight: element.scrollHeight + 40 // Ajuste para evitar recortes
+                    windowHeight: element.scrollHeight + 40
                 });
 
                 const imgData = canvas.toDataURL('image/png');
@@ -946,7 +934,6 @@
                 let imgWidth = pdfWidth;
                 let imgHeight = pdfWidth / ratio;
                 
-                // Si la altura calculada es mayor que la página, se ajusta a la altura de la página.
                 if (imgHeight > pdfHeight) {
                     imgHeight = pdfHeight;
                     imgWidth = pdfHeight * ratio;
@@ -961,7 +948,6 @@
                 console.error("Error al generar el PDF:", error);
                 alert("Hubo un error al generar el PDF.");
             } finally {
-                // Restaurar estados originales
                 elementsToHide.forEach((el, index) => {
                     if (el) el.style.display = originalDisplays[index];
                 });
@@ -1015,12 +1001,10 @@
 
         // Evento principal al cargar el DOM
         document.addEventListener('DOMContentLoaded', () => {
-            // Inicializar Carrusel Principal de Imágenes
             if (document.querySelector('.carousel-container')) {
                 showSlides(slideIndex);
             }
 
-            // --- Lógica del Carrusel de Logos ---
             const logoTrack = document.querySelector('.logo-carousel-track');
             if (logoTrack) {
                 const logosInHTML = Array.from(logoTrack.children);
@@ -1037,7 +1021,6 @@
                 const scrollSpeedPxPerSec = 60; 
                 const animationDuration = singleSetWidth / scrollSpeedPxPerSec;
 
-                // Inyectar la regla @keyframes dinámicamente
                 const style = document.createElement('style');
                 style.type = 'text/css';
                 style.innerHTML = `@keyframes scroll-logos {
@@ -1059,12 +1042,10 @@
                 });
             }
 
-            // --- Lógica de la Calculadora ---
             const btnFisica = document.getElementById('btnFisica');
             const btnJuridica = document.getElementById('btnJuridica');
             const valorBasicoMovilInput = document.getElementById('valorBasicoMovil');
 
-            // Event listener para el botón Persona Física
             if (btnFisica) {
                 btnFisica.addEventListener('click', () => {
                     currentTipoPersona = 'fisica';
@@ -1074,7 +1055,6 @@
                 });
             }
 
-            // Event listener para el botón Persona Jurídica
             if (btnJuridica) {
                 btnJuridica.addEventListener('click', () => {
                     currentTipoPersona = 'juridica';
@@ -1084,7 +1064,6 @@
                 });
             }
 
-            // Event listener para el input de valorBasicoMovil (Enter)
             if (valorBasicoMovilInput) {
                 valorBasicoMovilInput.addEventListener('keydown', function(event) {
                     if (event.key === 'Enter') {
@@ -1094,12 +1073,10 @@
                 });
             }
 
-            // Inicializar la calculadora al cargar la página
             setActiveButton('btnFisica');
             updateDisplayFields();
             calcularAutomatico(); 
 
-            // Lógica para el acordeón de Especificaciones del plan
             const accordionSummary = document.querySelector('.accordion summary');
             if (accordionSummary) {
                 accordionSummary.addEventListener('click', function() {
