@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="description" content="Agro Plan, calculador de cuota para plan de ahorro de remolques en 60 cuotas mensuales." />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Calculadora de Cuotas AgroPlan S.A. | ¡Calcula tu Plan de Ahorro!</title>
+    <title>Calculador de Cuotas | AgroPlan S.A.</title>
     <link rel="icon" href="img/Icono-Cerdito-Extranet_2.svg" type="image/x-icon" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     
@@ -36,7 +36,7 @@
             max-width: 100%;
             margin: 0 auto;
             overflow: hidden;
-            height: 350px; /* Altura por defecto, ajusta según tus imágenes */
+            height: 350px;
             background-color: #f0f0f0;
         }
 
@@ -232,10 +232,19 @@
             color: #555;
         }
 
+        /* Aumentar el tamaño y el espacio para el número final */
         .final-result-value {
             font-size: 2.2em;
             font-weight: bolder;
             color: #e4002b;
+            padding: 5px; /* Añade un poco de espacio */
+        }
+        
+        /* Aumentar el tamaño de fuente y el padding de los campos de resultado */
+        input[readonly] {
+            font-size: 18px; 
+            padding: 15px; 
+            box-sizing: border-box; /* Asegura que el padding no desborde el ancho */
         }
 
         /* Clase para ocultar elementos temporalmente durante la captura de imagen */
@@ -857,10 +866,12 @@
             }
             
             try {
-                // Capturar el elemento con un margen para evitar recortes
+                // Capturar el elemento con una configuración que asegura que no se recorte
                 const canvas = await html2canvas(calculatorAndResultWrapper, {
-                    scale: 1.5,
-                    backgroundColor: '#ffffff'
+                    scale: 2,
+                    backgroundColor: '#ffffff',
+                    allowTaint: true,
+                    useCORS: true
                 });
                 const imageData = canvas.toDataURL("image/png");
 
@@ -880,8 +891,7 @@
             } 
         }
 
-
-        // Nueva función para generar y descargar PDF
+        // Función para generar y descargar PDF
         async function descargarPDFReporteCompleto() {
             if (!window.jspdf) {
                 alert("La librería jsPDF no está disponible. Por favor, recargue la página.");
@@ -895,11 +905,15 @@
                 return;
             }
 
-            const carouselContainer = document.querySelector('.carousel-container');
-            const shareButtonGroup = document.querySelector('.share-button-group');
+            // Ocultar los elementos no deseados de forma más robusta
+            const elementsToHide = [
+                document.querySelector('.share-button-group'), 
+                document.querySelector('.carousel-container'),
+                document.querySelector('.logo-carousel-section'),
+                document.querySelector('header'),
+                document.querySelector('footer')
+            ];
 
-            // Ocultar los botones de compartir y el carrusel para el PDF
-            const elementsToHide = [shareButtonGroup, carouselContainer];
             const originalDisplays = elementsToHide.map(el => el ? el.style.display : null);
             elementsToHide.forEach(el => { if (el) el.style.display = 'none'; });
 
@@ -909,22 +923,40 @@
             if(!wasSpecificationsOpen) specificationsContainer.open = true;
             
             try {
+                // Agregar un padding temporal al contenedor principal para que no se corte
+                const originalPadding = element.style.padding;
+                element.style.padding = '20px';
+
                 const canvas = await html2canvas(element, {
-                    scale: 1.5,
+                    scale: 2,
                     useCORS: true,
-                    backgroundColor: '#ffffff'
+                    backgroundColor: '#ffffff',
+                    windowWidth: element.scrollWidth,
+                    windowHeight: element.scrollHeight + 40 // Ajuste para evitar recortes
                 });
+
                 const imgData = canvas.toDataURL('image/png');
                 
                 const doc = new jsPDF('p', 'mm', 'a4');
-                const imgWidth = doc.internal.pageSize.getWidth();
-                const imgHeight = canvas.height * imgWidth / canvas.width;
+                const pdfWidth = doc.internal.pageSize.getWidth();
+                const pdfHeight = doc.internal.pageSize.getHeight();
+                const canvasWidth = canvas.width;
+                const canvasHeight = canvas.height;
+                const ratio = canvasWidth / canvasHeight;
+                let imgWidth = pdfWidth;
+                let imgHeight = pdfWidth / ratio;
+                
+                // Si la altura calculada es mayor que la página, se ajusta a la altura de la página.
+                if (imgHeight > pdfHeight) {
+                    imgHeight = pdfHeight;
+                    imgWidth = pdfHeight * ratio;
+                }
 
-                doc.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+                doc.addImage(imgData, 'PNG', (pdfWidth - imgWidth) / 2, (pdfHeight - imgHeight) / 2, imgWidth, imgHeight);
 
-                doc.save('calculo+especificaciones_agroplan.pdf');
+                doc.save('reporte_agroplan.pdf');
 
-                alert('El documento PDF "calculo+especificaciones_agroplan.pdf" ha sido descargado.');
+                alert('El documento PDF "reporte_agroplan.pdf" ha sido descargado.');
             } catch (error) {
                 console.error("Error al generar el PDF:", error);
                 alert("Hubo un error al generar el PDF.");
@@ -934,6 +966,7 @@
                     if (el) el.style.display = originalDisplays[index];
                 });
                 if(!wasSpecificationsOpen) specificationsContainer.open = false;
+                element.style.padding = originalPadding;
             }
         }
 
@@ -1080,6 +1113,3 @@
     </script>
 </body>
 </html>
-
-
-
