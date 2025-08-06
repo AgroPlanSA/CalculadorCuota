@@ -1031,7 +1031,7 @@
                 });
             }
 
-            // --- Lógica de la Calculadora ---
+           // --- Lógica de la Calculadora ---
             const btnFisica = document.getElementById('btnFisica');
             const btnJuridica = document.getElementById('btnJuridica');
             const valorBasicoMovilInput = document.getElementById('valorBasicoMovil');
@@ -1044,3 +1044,44 @@
                     updateDisplayFields();
                     calcularAutomatico(); 
                 });
+            }
+
+            // Event listener para el botón Persona Jurídica
+            if (btnJuridica) {
+                btnJuridica.addEventListener('click', () => {
+                    currentTipoPersona = 'juridica';
+                    setActiveButton('btnJuridica');
+                    updateDisplayFields();
+                    calcularAutomatico(); 
+                });
+            }
+
+            // Event listener para el input de valorBasicoMovil (Enter)
+            if (valorBasicoMovilInput) {
+                valorBasicoMovilInput.addEventListener('keydown', function(event) {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        calcularAutomatico();
+                    }
+                });
+            }
+
+            // Inicializar la calculadora al cargar la página
+            setActiveButton('btnFisica');
+            updateDisplayFields();
+            calcularAutomatico(); 
+
+            // Lógica para el acordeón de Especificaciones del plan
+            const accordionSummary = document.querySelector('.accordion summary');
+            if (accordionSummary) {
+                accordionSummary.addEventListener('click', function() {
+                    const parentDetails = this.closest('details');
+                    if (parentDetails) {
+                        parentDetails.classList.toggle('open');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
