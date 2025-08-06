@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <style>
         body {
@@ -131,7 +132,7 @@
         }
         
         .calculator-header {
-            background-color: #cc0000; /* Rojo de tu logo */
+            background-color: #e4002b; /* Rojo de tu logo */
             padding: 20px;
             text-align: center;
             color: white;
@@ -586,7 +587,7 @@
             <button class="download-calculation-button" onclick="descargarImagenCalculo()">
                 <i class="fas fa-download"></i> <span class="button-text">Descargar Cálculo</span>
             </button>
-            <button class="download-full-report-button" onclick="descargarImagenCalculoYEspecificaciones()">
+            <button class="download-full-report-button" onclick="descargarPDFReporteCompleto()">
                 <i class="fas fa-download"></i> <span class="button-text">Descargar Cálculo + Especificaciones</span>
             </button>
         </div>
@@ -700,7 +701,7 @@
 
         function limpiarResults() {
             document.getElementById('cuotaPura').value = '';
-            document.getElementById('cuotaAdministrativaIVA').value = ''; // Añadido
+            document.getElementById('cuotaAdministrativaIVA').value = ''; 
             document.getElementById('mensualJuridica').value = '';
             document.getElementById('segVida').value = '';
             document.getElementById('mensualFisca').value = '';
@@ -716,7 +717,6 @@
             const juridicaFields = document.getElementById('juridicaFields');
 
             if (fisicaFields && juridicaFields) {
-                // Quitamos hidden-field de los contenedores principales para que su display pueda ser controlado
                 juridicaFields.classList.remove('hidden-field');
                 fisicaFields.classList.remove('hidden-field');
 
@@ -794,11 +794,8 @@
                 finalCuotaTotal = mensualFisca; // El total para Persona Física incluye Seg. de Vida
                 
                 document.getElementById('segVida').value = currencyFormat(segVida);
-                // document.getElementById('mensualFisca').value = currencyFormat(mensualFisca); // Oculto por petición del usuario
                 document.getElementById('impuestoSello').value = currencyFormat(impuestoSello);
                 
-                // document.getElementById('mensualJuridica').value = ''; // Oculto por petición del usuario
-
             } else if (currentTipoPersona === 'juridica') {
                 const comisionJuridica = 0.08; 
                 const ivaJuridica = 0.21;     
@@ -813,11 +810,7 @@
 
                 finalCuotaTotal = mensualJuridica; // El total para Persona Jurídica no incluye Seg. de Vida
 
-                // document.getElementById('mensualJuridica').value = currencyFormat(mensualJuridica); // Oculto por petición del usuario
                 document.getElementById('impuestoSello').value = currencyFormat(impuestoSello);
-
-                // document.getElementById('segVida').value = ''; // Oculto por petición del usuario
-                // document.getElementById('mensualFisca').value = ''; // Oculto por petición del usuario
             }
             
             const finalTotalCuotaElement = document.getElementById('finalTotalCuota');
@@ -828,7 +821,7 @@
         function compartirWhatsAppTexto() {
             const valorBasicoMovil = document.getElementById('valorBasicoMovil').value;
             const cuotaPura = document.getElementById('cuotaPura').value;
-            const cuotaAdministrativaIVA = document.getElementById('cuotaAdministrativaIVA').value; // Obtener el valor del nuevo campo
+            const cuotaAdministrativaIVA = document.getElementById('cuotaAdministrativaIVA').value; 
             const impuestoSello = document.getElementById('impuestoSello').value;
             const finalTotalCuota = document.getElementById('finalTotalCuota').textContent;
 
@@ -837,19 +830,14 @@
                 return;
             }
 
-            let mensaje = `*Acá te paso los detalles*\n\n`;
+            let mensaje = `*AgroPlan S.A. - Cálculo de Cuota*\n\n`;
             mensaje += `*Valor Básico Móvil:* ${valorBasicoMovil}\n`;
             mensaje += `*Cuota Pura:* ${cuotaPura}\n`;
-            mensaje += `*Cuota Administrativa + IVA:* ${cuotaAdministrativaIVA}\n`; // Incluir en el mensaje de WhatsApp
+            mensaje += `*Cuota Administrativa + IVA:* ${cuotaAdministrativaIVA}\n`; 
 
             if (currentTipoPersona === 'fisica') {
                 const segVida = document.getElementById('segVida').value;
-                // const mensualFisca = document.getElementById('mensualFisca').value; // Este campo está oculto
                 mensaje += `*Seguro de Vida:* ${segVida}\n`;
-                // mensaje += `*Mensual Física:* ${mensualFisca}\n`; // No se comparte si está oculto
-            } else { 
-                // const mensualJuridica = document.getElementById('mensualJuridica').value; // Este campo está oculto
-                // mensaje += `*Mensual Jurídica:* ${mensualJuridica}\n`; // No se comparte si está oculto
             }
             
             mensaje += `*Impuesto al Sello (Cuota 1 a 6):* ${impuestoSello}\n\n`;
@@ -861,109 +849,129 @@
         }
 
         // Función para generar y descargar imagen
-        async function generateAndDownloadImage(filename, captureType) {
-            const mainWrapper = document.getElementById('main-content-wrapper');
-            if (!mainWrapper) {
-                console.error('Elemento principal (main-content-wrapper) no encontrado.');
+        async function descargarImagenCalculo() {
+            const calculatorAndResultWrapper = document.getElementById('calculator-and-result-wrapper');
+            const mainContentWrapper = document.getElementById('main-content-wrapper');
+
+            if (!calculatorAndResultWrapper || !mainContentWrapper) {
+                console.error('Elementos no encontrados.');
                 return;
             }
 
-            // Elementos a ocultar/mostrar
-            const shareButtonGroup = document.querySelector('.share-button-group');
-            const carouselContainer = document.querySelector('.carousel-container');
-            const specificationsContainer = document.getElementById('specifications-container');
-            const calculatorAndResultWrapper = document.getElementById('calculator-and-result-wrapper'); 
-
-            // Almacenar estados originales
-            const elementsToManage = [shareButtonGroup, carouselContainer, specificationsContainer];
-            const originalDisplays = new Map();
-
-            elementsToManage.forEach(el => {
-                if (el) {
-                    originalDisplays.set(el, el.style.display);
-                    el.classList.add('hide-on-capture'); // Aplicar ocultamiento inicial a todos los elementos controlados
-                }
-            });
-            let wasSpecificationsOpen = specificationsContainer ? specificationsContainer.open : false;
-
-
-            // === Visibilidad condicional según el tipo de captura ===
-            if (captureType === 'calculation') {
-                // Para "Descargar Cálculo": solo mostrar calculadora y resultado, ocultar carrusel, especificaciones, botones de compartir.
-                if (calculatorAndResultWrapper) {
-                    calculatorAndResultWrapper.classList.remove('hide-on-capture'); 
-                    calculatorAndResultWrapper.style.display = originalDisplays.get(calculatorAndResultWrapper) || 'block'; 
-                }
-                if (specificationsContainer) {
-                    specificationsContainer.open = false; // Asegurar que las especificaciones estén cerradas
-                }
-
-            } else if (captureType === 'full_report') {
-                // Para "Descargar Cálculo + Especificaciones": mostrar todo lo relevante.
-                if (carouselContainer) {
-                    carouselContainer.classList.remove('hide-on-capture');
-                    carouselContainer.style.display = originalDisplays.get(carouselContainer) || 'block';
-                }
-                if (specificationsContainer) { 
-                    specificationsContainer.classList.remove('hide-on-capture'); // Asegurar que sea visible
-                    specificationsContainer.style.display = originalDisplays.get(specificationsContainer) || 'block'; // Restaurar su display original
-                    if (!wasSpecificationsOpen) { // Solo abrir si estaba originalmente cerrado por el usuario
-                        specificationsContainer.open = true;
-                    }
-                }
-                if (calculatorAndResultWrapper) {
-                    calculatorAndResultWrapper.classList.remove('hide-on-capture');
-                    calculatorAndResultWrapper.style.display = originalDisplays.get(calculatorAndResultWrapper) || 'block';
-                }
-            }
+            // Ocultar los botones de compartir y especificaciones temporalmente
+            const elementsToHide = [
+                document.querySelector('.share-button-group'), 
+                document.getElementById('specifications-container')
+            ];
+            const originalDisplays = elementsToHide.map(el => el ? el.style.display : null);
+            elementsToHide.forEach(el => { if (el) el.style.display = 'none'; });
             
-            void mainWrapper.offsetWidth; // Forzar el reflow después de todos los cambios de display
+            // Reajustar el padding del contenedor principal para evitar recortes
+            const originalPadding = mainContentWrapper.style.padding;
+            mainContentWrapper.style.padding = '20px';
 
             try {
                 const options = {
                     scale: 2,
                     backgroundColor: '#ffffff',
-                    windowWidth: mainWrapper.scrollWidth,
-                    windowHeight: mainWrapper.scrollHeight
+                    windowWidth: mainContentWrapper.scrollWidth,
+                    windowHeight: mainContentWrapper.scrollHeight,
                 };
-
-                const canvas = await html2canvas(mainWrapper, options); 
+                const canvas = await html2canvas(mainContentWrapper, options); 
                 const imageData = canvas.toDataURL("image/png");
 
                 const link = document.createElement('a');
                 link.href = imageData;
-                link.download = filename;
+                link.download = 'calculo_agroplan.png';
 
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
                 
-                alert(`La imagen "${filename}" ha sido descargada. Ahora podés compartirla en WhatsApp.`);
+                alert('La imagen "calculo_agroplan.png" ha sido descargada. Ahora podés compartirla en WhatsApp.');
 
             } catch (error) {
                 console.error("Error al generar la imagen:", error);
                 alert("Hubo un error al descargar la imagen.");
             } finally {
-                // Restaurar estados originales
-                elementsToManage.forEach(el => {
-                    if (el) {
-                        el.classList.remove('hide-on-capture');
-                        el.style.display = originalDisplays.get(el);
-                    }
+                // Restaurar los elementos ocultos y el padding
+                elementsToHide.forEach((el, index) => {
+                    if (el) el.style.display = originalDisplays[index];
                 });
-                if (specificationsContainer && !wasSpecificationsOpen && captureType === 'full_report') {
-                    specificationsContainer.open = false;
-                }
+                mainContentWrapper.style.padding = originalPadding;
             }
         }
 
-        function descargarImagenCalculo() {
-            generateAndDownloadImage('calculo_agroplan.png', 'calculation');
+
+        // Nueva función para generar y descargar PDF
+        async function descargarPDFReporteCompleto() {
+            if (!window.jspdf) {
+                alert("La librería jsPDF no está disponible. Por favor, recargue la página.");
+                return;
+            }
+            const { jsPDF } = window.jspdf;
+            const element = document.getElementById('main-content-wrapper');
+
+            const carouselContainer = document.querySelector('.carousel-container');
+            const shareButtonGroup = document.querySelector('.share-button-group');
+
+            const elementsToHide = [shareButtonGroup];
+            const originalDisplays = elementsToHide.map(el => el ? el.style.display : null);
+            elementsToHide.forEach(el => { if (el) el.style.display = 'none'; });
+
+            // Asegurar que el carrusel y las especificaciones estén visibles para la captura
+            const wasCarouselHidden = carouselContainer.style.display === 'none';
+            if(wasCarouselHidden) carouselContainer.style.display = 'block';
+            
+            const specificationsContainer = document.getElementById('specifications-container');
+            const wasSpecificationsOpen = specificationsContainer.open;
+            if(!wasSpecificationsOpen) specificationsContainer.open = true;
+
+            const options = {
+                scale: 2, // Aumenta la escala para mayor calidad
+                useCORS: true,
+                backgroundColor: '#ffffff'
+            };
+
+            try {
+                const canvas = await html2canvas(element, options);
+                const imgData = canvas.toDataURL('image/png');
+                
+                const imgWidth = 210; // Ancho A4 en mm
+                const pageHeight = 297; // Altura A4 en mm
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+                let heightLeft = imgHeight;
+
+                const doc = new jsPDF('p', 'mm', 'a4');
+                let position = 0;
+
+                doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight;
+                    doc.addPage();
+                    doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+
+                doc.save('reporte_agroplan.pdf');
+
+                alert('El documento PDF "reporte_agroplan.pdf" ha sido descargado.');
+            } catch (error) {
+                console.error("Error al generar el PDF:", error);
+                alert("Hubo un error al generar el PDF.");
+            } finally {
+                // Restaurar estados originales
+                elementsToHide.forEach((el, index) => {
+                    if (el) el.style.display = originalDisplays[index];
+                });
+
+                if(wasCarouselHidden) carouselContainer.style.display = 'none';
+                if(!wasSpecificationsOpen) specificationsContainer.open = false;
+            }
         }
 
-        function descargarImagenCalculoYEspecificaciones() {
-            generateAndDownloadImage('calculo_y_especificaciones_agroplan.png', 'full_report');
-        }
 
         // Carrusel principal de imágenes (funciones)
         let slideIndex = 1;
