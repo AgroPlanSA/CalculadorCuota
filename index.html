@@ -559,8 +559,11 @@
                 <label for="cuotaPura">Cuota Pura</label>
                 <input type="text" id="cuotaPura" placeholder="Cuota Pura" readonly>
 
-                <label for="cuotaAdministrativaIVA">Cuota Administrativa + IVA</label>
-                <input type="text" id="cuotaAdministrativaIVA" placeholder="Cuota Administrativa + IVA" readonly>
+                <div class="hidden-field">
+                    <label for="cuotaAdministrativaIVA">Cuota Administrativa + IVA</label>
+                    <input type="text" id="cuotaAdministrativaIVA" placeholder="Cuota Administrativa + IVA" readonly>
+                </div>
+
 
                 <div id="juridicaFields">
                     <div class="hidden-field">
@@ -840,7 +843,7 @@
             let mensaje = `*AgroPlan S.A. - Cálculo de Cuota*\n\n`;
             mensaje += `*Valor Básico Móvil:* ${valorBasicoMovil}\n`;
             mensaje += `*Cuota Pura:* ${cuotaPura}\n`;
-            mensaje += `*Cuota Administrativa + IVA:* ${cuotaAdministrativaIVA}\n`; 
+            
 
             if (currentTipoPersona === 'fisica') {
                 const segVida = document.getElementById('segVida').value;
@@ -1096,6 +1099,7 @@
     </script>
 </body>
 </html>
+
 
 
 
