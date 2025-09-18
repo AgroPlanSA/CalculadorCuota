@@ -187,6 +187,10 @@
             font-size: 14px;
         }
 
+        label[for="impuestoSello"] {
+            margin: 20px 0 5px;
+        }
+
         input[type="text"], input[type="number"] {
             width: calc(100% - 40px);
             margin: 0 auto 10px;
@@ -592,8 +596,6 @@
                     </div>
                 </div>
                 
-                <label for="impuestoSello">Impuesto al Sello (Cuota 1 a 6)</label>
-                <input type="text" id="impuestoSello" placeholder="Impuesto al Sello" readonly>
             </div>
 
             <div class="final-result-container">
@@ -603,6 +605,9 @@
                 </div>
                 <div class="final-result-value" id="finalTotalCuota">$0</div>
             </div>
+
+            <label for="impuestoSello">Impuesto al Sello (Cuota 1 a 6)</label>
+            <input type="text" id="impuestoSello" placeholder="Impuesto al Sello" readonly>
         </div>
 
         <div class="share-button-group">
@@ -1117,5 +1122,6 @@
     </script>
 </body>
 </html>
+
 
 
