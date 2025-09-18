@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="description" content="Agro Plan, calculador de cuota para plan de ahorro de remolques en 60 cuotas mensuales." />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale $=1.0^{\prime\prime}$ />
     <title>Calculadora de Cuotas | AgroPlan S.A.</title>
     <link rel="icon" href="img/Icono-Cerdito-Extranet_2.svg" type="image/x-icon" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -69,7 +67,7 @@
             transition: 0.6s ease;
             border-radius: 0 3px 3px 0;
             user-select: none;
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(0, 0, 0, 0.5);
             z-index: 10;
         }
 
@@ -79,7 +77,7 @@
         }
 
         .prev:hover, .next:hover {
-            background-color: rgba(0,0,0,0.8);
+            background-color: rgba(0, 0, 0, 0.8);
         }
 
         /* Puntos indicadores del carrusel principal */
@@ -113,8 +111,12 @@
         }
 
         @keyframes fade {
-            from {opacity: .4}
-            to {opacity: 1}
+            from {
+                opacity: .4
+            }
+            to {
+                opacity: 1
+            }
         }
 
         /* Estilos de la Calculadora y secciones principales */
@@ -130,7 +132,7 @@
         .container {
             padding: 0;
         }
-        
+
         .calculator-header {
             background-color: #e4002b;
             padding: 20px;
@@ -138,14 +140,14 @@
             color: white;
             border-top-left-radius: 8px;
             border-top-right-radius: 8px;
-            padding-bottom: 30px; 
+            padding-bottom: 30px;
             position: relative;
             z-index: 1;
         }
 
         .calculator-header .title {
-            margin: 0; 
-            padding-bottom: 20px; 
+            margin: 0;
+            padding-bottom: 20px;
             font-size: 2em;
             font-weight: bold;
         }
@@ -157,7 +159,7 @@
         }
 
         .toggle-button {
-            background-color: #555; 
+            background-color: #555;
             color: white;
             border: none;
             padding: 10px 20px;
@@ -173,7 +175,7 @@
         }
 
         .toggle-button.active {
-            background-color: #333; 
+            background-color: #333;
             font-weight: bold;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
@@ -201,8 +203,10 @@
         input[readonly] {
             background-color: #eee;
             cursor: not-allowed;
-            font-size: 18px; /* Aumento para visibilidad */
-            padding: 15px; /* Aumento para evitar el corte */
+            font-size: 18px;
+            /* Aumento para visibilidad */
+            padding: 15px;
+            /* Aumento para evitar el corte */
         }
 
         .error-message {
@@ -237,7 +241,7 @@
             align-items: flex-start;
         }
 
-        .final-result-label .nota {
+        .final-result-label.nota {
             font-size: 0.75em;
             font-weight: normal;
             color: #666;
@@ -248,9 +252,10 @@
             font-size: 2.2em;
             font-weight: bolder;
             color: #e4002b;
-            padding: 5px; /* Pequeño ajuste para el espacio interno */
+            padding: 5px;
+            /* Pequeño ajuste para el espacio interno */
         }
-        
+
         .hide-on-capture {
             display: none !important;
         }
@@ -315,7 +320,7 @@
             color: #333;
             line-height: 1.6;
             border-top: 2px solid #ccc;
-            margin-top: 20px; 
+            margin-top: 20px;
         }
 
         .accordion summary {
@@ -324,17 +329,17 @@
             font-weight: bold;
             cursor: pointer;
             outline: none;
-            list-style: none; 
+            list-style: none;
             position: relative;
-            padding-right: 25px; 
+            padding-right: 25px;
         }
 
         .accordion summary::-webkit-details-marker {
-            display: none; 
+            display: none;
         }
 
         .accordion summary::after {
-            content: '+'; 
+            content: '+';
             position: absolute;
             right: 0;
             font-size: 1.2em;
@@ -342,19 +347,18 @@
         }
 
         .accordion[open] summary::after {
-            content: '-'; 
+            content: '-';
             transform: rotate(0deg);
         }
-        
+
         .accordion-content {
             padding-top: 15px;
             border-top: 1px solid #ddd;
             margin-top: 15px;
         }
 
-
         /* Estilos para el Carrusel de Logos */
-        .logo-carousel-section {
+        logo-carousel-section {
             padding: 40px 20px;
             text-align: center;
             background-color: #f8f8f8;
@@ -368,7 +372,7 @@
             margin-bottom: 30px;
         }
 
-        .logo-carousel-container {
+        logo-carousel-container {
             width: 100%;
             overflow: hidden;
             position: relative;
@@ -376,11 +380,11 @@
             white-space: nowrap;
         }
 
-        .logo-carousel-track {
+        logo-carousel-track {
             display: inline-block;
         }
 
-        .logo-carousel-track img {
+        logo-carousel-track img {
             height: 80px;
             width: auto;
             margin: 0 40px;
@@ -435,8 +439,8 @@
             }
 
             .calculator-header .title {
-                font-size: 1.5em;
                 padding-bottom: 10px;
+                font-size: 1.5em;
             }
 
             .toggle-buttons {
@@ -471,7 +475,7 @@
                 width: 100%;
                 max-width: 300px;
                 min-height: 48px;
-                padding-left: 44px; 
+                padding-left: 44px;
                 padding-right: 16px;
                 box-sizing: border-box;
                 justify-content: center;
@@ -518,17 +522,17 @@
         }
     </style>
 </head>
+
 <body>
     <header>
         <a href="https://www.agroplansa.com.ar/" target="_blank"> <img src="img/AgroPlan blanco.svg" alt="AgroPlan Logo"> </a>
     </header>
-
     <div class="carousel-container">
         <//div class="carousel-slide">
-            <//a href="https://www.agroplansa.com.ar/index.php/novedades/2012-plan-de-amigos" target="_blank">
-                <//img src="img/galeria4.jpg" alt="AgroPlan Imagen 4">
-            <//a>
-    <//div//>
+        <//a href="https://www.agroplansa.com.ar/index.php/novedades/2012-plan-de-amigos" target="_blank">
+        <//img src="img/galeria4.jpg" alt="AgroPlan Imagen 4">
+        <//a>
+        <//div//>
         <div class="carousel-slide">
             <img src="img/galeria1.jpg" alt="AgroPlan Imagen 1">
         </div>
@@ -540,17 +544,14 @@
         <div class="carousel-slide">
             <img src="img/galeria3.jpg" alt="AgroPlan Imagen 3">
         </div>
-
         <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
         <a class="next" onclick="plusSlides(1)">&#10095;</a>
         <div class="carousel-dots">
             <span class="dot" onclick="currentSlide(1)"></span>
             <span class="dot" onclick="currentSlide(2)"></span>
             <span class="dot" onclick="currentSlide(3)"></span>
-
         </div>
     </div>
-
     <div id="main-content-wrapper">
         <div class="calculator-header">
             <h2 class="title">Calculador de cuota</h2>
@@ -559,29 +560,21 @@
                 <button id="btnJuridica" class="toggle-button">Persona jurídica</button>
             </div>
         </div>
-
         <div id="calculator-and-result-wrapper">
             <div class="container" id="calculator-container">
                 <label for="valorBasicoMovil">Valor Básico Móvil ($40.000.000 a $72.000.000, en múltiplos de $10.000)</label>
                 <input type="text" id="valorBasicoMovil" placeholder="Ingrese el valor" required oninput="formatearValor(this); calcularAutomatico();" />
                 <span id="errorMensaje" class="error-message"></span>
-
                 <label for="cuotaPura">Cuota Pura</label>
                 <input type="text" id="cuotaPura" placeholder="Cuota Pura" readonly>
-
-                <div class="hidden-field">
-                    <label for="cuotaAdministrativaIVA">Cuota Administrativa + IVA</label>
-                    <input type="text" id="cuotaAdministrativaIVA" placeholder="Cuota Administrativa + IVA" readonly>
-                </div>
-
-
+                <label for="cuotaAdministrativaIVA">Cuota Administrativa + IVA</label>
+                <input type="text" id="cuotaAdministrativaIVA" placeholder="Cuota Administrativa + IVA" readonly>
                 <div id="juridicaFields">
                     <div class="hidden-field">
                         <label for="mensualJuridica">Mensual Jurídica</label>
                         <input type="text" id="mensualJuridica" placeholder="Mensual Jurídica" readonly>
                     </div>
                 </div>
-
                 <div id="fisicaFields">
                     <label for="segVida">Seg. de Vida</label>
                     <input type="text" id="segVida" placeholder="Seg. de Vida" readonly>
@@ -590,11 +583,9 @@
                         <input type="text" id="mensualFisca" placeholder="Mensual Física" readonly>
                     </div>
                 </div>
-                
                 <label for="impuestoSello">Impuesto al Sello (Cuota 1 a 6)</label>
                 <input type="text" id="impuestoSello" placeholder="Impuesto al Sello" readonly>
             </div>
-
             <div class="final-result-container">
                 <div class="final-result-label">
                     <span>Total de Cuota*</span>
@@ -603,7 +594,6 @@
                 <div class="final-result-value" id="finalTotalCuota">$0</div>
             </div>
         </div>
-
         <div class="share-button-group">
             <a href="#" class="whatsapp-text-button" onclick="compartirWhatsAppTexto()">
                 <i class="fab fa-whatsapp"></i> <span class="button-text">Compartir</span>
@@ -615,7 +605,6 @@
                 <i class="fas fa-download"></i> <span class="button-text">Descargar Cálculo + Especificaciones</span>
             </button>
         </div>
-
         <details class="accordion" id="specifications-container">
             <summary>Especificaciones del Plan</summary>
             <div class="accordion-content">
@@ -635,7 +624,6 @@
             </div>
         </details>
     </div>
-
     <section class="logo-carousel-section">
         <div class="logo-carousel-container">
             <div class="logo-carousel-track">
@@ -678,14 +666,12 @@
             </div>
         </div>
     </section>
-
     <footer>
         <div class="footer-wrapper">
             <div class="footer-column">
                 <strong>Domicilio Postal:</strong> Gualeguaychú 745 - CP: 3100 <br>
                 Paraná, Entre Ríos, Argentina<br>
-                <br> <strong>Domicilio Legal:</strong> Echeverría 2923 <br> Piso 9° Dpto.
-                A - CP 1428 - C.A.B.A.
+                <br> <strong>Domicilio Legal:</strong> Echeverría 2923 <br> Piso 9° Dpto. A - CP 1428 - C.A.B.A.
             </div>
             <div class="footer-column">
                 <strong>Atención:</strong> Lunes a Viernes de 8 a 16 hs <br>
@@ -696,7 +682,6 @@
             <a href="https://servicioscf.afip.gob.ar/publico/denuncias/denunciaCD.aspx" target="_blank"> <img src="img/qr-footer.jpg" alt="QR AgroPlan" class="qr" /> </a>
         </div>
     </footer>
-
     <script>
         // Funciones de formato y limpieza
         function currencyFormat(value) {
@@ -707,9 +692,7 @@
             let cursorPosition = input.selectionStart;
             const originalValue = input.value;
             const originalLength = originalValue.length;
-
             let value = originalValue.replace(/\$/g, '').replace(/\./g, '').replace(/,/g, '');
-
             if (value) {
                 let formattedValue = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
                 input.value = '$' + formattedValue;
@@ -725,36 +708,30 @@
 
         function limpiarResults() {
             document.getElementById('cuotaPura').value = '';
-            document.getElementById('cuotaAdministrativaIVA').value = ''; 
+            document.getElementById('cuotaAdministrativaIVA').value = '';
             document.getElementById('mensualJuridica').value = '';
             document.getElementById('segVida').value = '';
             document.getElementById('mensualFisca').value = '';
             document.getElementById('impuestoSello').value = '';
         }
-
         // Variable global para controlar el tipo de persona seleccionado
-        let currentTipoPersona = 'fisica'; 
-
+        let currentTipoPersona = 'fisica';
         // Función para actualizar la visibilidad de los campos de la calculadora
         function updateDisplayFields() {
             const fisicaFields = document.getElementById('fisicaFields');
             const juridicaFields = document.getElementById('juridicaFields');
-
             if (fisicaFields && juridicaFields) {
                 juridicaFields.classList.remove('hidden-field');
                 fisicaFields.classList.remove('hidden-field');
-
                 if (currentTipoPersona === 'fisica') {
                     juridicaFields.style.display = 'none';
                     fisicaFields.style.display = 'block';
-
-                } else { 
+                } else {
                     fisicaFields.style.display = 'none';
                     juridicaFields.style.display = 'block';
                 }
             }
         }
-
         // Función para establecer el botón activo de selección de persona
         function setActiveButton(buttonId) {
             document.querySelectorAll('.toggle-button').forEach(button => {
@@ -772,16 +749,13 @@
             const errorMensaje = document.getElementById('errorMensaje');
             const valorString = valorInput.value.replace(/\$/g, '').replace(/\./g, '');
             const valorBasico = parseFloat(valorString);
-
             errorMensaje.textContent = '';
-            
             if (valorString === '') {
                 limpiarResults();
                 const finalTotalCuotaElement = document.getElementById('finalTotalCuota');
                 if (finalTotalCuotaElement) finalTotalCuotaElement.textContent = currencyFormat(0);
                 return;
             }
-
             if (isNaN(valorBasico) || valorBasico < 40000000 || valorBasico > 72000000 || (valorBasico % 10000 !== 0)) {
                 errorMensaje.textContent = "Ingrese un valor entre $40.000.000 y $72.000.000, en múltiplos de $10.000.";
                 limpiarResults();
@@ -789,7 +763,6 @@
                 if (finalTotalCuotaElement) finalTotalCuotaElement.textContent = currencyFormat(0);
                 return;
             }
-
             let cuotaPura;
             let parte1;
             let parte2;
@@ -798,87 +771,72 @@
             let segVida;
             let mensualFisca;
             let impuestoSello;
-            let finalCuotaTotal = 0; 
-
+            let finalCuotaTotal = 0;
             cuotaPura = valorBasico / 60;
-            parte1 = valorBasico * 0.08; 
-            parte2 = parte1 * 0.21;     
+            parte1 = valorBasico * 0.08;
+            parte2 = parte1 * 0.21;
             cuotaAdministrativaIVA = (parte1 + parte2) / 60;
-
             document.getElementById('cuotaPura').value = currencyFormat(cuotaPura);
             document.getElementById('cuotaAdministrativaIVA').value = currencyFormat(cuotaAdministrativaIVA);
-
             if (currentTipoPersona === 'fisica') {
-                mensualJuridica = (valorBasico + parte1 + parte2) / 60; 
-                segVida = valorBasico * 0.000833; 
+                mensualJuridica = (valorBasico + parte1 + parte2) / 60;
+                segVida = valorBasico * 0.000833;
                 mensualFisca = mensualJuridica + segVida;
-                impuestoSello = (valorBasico * 0.012) / 6; 
-                
+                impuestoSello = (valorBasico * 0.012) / 6;
+
                 finalCuotaTotal = mensualFisca;
-                
                 document.getElementById('segVida').value = currencyFormat(segVida);
                 document.getElementById('impuestoSello').value = currencyFormat(impuestoSello);
-                
+
             } else if (currentTipoPersona === 'juridica') {
                 const comisionJuridica = 0.08;
                 const ivaJuridica = 0.21;
                 const segVidaJuridica = 0;
                 const impuestoSelloJuridica = 0.012;
-
                 mensualJuridica = (valorBasico + parte1 + parte2) / 60;
                 segVida = valorBasico * segVidaJuridica;
                 mensualFisca = mensualJuridica + segVida;
-
                 impuestoSello = (valorBasico * impuestoSelloJuridica) / 6;
-
                 finalCuotaTotal = mensualJuridica;
-
                 document.getElementById('impuestoSello').value = currencyFormat(impuestoSello);
             }
-            
+
             const finalTotalCuotaElement = document.getElementById('finalTotalCuota');
             if (finalTotalCuotaElement) finalTotalCuotaElement.textContent = currencyFormat(finalCuotaTotal);
         }
-
         // Función para compartir por WhatsApp
         function compartirWhatsAppTexto() {
             const valorBasicoMovil = document.getElementById('valorBasicoMovil').value;
             const cuotaPura = document.getElementById('cuotaPura').value;
-            const cuotaAdministrativaIVA = document.getElementById('cuotaAdministrativaIVA').value; 
+            const cuotaAdministrativaIVA = document.getElementById('cuotaAdministrativaIVA').value;
             const impuestoSello = document.getElementById('impuestoSello').value;
             const finalTotalCuota = document.getElementById('finalTotalCuota').textContent;
-
             if (!finalTotalCuota || finalTotalCuota === currencyFormat(0)) {
                 alert("Por favor, realice un cálculo válido antes de compartir.");
                 return;
             }
-
             let mensaje = `*AgroPlan S.A. - Cálculo de Cuota*\n\n`;
             mensaje += `*Valor Básico Móvil:* ${valorBasicoMovil}\n`;
             mensaje += `*Cuota Pura:* ${cuotaPura}\n`;
-            
-
             if (currentTipoPersona === 'fisica') {
                 const segVida = document.getElementById('segVida').value;
                 mensaje += `*Seguro de Vida:* ${segVida}\n`;
             }
-            
+
             mensaje += `*Impuesto al Sello (Cuota 1 a 6):* ${impuestoSello}\n\n`;
             mensaje += `*Total Cuota:* ${finalTotalCuota}\n\n`;
             mensaje += `¡A disposición para lo que necesite!`;
-
             const linkWhatsApp = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
             window.open(linkWhatsApp, '_blank');
         }
-
         // Función para generar y descargar imagen
         async function descargarImagenCalculo() {
-            const calculatorAndResultWrapper = document.getElementById('calculator-and-result-wrapper');
+            const calculatorAndResultWrapper = document.getElementById('calculator-and-result wrapper');
             if (!calculatorAndResultWrapper) {
                 console.error('Elemento "calculator-and-result-wrapper" no encontrado.');
                 return;
             }
-            
+
             try {
                 const canvas = await html2canvas(calculatorAndResultWrapper, {
                     scale: 2,
@@ -887,23 +845,18 @@
                     useCORS: true
                 });
                 const imageData = canvas.toDataURL("image/png");
-
                 const link = document.createElement('a');
                 link.href = imageData;
                 link.download = 'calculo_agroplan.png';
-
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
-                
                 alert('La imagen "calculo_agroplan.png" ha sido descargada. Ahora podés compartirla en WhatsApp.');
-
             } catch (error) {
                 console.error("Error al generar la imagen:", error);
                 alert("Hubo un error al descargar la imagen.");
-            } 
+            }
         }
-
         // Función para generar y descargar PDF
         async function descargarPDFReporteCompleto() {
             if (!window.jspdf) {
@@ -912,31 +865,29 @@
             }
             const { jsPDF } = window.jspdf;
             const element = document.getElementById('main-content-wrapper');
-
             if (!element) {
                 console.error('Elemento "main-content-wrapper" no encontrado.');
                 return;
             }
-            
+
             const elementsToHide = [
-                document.querySelector('.share-button-group'), 
+                document.querySelector('.share-button-group'),
                 document.querySelector('.carousel-container'),
                 document.querySelector('.logo-carousel-section'),
                 document.querySelector('header'),
                 document.querySelector('footer')
             ];
-
             const originalDisplays = elementsToHide.map(el => el ? el.style.display : null);
-            elementsToHide.forEach(el => { if (el) el.style.display = 'none'; });
-
+            elementsToHide.forEach(el => {
+                if (el) el.style.display = 'none';
+            });
             const specificationsContainer = document.getElementById('specifications-container');
             const wasSpecificationsOpen = specificationsContainer.open;
-            if(!wasSpecificationsOpen) specificationsContainer.open = true;
-            
+            if (!wasSpecificationsOpen) specificationsContainer.open = true;
+
             try {
                 const originalPadding = element.style.padding;
                 element.style.padding = '20px';
-
                 const canvas = await html2canvas(element, {
                     scale: 2,
                     useCORS: true,
@@ -944,9 +895,8 @@
                     windowWidth: element.scrollWidth,
                     windowHeight: element.scrollHeight + 40
                 });
-
                 const imgData = canvas.toDataURL('image/png');
-                
+
                 const doc = new jsPDF('p', 'mm', 'a4');
                 const pdfWidth = doc.internal.pageSize.getWidth();
                 const pdfHeight = doc.internal.pageSize.getHeight();
@@ -955,16 +905,13 @@
                 const ratio = canvasWidth / canvasHeight;
                 let imgWidth = pdfWidth;
                 let imgHeight = pdfWidth / ratio;
-                
+
                 if (imgHeight > pdfHeight) {
                     imgHeight = pdfHeight;
                     imgWidth = pdfHeight * ratio;
                 }
-
                 doc.addImage(imgData, 'PNG', (pdfWidth - imgWidth) / 2, (pdfHeight - imgHeight) / 2, imgWidth, imgHeight);
-
                 doc.save('reporte_agroplan.pdf');
-
                 alert('El documento PDF "reporte_agroplan.pdf" ha sido descargado.');
             } catch (error) {
                 console.error("Error al generar el PDF:", error);
@@ -973,12 +920,10 @@
                 elementsToHide.forEach((el, index) => {
                     if (el) el.style.display = originalDisplays[index];
                 });
-                if(!wasSpecificationsOpen) specificationsContainer.open = false;
+                if (!wasSpecificationsOpen) specificationsContainer.open = false;
                 element.style.padding = originalPadding;
             }
         }
-
-
         // Carrusel principal de imágenes (funciones)
         let slideIndex = 1;
         let slideTimer;
@@ -987,29 +932,28 @@
             let i;
             let slides = document.getElementsByClassName("carousel-slide");
             let dots = document.getElementsByClassName("dot");
-
             clearTimeout(slideTimer);
-
-            if (n > slides.length) { slideIndex = 1 }
-            if (n < 1) { slideIndex = slides.length }
-
+            if (n > slides.length) {
+                slideIndex = 1
+            }
+            if (n < 1) {
+                slideIndex = slides.length
+            }
             for (i = 0; i < slides.length; i++) {
                 slides[i].style.display = "none";
                 slides[i].classList.remove('fade');
             }
             for (i = 0; i < dots.length; i++) {
-                dots[i].className = dots[i].className.replace(" active", ""); 
+                dots[i].className = dots[i].className.replace(" active", "");
             }
-
             if (slides.length > 0) {
                 slides[slideIndex - 1].style.display = "block";
                 slides[slideIndex - 1].classList.add('fade');
             }
-            
-            if (dots.length > 0) {
-                dots[slideIndex - 1].className += " active"; 
-            }
 
+            if (dots.length > 0) {
+                dots[slideIndex - 1].className += " active";
+            }
             slideTimer = setTimeout(() => plusSlides(1), 5000);
         }
 
@@ -1020,18 +964,16 @@
         function currentSlide(n) {
             showSlides(slideIndex = n);
         }
-
         // Evento principal al cargar el DOM
         document.addEventListener('DOMContentLoaded', () => {
             if (document.querySelector('.carousel-container')) {
                 showSlides(slideIndex);
             }
-
             const logoTrack = document.querySelector('.logo-carousel-track');
             if (logoTrack) {
                 const logosInHTML = Array.from(logoTrack.children);
-                const numberOfUniqueLogos = 18; 
-                
+                const numberOfUniqueLogos = 18;
+
                 let singleSetWidth = 0;
                 for (let i = 0; i < numberOfUniqueLogos; i++) {
                     const logo = logosInHTML[i];
@@ -1039,23 +981,19 @@
                     const computedStyle = window.getComputedStyle(logo);
                     singleSetWidth += parseFloat(computedStyle.marginLeft) + parseFloat(computedStyle.marginRight);
                 }
-
-                const scrollSpeedPxPerSec = 60; 
+                const scrollSpeedPxPerSec = 60;
                 const animationDuration = singleSetWidth / scrollSpeedPxPerSec;
-
                 const style = document.createElement('style');
                 style.type = 'text/css';
                 style.innerHTML = `@keyframes scroll-logos {
-                    0% { transform: translateX(0); }
-                    100% { transform: translateX(-${singleSetWidth}px); }
-                }`;
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-${singleSetWidth}px); }
+  }`;
                 document.head.appendChild(style);
-
                 logoTrack.style.animationName = 'scroll-logos';
                 logoTrack.style.animationDuration = `${animationDuration}s`;
                 logoTrack.style.animationTimingFunction = 'linear';
                 logoTrack.style.animationIterationCount = 'infinite';
-
                 logoTrack.addEventListener('mouseenter', () => {
                     logoTrack.style.animationPlayState = 'paused';
                 });
@@ -1067,25 +1005,23 @@
             const btnFisica = document.getElementById('btnFisica');
             const btnJuridica = document.getElementById('btnJuridica');
             const valorBasicoMovilInput = document.getElementById('valorBasicoMovil');
-
             if (btnFisica) {
                 btnFisica.addEventListener('click', () => {
                     currentTipoPersona = 'fisica';
                     setActiveButton('btnFisica');
                     updateDisplayFields();
-                    calcularAutomatico(); 
+                    calcularAutomatico();
                 });
             }
-
             if (btnJuridica) {
                 btnJuridica.addEventListener('click', () => {
                     currentTipoPersona = 'juridica';
                     setActiveButton('btnJuridica');
+
                     updateDisplayFields();
-                    calcularAutomatico(); 
+                    calcularAutomatico();
                 });
             }
-
             if (valorBasicoMovilInput) {
                 valorBasicoMovilInput.addEventListener('keydown', function(event) {
                     if (event.key === 'Enter') {
@@ -1094,11 +1030,9 @@
                     }
                 });
             }
-
             setActiveButton('btnFisica');
             updateDisplayFields();
-            calcularAutomatico(); 
-
+            calcularAutomatico();
             const accordionSummary = document.querySelector('.accordion summary');
             if (accordionSummary) {
                 accordionSummary.addEventListener('click', function() {
@@ -1112,18 +1046,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
