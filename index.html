@@ -583,16 +583,16 @@
                         <input type="text" id="mensualFisca" placeholder="Mensual Física" readonly>
                     </div>
                 </div>
-                <label for="impuestoSello">Impuesto al Sello (Cuota 1 a 6)</label>
-                <input type="text" id="impuestoSello" placeholder="Impuesto al Sello" readonly>
             </div>
             <div class="final-result-container">
                 <div class="final-result-label">
                     <span>Total de Cuota*</span>
-                    <small class="nota">*No incluye impuesto al sello</small>
+                    <small class="nota">*No incluye el impuesto al sello, que se abona aparte en las primeras 6 cuotas.</small>
                 </div>
                 <div class="final-result-value" id="finalTotalCuota">$0</div>
             </div>
+            <label for="impuestoSello">Impuesto al Sello (Cuota 1 a 6)</label>
+            <input type="text" id="impuestoSello" placeholder="Impuesto al Sello" readonly>
         </div>
         <div class="share-button-group">
             <a href="#" class="whatsapp-text-button" onclick="compartirWhatsAppTexto()">
@@ -823,8 +823,9 @@
                 mensaje += `*Seguro de Vida:* ${segVida}\n`;
             }
 
+            mensaje += `*Cuota Administrativa + IVA:* ${cuotaAdministrativaIVA}\n`;
+            mensaje += `*Total Cuota:* ${finalTotalCuota}\n`;
             mensaje += `*Impuesto al Sello (Cuota 1 a 6):* ${impuestoSello}\n\n`;
-            mensaje += `*Total Cuota:* ${finalTotalCuota}\n\n`;
             mensaje += `¡A disposición para lo que necesite!`;
             const linkWhatsApp = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
             window.open(linkWhatsApp, '_blank');
