@@ -912,79 +912,98 @@
             } 
         }
 
-        // Función para generar y descargar PDF
-        async function descargarPDFReporteCompleto() {
-            if (!window.jspdf) {
-                alert("La librería jsPDF no está disponible. Por favor, recargue la página.");
-                return;
-            }
-            const { jsPDF } = window.jspdf;
-            const element = document.getElementById('main-content-wrapper');
+// Función para generar y descargar PDF optimizado
+async function descargarPDFReporteCompleto() {
+    if (!window.jspdf) {
+        alert("La librería jsPDF no está disponible. Por favor, recargue la página.");
+        return;
+    }
 
-            if (!element) {
-                console.error('Elemento "main-content-wrapper" no encontrado.');
-                return;
-            }
-            
-            const elementsToHide = [
-                document.querySelector('.share-button-group'), 
-                document.querySelector('.carousel-container'),
-                document.querySelector('.logo-carousel-section'),
-                document.querySelector('header'),
-                document.querySelector('footer')
-            ];
+    const { jsPDF } = window.jspdf;
+    const element = document.getElementById('main-content-wrapper');
 
-            const originalDisplays = elementsToHide.map(el => el ? el.style.display : null);
-            elementsToHide.forEach(el => { if (el) el.style.display = 'none'; });
+    if (!element) {
+        console.error('Elemento "main-content-wrapper" no encontrado.');
+        return;
+    }
 
-            const specificationsContainer = document.getElementById('specifications-container');
-            const wasSpecificationsOpen = specificationsContainer.open;
-            if(!wasSpecificationsOpen) specificationsContainer.open = true;
-            
-            try {
-                const originalPadding = element.style.padding;
-                element.style.padding = '20px';
+    // Elementos a ocultar temporalmente
+    const elementsToHide = [
+        document.querySelector('.share-button-group'),
+        document.querySelector('.carousel-container'),
+        document.querySelector('.logo-carousel-section'),
+        document.querySelector('header'),
+        document.querySelector('footer')
+    ];
 
-                const canvas = await html2canvas(element, {
-                    scale: 2,
-                    useCORS: true,
-                    backgroundColor: '#ffffff',
-                    windowWidth: element.scrollWidth,
-                    windowHeight: element.scrollHeight + 40
-                });
+    const originalDisplays = elementsToHide.map(el => el ? el.style.display : null);
+    elementsToHide.forEach(el => { if (el) el.style.display = 'none'; });
 
-                const imgData = canvas.toDataURL('image/png');
-                
-                const doc = new jsPDF('p', 'mm', 'a4');
-                const pdfWidth = doc.internal.pageSize.getWidth();
-                const pdfHeight = doc.internal.pageSize.getHeight();
-                const canvasWidth = canvas.width;
-                const canvasHeight = canvas.height;
-                const ratio = canvasWidth / canvasHeight;
-                let imgWidth = pdfWidth;
-                let imgHeight = pdfWidth / ratio;
-                
-                if (imgHeight > pdfHeight) {
-                    imgHeight = pdfHeight;
-                    imgWidth = pdfHeight * ratio;
-                }
+    // Abrir <details> de especificaciones si estaba cerrado
+    const specificationsContainer = document.getElementById('specifications-container');
+    const wasSpecificationsOpen = specificationsContainer.open;
+    if (!wasSpecificationsOpen) specificationsContainer.open = true;
 
-                doc.addImage(imgData, 'PNG', (pdfWidth - imgWidth) / 2, (pdfHeight - imgHeight) / 2, imgWidth, imgHeight);
+    try {
+        const originalPadding = element.style.padding;
+        element.style.padding = '20px';
 
-                doc.save('reporte_agroplan.pdf');
+        // CAPTURA OPTIMIZADA
+        const canvas = await html2canvas(element, {
+            scale: 1,         // reducción clave
+            useCORS: true,
+            backgroundColor: '#ffffff',
+            windowWidth: element.scrollWidth,
+            windowHeight: element.scrollHeight + 40
+        });
 
-                alert('El documento PDF "reporte_agroplan.pdf" ha sido descargado.');
-            } catch (error) {
-                console.error("Error al generar el PDF:", error);
-                alert("Hubo un error al generar el PDF.");
-            } finally {
-                elementsToHide.forEach((el, index) => {
-                    if (el) el.style.display = originalDisplays[index];
-                });
-                if(!wasSpecificationsOpen) specificationsContainer.open = false;
-                element.style.padding = originalPadding;
-            }
+        // Convertir a JPG con compresión (MUCHO más liviano)
+        const imgData = canvas.toDataURL('image/jpeg', 0.70);
+
+        // Crear PDF con compresión
+        const pdf = new jsPDF({
+            orientation: 'p',
+            unit: 'mm',
+            format: 'a4',
+            compress: true
+        });
+
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
+
+        const canvasRatio = canvas.width / canvas.height;
+        let imgWidth = pdfWidth;
+        let imgHeight = pdfWidth / canvasRatio;
+
+        if (imgHeight > pdfHeight) {
+            imgHeight = pdfHeight;
+            imgWidth = pdfHeight * canvasRatio;
         }
+
+        pdf.addImage(
+            imgData,
+            'JPEG',
+            (pdfWidth - imgWidth) / 2,
+            (pdfHeight - imgHeight) / 2,
+            imgWidth,
+            imgHeight
+        );
+
+        pdf.save('reporte_agroplan.pdf');
+    } catch (error) {
+        console.error("Error al generar el PDF:", error);
+        alert("Hubo un error al generar el PDF.");
+    } finally {
+        // Restaurar elementos ocultos
+        elementsToHide.forEach((el, index) => {
+            if (el) el.style.display = originalDisplays[index];
+        });
+
+        if (!wasSpecificationsOpen) specificationsContainer.open = false;
+        element.style.padding = originalPadding;
+    }
+}
+
 
 
         // Carrusel principal de imágenes (funciones)
@@ -1121,6 +1140,7 @@
     </script>
 </body>
 </html>
+
 
 
 
