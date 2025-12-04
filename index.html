@@ -949,7 +949,7 @@ async function descargarPDFReporteCompleto() {
 
         // CAPTURA OPTIMIZADA
         const canvas = await html2canvas(element, {
-            scale: 1,         // reducción clave
+            scale: 2,         // reducción clave
             useCORS: true,
             backgroundColor: '#ffffff',
             windowWidth: element.scrollWidth,
@@ -957,7 +957,7 @@ async function descargarPDFReporteCompleto() {
         });
 
         // Convertir a JPG con compresión (MUCHO más liviano)
-        const imgData = canvas.toDataURL('image/jpeg', 0.80);
+        const imgData = canvas.toDataURL('image/jpeg', 2);
 
         // Crear PDF con compresión
         const pdf = new jsPDF({
@@ -1139,6 +1139,7 @@ async function descargarPDFReporteCompleto() {
     </script>
 </body>
 </html>
+
 
 
 
