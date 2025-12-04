@@ -957,7 +957,7 @@ async function descargarPDFReporteCompleto() {
         });
 
         // Convertir a JPG con compresión (MUCHO más liviano)
-        const imgData = canvas.toDataURL('image/jpeg', 0.70);
+        const imgData = canvas.toDataURL('image/jpeg', 0.80);
 
         // Crear PDF con compresión
         const pdf = new jsPDF({
@@ -1139,6 +1139,7 @@ async function descargarPDFReporteCompleto() {
     </script>
 </body>
 </html>
+
 
 
 
