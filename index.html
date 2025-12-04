@@ -888,7 +888,7 @@
             
             try {
                 const canvas = await html2canvas(calculatorAndResultWrapper, {
-                    scale: 2,
+                    scale: 3,
                     backgroundColor: '#ffffff',
                     allowTaint: true,
                     useCORS: true
@@ -949,7 +949,7 @@ async function descargarPDFReporteCompleto() {
 
         // CAPTURA OPTIMIZADA
         const canvas = await html2canvas(element, {
-            scale: 2,         // reducción clave
+            scale: 3,         // reducción clave
             useCORS: true,
             backgroundColor: '#ffffff',
             windowWidth: element.scrollWidth,
@@ -957,7 +957,7 @@ async function descargarPDFReporteCompleto() {
         });
 
         // Convertir a JPG con compresión (MUCHO más liviano)
-        const imgData = canvas.toDataURL('image/jpeg', 2);
+        const imgData = canvas.toDataURL('image/jpeg', 3);
 
         // Crear PDF con compresión
         const pdf = new jsPDF({
@@ -1139,6 +1139,7 @@ async function descargarPDFReporteCompleto() {
     </script>
 </body>
 </html>
+
 
 
 
